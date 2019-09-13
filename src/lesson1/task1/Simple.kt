@@ -59,7 +59,8 @@ fun main() {
  * Пользователь задает время в часах, минутах и секундах, например, 8:20:35.
  * Рассчитать время в секундах, прошедшее с начала суток (30035 в данном случае).
  */
-fun seconds(hours: Int, minutes: Int, seconds: Int): Int = (hours * 3600) + (minutes * 60) + seconds
+fun seconds(hours: Int, minutes: Int, seconds: Int): Int
+        = (hours * 3600) + (minutes * 60) + seconds
 
 
 /**
@@ -79,7 +80,7 @@ fun lengthInMeters(sagenes: Int, arshins: Int, vershoks: Int): Double =
  * Вывести значение того же угла в радианах (например, 0.63256).
  */
 fun angleInRadian(deg: Int, min: Int, sec: Int): Double =
-    ((deg.toDouble() + (min.toDouble() / 60) + (sec.toDouble() / 3600)) * 3.14159) / 180
+    ((deg.toDouble() + (min.toDouble() / 60) + (sec.toDouble() / 3600)) * PI) / 180
 
 /**
  * Тривиальная
