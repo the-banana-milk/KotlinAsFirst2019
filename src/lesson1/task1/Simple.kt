@@ -118,7 +118,7 @@ fun travelMinutes(hoursDepart: Int, minutesDepart: Int, hoursArrive: Int, minute
  * Например, 100 рублей под 10% годовых превратятся в 133.1 рубля
  */
 fun accountInThreeYears(initial: Int, percent: Int): Double =
-    initial * (1 + percent.toDouble() / 100) * (1 + percent.toDouble() / 100) * (1 + percent.toDouble() / 100)
+    initial * (1 + percent.toDouble() / 100).pow(3)
 /**
  * Простая
  *
