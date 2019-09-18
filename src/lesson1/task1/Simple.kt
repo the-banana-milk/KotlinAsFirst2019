@@ -81,7 +81,7 @@ fun lengthInMeters(sagenes: Int, arshins: Int, vershoks: Int): Double =
  */
 fun angleInRadian(deg: Int, min: Int, sec: Int): Double {
     val angleindegree = deg.toDouble() + (min.toDouble() / 60.0) + (sec.toDouble() / 3600.0)
-    val count = angleindegree * PI / 180.0 
+    val count = angleindegree * PI / 180.0
     return count
 }
 /**
