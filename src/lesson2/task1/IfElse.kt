@@ -66,10 +66,10 @@ fun minBiRoot(a: Double, b: Double, c: Double): Double {
  * вернуть строку вида: «21 год», «32 года», «12 лет».
  */
 fun ageDescription(age: Int): String {
-    if ((age % 10 in 2..4) && ((age / 10 in 2..10) || (age / 10 in 12..19) || (age / 10 == 0))) return "$age года"
-    else if ((age % 10 == 1) && ((age / 10 != 1) && (age / 10 != 11) || (age / 10 == 0))) return "$age год"
-    else if ((age / 10 >= 1) || (age / 10 >= 10) || (age % 10 >= 5) || (age % 10 == 0)) return "$age лет"
-    else return "неопределённо"
+    return if ((age % 10 in 2..4) && ((age / 10 in 2..10) || (age / 10 in 12..19) || (age / 10 == 0))) "$age года"
+    else if ((age % 10 == 1) && ((age / 10 != 1) && (age / 10 != 11) || (age / 10 == 0))) "$age год"
+    else if ((age / 10 >= 1) || (age / 10 >= 10) || (age % 10 >= 5) || (age % 10 == 0)) "$age лет"
+    else "неопределённо"
 }
 
 /**
@@ -88,15 +88,15 @@ fun timeForHalfWay(
     val s2 = t2 * v2
     val s3 = t3 * v3
     val halfOfRoad = (t1 * v1 + t2 * v2 + t3 * v3) / 2.0
-    if (s1 == halfOfRoad) return t1
-    else if (s1 > halfOfRoad) return t1 - ((s1 - halfOfRoad) / v1)
+    return if (s1 == halfOfRoad) t1
+    else if (s1 > halfOfRoad) t1 - ((s1 - halfOfRoad) / v1)
     else if (s1 < halfOfRoad) {
-        if (s1 + s2 == halfOfRoad) return t1 + t2
-        else if (s1 + s2 > halfOfRoad) return t1 + (t2 - (s1 + s2 - halfOfRoad) / v2)
-        else if (s1 + s2 < halfOfRoad) return t1 + t2 + (t3 - (s1 + s2 + s3 - halfOfRoad) / v3)
-        return Double.NaN
+        return if (s1 + s2 == halfOfRoad) t1 + t2
+        else if (s1 + s2 > halfOfRoad) t1 + (t2 - (s1 + s2 - halfOfRoad) / v2)
+        else if (s1 + s2 < halfOfRoad) t1 + t2 + (t3 - (s1 + s2 + s3 - halfOfRoad) / v3)
+        else Double.NaN
     }
-    return Double.NaN
+    else Double.NaN
 }
 
 /**
@@ -114,12 +114,12 @@ fun whichRookThreatens(
     rookX2: Int, rookY2: Int
 ): Int {
     if ((kingX == rookX1) || (kingY == rookY1)) {
-        if ((kingX == rookX2) || (kingY == rookY2)) return 3
-        return 1
+        return if ((kingX == rookX2) || (kingY == rookY2)) 3
+        else 1
     }
     if ((kingX == rookX2) || (kingY == rookY2)) {
-        if ((kingX == rookX1) || (kingY == rookY1)) return 3
-        return 2
+        return if ((kingX == rookX1) || (kingY == rookY1)) 3
+        else 2
     }
     return 0
 }
@@ -143,12 +143,12 @@ fun rookOrBishopThreatens(
     val lenBishopToKingX = (bishopX - kingX)
     val lenBishopToKingY = (bishopY - kingY)
     if ((kingX == rookX) || (kingY == rookY)) {
-        if ((abs(lenBishopToKingX)) == (abs(lenBishopToKingY))) return 3
-        return 1
+        return if ((abs(lenBishopToKingX)) == (abs(lenBishopToKingY))) 3
+        else 1
     }
     if ((abs(lenBishopToKingX)) == (abs(lenBishopToKingY))) {
-        if ((kingX == rookX) || (kingY == rookY)) return 3
-        return 2
+        return if ((kingX == rookX) || (kingY == rookY)) 3
+        else 2
     }
     return 0
 }
@@ -162,15 +162,11 @@ fun rookOrBishopThreatens(
  * Если такой треугольник не существует, вернуть -1.
  */
 fun triangleKind(a: Double, b: Double, c: Double): Int {
-    if ((a + b < c) || (c + b < a) || (a + c < b))
-        return -1
-    if ((sqr(a) + sqr(b) == sqr(c)) || (sqr(c) + sqr(b) == sqr(a)) || (sqr(a) + sqr(c) == sqr(b)))
-        return 1
-    if ((sqr(a) + sqr(b) < sqr(c)) || (sqr(c) + sqr(b) < sqr(a)) || (sqr(a) + sqr(c) < sqr(b)))
-        return 2
-    if ((sqr(a) + sqr(b) > sqr(c)) || (sqr(c) + sqr(b) > sqr(a)) || (sqr(a) + sqr(c) > sqr(b)))
-        return 0
-    return 0
+    return if ((a + b < c) || (c + b < a) || (a + c < b)) -1
+    else if ((sqr(a) + sqr(b) == sqr(c)) || (sqr(c) + sqr(b) == sqr(a)) || (sqr(a) + sqr(c) == sqr(b))) 1
+    else if ((sqr(a) + sqr(b) < sqr(c)) || (sqr(c) + sqr(b) < sqr(a)) || (sqr(a) + sqr(c) < sqr(b))) 2
+    else if ((sqr(a) + sqr(b) > sqr(c)) || (sqr(c) + sqr(b) > sqr(a)) || (sqr(a) + sqr(c) > sqr(b))) 0
+    else 0
 }
 
 /**
@@ -182,11 +178,9 @@ fun triangleKind(a: Double, b: Double, c: Double): Int {
  * Если пересечения нет, вернуть -1.
  */
 fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int {
-    if ((a <= c) && (b <= d) && (b != a)) return abs(b - a)
-    if ((c <= a) && (d <= b) && (d != c)) return abs(d - c)
-    if ((c < b) && (c > a) && (b < d)) return abs(b - c)
-    if ((a > c) && (a < d) && (d < b)) return abs(d - a)
-    if ((a == b) && (b == c) && (c == d)) return 0
-    if (((a == b) && (a > c) && (a < d)) || ((c == d) && (c > a) && (c < b))) return 0
+    if ((a < c) && (b < d) && (c < b)) return abs(b - a)
+    if ((c < a) && (d < b) && (b > d)) return abs(d - c)
+    if ((c >= a) && (b <= d)) return abs(b - c)
+    if ((a >= c) && (d <= b)) return abs(d - a)
     return -1
 }
