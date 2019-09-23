@@ -91,7 +91,7 @@ fun timeForHalfWay(
     return if (s1 == halfOfRoad) t1
     else if (s1 > halfOfRoad) t1 - ((s1 - halfOfRoad) / v1)
     else if (s1 < halfOfRoad) {
-        return if (s1 + s2 == halfOfRoad) t1 + t2
+        if (s1 + s2 == halfOfRoad) t1 + t2
         else if (s1 + s2 > halfOfRoad) t1 + (t2 - (s1 + s2 - halfOfRoad) / v2)
         else if (s1 + s2 < halfOfRoad) t1 + t2 + (t3 - (s1 + s2 + s3 - halfOfRoad) / v3)
         else Double.NaN
@@ -114,11 +114,11 @@ fun whichRookThreatens(
     rookX2: Int, rookY2: Int
 ): Int {
     return if ((kingX == rookX1) || (kingY == rookY1)) {
-        return if ((kingX == rookX2) || (kingY == rookY2)) 3
+        if ((kingX == rookX2) || (kingY == rookY2)) 3
         else 1
     }
     else if ((kingX == rookX2) || (kingY == rookY2)) {
-        return if ((kingX == rookX1) || (kingY == rookY1)) 3
+        if ((kingX == rookX1) || (kingY == rookY1)) 3
         else 2
     }
     else 0
@@ -143,11 +143,11 @@ fun rookOrBishopThreatens(
     val lenBishopToKingX = (bishopX - kingX)
     val lenBishopToKingY = (bishopY - kingY)
     return if ((kingX == rookX) || (kingY == rookY)) {
-        return if ((abs(lenBishopToKingX)) == (abs(lenBishopToKingY))) 3
+        if ((abs(lenBishopToKingX)) == (abs(lenBishopToKingY))) 3
         else 1
     }
     else if ((abs(lenBishopToKingX)) == (abs(lenBishopToKingY))) {
-        return if ((kingX == rookX) || (kingY == rookY)) 3
+        if ((kingX == rookX) || (kingY == rookY)) 3
         else 2
     }
     else 0
@@ -161,13 +161,13 @@ fun rookOrBishopThreatens(
  * прямоугольным (вернуть 1) или тупоугольным (вернуть 2).
  * Если такой треугольник не существует, вернуть -1.
  */
-fun triangleKind(a: Double, b: Double, c: Double): Int {
-    return if ((a + b < c) || (c + b < a) || (a + c < b)) -1
+fun triangleKind(a: Double, b: Double, c: Double): Int =
+    if ((a + b < c) || (c + b < a) || (a + c < b)) -1
     else if ((sqr(a) + sqr(b) == sqr(c)) || (sqr(c) + sqr(b) == sqr(a)) || (sqr(a) + sqr(c) == sqr(b))) 1
     else if ((sqr(a) + sqr(b) < sqr(c)) || (sqr(c) + sqr(b) < sqr(a)) || (sqr(a) + sqr(c) < sqr(b))) 2
     else if ((sqr(a) + sqr(b) > sqr(c)) || (sqr(c) + sqr(b) > sqr(a)) || (sqr(a) + sqr(c) > sqr(b))) 0
     else 0
-}
+
 
 /**
  * Средняя
@@ -177,11 +177,11 @@ fun triangleKind(a: Double, b: Double, c: Double): Int {
  * Найти длину пересечения отрезков AB и CD.
  * Если пересечения нет, вернуть -1.
  */
-fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int {
-    return if ((a > d) || (b < c)) -1
+fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int =
+    if ((a > d) || (b < c)) -1
     else if ((a < c) && (b < d) && (c <= b)) abs(b - c)
     else if ((c < a) && (d < b) && (a <= d)) abs(d - a)
     else if ((c >= a) && (d <= b)) abs(d - c)
     else if ((a >= c) && (b <= d)) abs(b - a)
     else -1
-}
+
