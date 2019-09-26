@@ -90,13 +90,11 @@ fun timeForHalfWay(
     val halfOfRoad = (t1 * v1 + t2 * v2 + t3 * v3) / 2.0
     return if (s1 == halfOfRoad) t1
     else if (s1 > halfOfRoad) t1 - ((s1 - halfOfRoad) / v1)
-    else if (s1 < halfOfRoad) {
+    else
         if (s1 + s2 == halfOfRoad) t1 + t2
         else if (s1 + s2 > halfOfRoad) t1 + (t2 - (s1 + s2 - halfOfRoad) / v2)
         else if (s1 + s2 < halfOfRoad) t1 + t2 + (t3 - (s1 + s2 + s3 - halfOfRoad) / v3)
         else Double.NaN
-    }
-    else Double.NaN
 }
 
 /**
@@ -112,8 +110,8 @@ fun whichRookThreatens(
     kingX: Int, kingY: Int,
     rookX1: Int, rookY1: Int,
     rookX2: Int, rookY2: Int
-): Int {
-    return if ((kingX == rookX1) || (kingY == rookY1)) {
+): Int =
+    if ((kingX == rookX1) || (kingY == rookY1)) {
         if ((kingX == rookX2) || (kingY == rookY2)) 3
         else 1
     }
@@ -122,7 +120,7 @@ fun whichRookThreatens(
         else 2
     }
     else 0
-}
+
 
 
 /**
