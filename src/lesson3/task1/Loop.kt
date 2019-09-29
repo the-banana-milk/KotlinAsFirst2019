@@ -217,13 +217,9 @@ fun collatzSteps(x: Int): Int {
  */
 fun sin(x: Double, eps: Double): Double {
     var sinX = x
-    if (x in -2 * PI..2 * PI)
-        sinX = x
-    else
-        sinX = x * PI / 180
     var i = 1
     var remX = x
-    while (abs(remX) >= eps) {
+    while (remX >= abs(eps)) {
         remX = (((-1.0).pow(i) * (x.pow(2 * i + 1)) / factorial(2 * i + 1)))
         sinX += remX
         i++
