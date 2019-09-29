@@ -216,14 +216,25 @@ fun collatzSteps(x: Int): Int {
  * Использовать kotlin.math.sin и другие стандартные реализации функции синуса в этой задаче запрещается.
  */
 fun sin(x: Double, eps: Double): Double {
-    var sinX = x
+    var sinX = 0.0
     var i = 1
     var remX = x
-    while (remX >= abs(eps)) {
-        remX = (((-1.0).pow(i) * (x.pow(2 * i + 1)) / factorial(2 * i + 1)))
-        sinX += remX
-        i++
+    var next: Double
+    if (x > 0) {
+        while (remX > 2 * PI) {
+            remX -= 2 * PI
+        }
     }
+    else {
+        while (remX < 0) {
+            remX += 2 * PI
+        }
+    }
+    do {
+        next = (-1.0).pow(i + 1) * (remX.pow(2 * i - 1)) / factorial(2 * i - 1)
+        sinX += next
+        i++
+    } while (abs(next) >= eps)
     return sinX
 }
 
@@ -236,7 +247,28 @@ fun sin(x: Double, eps: Double): Double {
  * Подумайте, как добиться более быстрой сходимости ряда при больших значениях x.
  * Использовать kotlin.math.cos и другие стандартные реализации функции косинуса в этой задаче запрещается.
  */
-fun cos(x: Double, eps: Double): Double = TODO()
+fun cos(x: Double, eps: Double): Double {
+    var remX = x
+    var i = 0
+    var next: Double
+    var cosX = 0.0
+    if (x > 0) {
+        while (remX > 2 * PI) {
+            remX -= 2 * PI
+        }
+    }
+    else {
+        while (remX < 2 * PI) {
+            remX += 2 * PI
+        }
+    }
+    do {
+        next = (-1.0).pow(i) * remX.pow(i * 2) / factorial(i * 2)
+        cosX += next
+        i += 1
+    } while (abs(next) >= eps)
+    return cosX
+}
 
 /**
  * Средняя
