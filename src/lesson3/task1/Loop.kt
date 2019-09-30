@@ -276,19 +276,12 @@ fun cos(x: Double, eps: Double): Double {
  */
 fun revert(n: Int): Int {
     var number = n
-    var rememberNum = n
-    var tenInPower = 1
     var newNum = 0
     while (number != 0) {
+        newNum = newNum * 10 + (number % 10)
         number /= 10
-        tenInPower *= 10
     }
-    while (rememberNum != 0) {
-        newNum += (rememberNum % 10) * tenInPower
-        tenInPower /= 10
-        rememberNum /= 10
-    }
-    return newNum / 10
+    return newNum
 }
 
 /**
