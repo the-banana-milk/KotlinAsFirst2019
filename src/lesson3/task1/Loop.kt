@@ -75,7 +75,7 @@ fun digitNumber(n: Int): Int =
     when {
         (n <= 9) && (n >= -9) -> 1
         else -> digitNumber(n % 10) + digitNumber(n / 10)
-}
+    }
 /**
  * Простая
  *
@@ -132,11 +132,8 @@ fun minDivisor(n: Int): Int {
  * Для заданного числа n > 1 найти максимальный делитель, меньший n
  */
 fun maxDivisor(n: Int): Int {
-    var divisior = n - 1
-    while (n % divisior != 0) {
-        divisior -= 1
-    }
-    return divisior
+    val divisior = minDivisor(n)
+    return n / divisior
 }
 
 /**
@@ -217,11 +214,8 @@ fun sin(x: Double, eps: Double): Double {
     var i = 1
     var remX = x
     var next: Double
-    if (x > 0) {
-        while (remX > 2 * PI) {
-            remX -= 2 * PI
-        }
-    }
+    if (x > 0)
+        remX %= 2 * PI
     else {
         while (remX < 0) {
             remX += 2 * PI
@@ -249,11 +243,8 @@ fun cos(x: Double, eps: Double): Double {
     var i = 0
     var next: Double
     var cosX = 0.0
-    if (x > 0) {
-        while (remX > 2 * PI) {
-            remX -= 2 * PI
-        }
-    }
+    if (x > 0)
+        remX %= 2 * PI
     else {
         while (remX < 2 * PI) {
             remX += 2 * PI
