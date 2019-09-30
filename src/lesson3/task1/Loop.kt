@@ -120,8 +120,7 @@ fun lcm(m: Int, n: Int): Int {
  */
 fun minDivisor(n: Int): Int {
     var divisor = 2
-    val input = n
-    while (input % divisor != 0) {
+    while (n % divisor != 0) {
         divisor += 1
     }
     return divisor
@@ -156,8 +155,7 @@ fun isCoPrime(m: Int, n: Int): Boolean {
         else
             remember2 -= remember1
     }
-   return if (remember1 == 1) true
-   else false
+   return remember1 == 1
 }
 
 /**
@@ -173,8 +171,7 @@ fun squareBetweenExists(m: Int, n: Int): Boolean {
     while ((sqr(sqrtK) < m)) {
         sqrtK += 1
     }
-    return if (sqr(sqrtK) in m..n) true
-    else false
+    return sqr(sqrtK) in m..n
 }
 
 /**
@@ -304,6 +301,7 @@ fun revert(n: Int): Int {
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun isPalindrome(n: Int): Boolean = TODO()
+
 
 /**
  * Средняя

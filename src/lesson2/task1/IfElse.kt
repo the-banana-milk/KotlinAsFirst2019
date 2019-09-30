@@ -93,8 +93,8 @@ fun timeForHalfWay(
     else
         if (s1 + s2 == halfOfRoad) t1 + t2
         else if (s1 + s2 > halfOfRoad) t1 + (t2 - (s1 + s2 - halfOfRoad) / v2)
-        else if (s1 + s2 < halfOfRoad) t1 + t2 + (t3 - (s1 + s2 + s3 - halfOfRoad) / v3)
-        else Double.NaN
+        else t1 + t2 + (t3 - (s1 + s2 + s3 - halfOfRoad) / v3)
+
 }
 
 /**
