@@ -317,14 +317,14 @@ fun hasDifferentDigits(n: Int): Boolean {
  */
 fun squareSequenceDigit(n: Int): Int {
     var count = 0
-    var k:Int
+    var k: Int
     var remember = 0
     var countDig = 0
     for (i in 1..n) {
+        if (count == n) break
         k = i * i
         countDig = digitNumber(k)
         k = revert(k)
-        if (count == n) break
         while (countDig != 0) {
             remember = k % 10
             count++
