@@ -355,7 +355,7 @@ fun fibSequenceDigit(n: Int): Int {
         countDig = digitNumber(numder)
         numder = revert(numder)
         if(count == n) break
-        while (countDig != 0){
+        while (countDig != 0) {
             remeber = numder % 10
             count++
             if (count == n) break
