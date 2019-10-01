@@ -296,18 +296,15 @@ fun isPalindrome(n: Int): Boolean = n == revert(n)
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun hasDifferentDigits(n: Int): Boolean {
-    var remN = n
-    var n1 = remN % 10
-    var n2 = 1
-    var i = 0
-    while ((n != 0) && (n1 != n2)) {
-        n2 = n1
+    var next: Int
+    val theConst = n % 10
+    var remN = n / 10
+    while (remN != 0) {
+        next = remN % 10
+        if (next != theConst) return true
         remN /= 10
-        n1 = remN % 10
-        i += 1
     }
-    return if ((remN == 0) && (i > 0)) true
-    else false
+    return false
 }
 /**
  * Сложная
@@ -318,7 +315,26 @@ fun hasDifferentDigits(n: Int): Boolean {
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun squareSequenceDigit(n: Int): Int = TODO()
+fun squareSequenceDigit(n: Int): Int {
+    var count = 0
+    var k:Int
+    var remember = 0
+    var countDig = 0
+    for (i in 1..n) {
+        k = i * i
+        countDig = digitNumber(k)
+        k = revert(k)
+        if (count == n) break
+        while (countDig != 0) {
+            remember = k % 10
+            count++
+            if (count == n) break
+            k /= 10
+            countDig -= 1
+        }
+    }
+    return remember
+}
 
 /**
  * Сложная
@@ -329,4 +345,23 @@ fun squareSequenceDigit(n: Int): Int = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun fibSequenceDigit(n: Int): Int = TODO()
+fun fibSequenceDigit(n: Int): Int {
+    var numder:Int
+    var count = 0
+    var countDig = 0
+    var remeber = 0
+    for (i in 1..n) {
+        numder = fib(i)
+        countDig = digitNumber(numder)
+        numder = revert(numder)
+        if(count == n) break
+        while (countDig != 0){
+            remeber = numder % 10
+            count++
+            if (count == n) break
+            numder /= 10
+            countDig -= 1
+        }
+    }
+    return remeber
+}
