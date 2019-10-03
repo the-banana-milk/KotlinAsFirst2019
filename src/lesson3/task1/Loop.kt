@@ -214,13 +214,7 @@ fun sin(x: Double, eps: Double): Double {
     var i = 1
     var remX = x
     var next: Double
-    if (x > 0)
-        remX %= 2 * PI
-    else {
-        while (remX < 0) {
-            remX += 2 * PI
-        }
-    }
+    remX %= 2 * PI
     do {
         next = (-1.0).pow(i + 1) * (remX.pow(2 * i - 1)) / factorial(2 * i - 1)
         sinX += next
@@ -243,13 +237,7 @@ fun cos(x: Double, eps: Double): Double {
     var i = 0
     var next: Double
     var cosX = 0.0
-    if (x > 0)
-        remX %= 2 * PI
-    else {
-        while (remX < 2 * PI) {
-            remX += 2 * PI
-        }
-    }
+    remX %= 2 * PI
     do {
         next = (-1.0).pow(i) * remX.pow(i * 2) / factorial(i * 2)
         cosX += next
@@ -316,24 +304,17 @@ fun hasDifferentDigits(n: Int): Boolean {
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun squareSequenceDigit(n: Int): Int {
+    var k = 0
+    var countDig: Int
     var count = 0
-    var k: Int
-    var remember = 0
-    var countDig = 0
     for (i in 1..n) {
-        if (count == n) break
         k = i * i
         countDig = digitNumber(k)
-        k = revert(k)
-        while (countDig != 0) {
-            remember = k % 10
-            count++
-            if (count == n) break
-            k /= 10
-            countDig -= 1
-        }
+        count += countDig
+        if (count >= n) break
     }
-    return remember
+    if (count > n) for (i in 1..count - n) k /= 10
+    return k % 10
 }
 
 /**
@@ -346,22 +327,16 @@ fun squareSequenceDigit(n: Int): Int {
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun fibSequenceDigit(n: Int): Int {
-    var numder:Int
     var count = 0
-    var countDig = 0
+    var countDig: Int
     var remeber = 0
     for (i in 1..n) {
-        numder = fib(i)
-        countDig = digitNumber(numder)
-        numder = revert(numder)
-        if(count == n) break
-        while (countDig != 0) {
-            remeber = numder % 10
-            count++
-            if (count == n) break
-            numder /= 10
-            countDig -= 1
-        }
+        if (count == n) break
+        remeber = fib(i)
+        countDig = digitNumber(remeber)
+        count += countDig
+        if (count >= n) break
     }
-    return remeber
+    if (count > n) for (i in 1..count - n) remeber /= 10
+    return remeber % 10
 }
