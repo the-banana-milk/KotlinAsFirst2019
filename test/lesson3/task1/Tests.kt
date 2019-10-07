@@ -20,6 +20,7 @@ class Tests {
     @Test
     @Tag("Example")
     fun isPrime() {
+        assertTrue(isPrime(3))
         assertFalse(isPrime(1))
         assertTrue(isPrime(2))
         assertTrue(isPrime(5))
