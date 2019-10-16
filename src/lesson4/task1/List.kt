@@ -2,8 +2,10 @@
 
 package lesson4.task1
 
+import javafx.scene.control.Separator
 import lesson1.task1.discriminant
 import lesson1.task1.sqr
+import lesson3.task1.minDivisor
 import kotlin.math.pow
 import kotlin.math.sqrt
 
@@ -119,15 +121,11 @@ fun buildSumExample(list: List<Int>) = list.joinToString(separator = " + ", post
  */
 fun abs(v: List<Double>): Double {
     var sum = 0.0
-    var elem: Double
-    return if (v.isEmpty()) 0.0
-    else {
-        for (i in 0..(v.size - 1)) {
-            elem = v[i] * v[i]
-            sum += elem
-        }
-        sum.pow(0.5)
+    for (i in 0 until v.size) {
+        val elem = v[i] * v[i]
+        sum += elem
     }
+    return sqrt(sum)
 }
 /**
  * Простая
@@ -141,7 +139,7 @@ fun mean(list: List<Double>): Double {
         for (elem in list) {
             sum += elem
         }
-        sum / (list.size).toDouble()
+        sum / (list.size)
     }
 }
 
@@ -155,7 +153,7 @@ fun mean(list: List<Double>): Double {
  */
 fun center(list: MutableList<Double>): MutableList<Double> {
     val mean = mean(list)
-    for (i in 0..(list.size - 1)) {
+    for (i in 0 until list.size) {
         list[i] = list[i] - mean
     }
     return list
@@ -170,7 +168,7 @@ fun center(list: MutableList<Double>): MutableList<Double> {
  */
 fun times(a: List<Int>, b: List<Int>): Int {
     var c = 0
-    for (i in 0..(a.size - 1)) {
+    for (i in 0 until a.size) {
         c += (a[i] * b[i])
     }
     return c
@@ -186,14 +184,13 @@ fun times(a: List<Int>, b: List<Int>): Int {
  */
 fun polynom(p: List<Int>, x: Int): Int {
     var pt = 0
-    val remX = x
     var remP = 0
     var remI = 0
-    for (i in 0..(p.size - 1)) {
-        remP = p[i]
+    for ((i, el) in p.withIndex()) {
+        remP = el
         remI = i
         while (remI != 0) {
-            remP *= remX
+            remP *= x
             remI -= 1
         }
         pt += remP
@@ -211,7 +208,12 @@ fun polynom(p: List<Int>, x: Int): Int {
  *
  * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
  */
-fun accumulate(list: MutableList<Int>): MutableList<Int> = TODO()
+fun accumulate(list: MutableList<Int>): MutableList<Int> {
+    for (i in 1 until list.size) {
+        list[i] += list[i - 1]
+    }
+    return list
+}
 
 /**
  * Средняя
@@ -220,7 +222,17 @@ fun accumulate(list: MutableList<Int>): MutableList<Int> = TODO()
  * Результат разложения вернуть в виде списка множителей, например 75 -> (3, 5, 5).
  * Множители в списке должны располагаться по возрастанию.
  */
-fun factorize(n: Int): List<Int> = TODO()
+fun factorize(n: Int): List<Int> {
+    val need = mutableListOf<Int>()
+    var remDiv = 0
+    var remN = n
+    while (remN != 1) {
+        remDiv = minDivisor(remN)
+        remN /= remDiv
+        need.add(remDiv)
+    }
+    return need.toList()
+}
 
 /**
  * Сложная
@@ -229,7 +241,8 @@ fun factorize(n: Int): List<Int> = TODO()
  * Результат разложения вернуть в виде строки, например 75 -> 3*5*5
  * Множители в результирующей строке должны располагаться по возрастанию.
  */
-fun factorizeToString(n: Int): String = TODO()
+fun factorizeToString(n: Int): String = factorize(n).joinToString("*")
+
 
 /**
  * Средняя
@@ -238,7 +251,17 @@ fun factorizeToString(n: Int): String = TODO()
  * Результат перевода вернуть в виде списка цифр в base-ичной системе от старшей к младшей,
  * например: n = 100, base = 4 -> (1, 2, 1, 0) или n = 250, base = 14 -> (1, 3, 12)
  */
-fun convert(n: Int, base: Int): List<Int> = TODO()
+fun convert(n: Int, base: Int): List<Int> {
+    val save = mutableListOf<Int>()
+    var rem = 0
+    var remN = n
+    while (remN != 0) {
+        rem = remN % base
+        save.add(rem)
+        remN /= base
+    }
+    return save.reversed().toList()
+}
 
 /**
  * Сложная
@@ -251,7 +274,7 @@ fun convert(n: Int, base: Int): List<Int> = TODO()
  * Использовать функции стандартной библиотеки, напрямую и полностью решающие данную задачу
  * (например, n.toString(base) и подобные), запрещается.
  */
-fun convertToString(n: Int, base: Int): String = TODO()
+fun convertToString(n: Int, base: Int): String = TODO()//convert(n, base).joinToString
 
 /**
  * Средняя
