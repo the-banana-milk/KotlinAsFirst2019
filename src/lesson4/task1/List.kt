@@ -257,7 +257,7 @@ fun convert(n: Int, base: Int): List<Int> {
         save.add(rem)
         remN /= base
     }
-    return save.reversed()
+    return save.reversed().toList()
 }
 
 /**
