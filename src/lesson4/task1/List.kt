@@ -121,9 +121,8 @@ fun buildSumExample(list: List<Int>) = list.joinToString(separator = " + ", post
  */
 fun abs(v: List<Double>): Double {
     var sum = 0.0
-    for (i in 0 until v.size) {
-        val elem = v[i] * v[i]
-        sum += elem
+    for (elem in v) {
+        sum += (elem * elem)
     }
     return sqrt(sum)
 }
@@ -189,9 +188,8 @@ fun polynom(p: List<Int>, x: Int): Int {
     for ((i, el) in p.withIndex()) {
         remP = el
         remI = i
-        while (remI != 0) {
+        for (k in 1..remI) {
             remP *= x
-            remI -= 1
         }
         pt += remP
     }
@@ -253,14 +251,13 @@ fun factorizeToString(n: Int): String = factorize(n).joinToString("*")
  */
 fun convert(n: Int, base: Int): List<Int> {
     val save = mutableListOf<Int>()
-    var rem = 0
     var remN = n
     while (remN != 0) {
-        rem = remN % base
+        val rem = remN % base
         save.add(rem)
         remN /= base
     }
-    return save.reversed().toList()
+    return save.reversed()
 }
 
 /**
@@ -274,7 +271,23 @@ fun convert(n: Int, base: Int): List<Int> {
  * Использовать функции стандартной библиотеки, напрямую и полностью решающие данную задачу
  * (например, n.toString(base) и подобные), запрещается.
  */
-fun convertToString(n: Int, base: Int): String = TODO()//convert(n, base).joinToString
+fun convertToString(n: Int, base: Int): String {
+    val newlist = convert(n, base)
+    val lit1 = "abcdefghij"
+    val lit2 = "klmnopqrst"
+    val lit3 = "uvwxyz"
+    var needStr = ""
+    for (i in 0 until newlist.size) {
+        when {
+            newlist[i] in 0..9 -> needStr += newlist[i]
+            newlist[i] in 10..19 -> needStr += lit1[newlist[i] % 10]
+            newlist[i] in 20..29 -> needStr += lit2[newlist[i] % 10]
+            newlist[i] in 30..35 -> needStr += lit3[newlist[i] % 10]
+        }
+    }
+    return needStr
+}
+
 
 /**
  * Средняя
@@ -283,7 +296,10 @@ fun convertToString(n: Int, base: Int): String = TODO()//convert(n, base).joinTo
  * из системы счисления с основанием base в десятичную.
  * Например: digits = (1, 3, 12), base = 14 -> 250
  */
-fun decimal(digits: List<Int>, base: Int): Int = TODO()
+fun decimal(digits: List<Int>, base: Int): Int {
+    val newlist = digits.reversed()
+    return polynom(newlist, base)
+}
 
 /**
  * Сложная
@@ -297,7 +313,34 @@ fun decimal(digits: List<Int>, base: Int): Int = TODO()
  * Использовать функции стандартной библиотеки, напрямую и полностью решающие данную задачу
  * (например, str.toInt(base)), запрещается.
  */
-fun decimalFromString(str: String, base: Int): Int = TODO()
+fun decimalFromString(str: String, base: Int): Int {
+    val lit1 = "abcdefghij"
+    val lit2 = "klmnopqrst"
+    val lit3 = "uvwxyz"
+    val list = mutableListOf<Int>()
+    for (i in 0 until str.length) {
+        if (base in 2..10) {
+            if (str[i].toInt() in 0..9) list.add(str[i].toInt())
+        }
+        if (base in 11..19) {
+            for (j in 0..9) {
+                if (str[i] == lit1[j]) list.add(j + 10)
+                if (str[i].toInt() in 0..9) list.add(str[i].toInt())
+            }
+        }
+        if (base in 20..29) {
+            for (j in 0..9) {
+                if (str[i] == lit2[j]) list.add(j + 20)
+                if (str[i].toInt() in 0..9) list.add(str[i].toInt())
+            }
+        }
+        if (base in 30..35) {
+            for (j in 0..5) if (str[i] == lit3[j]) list.add(j + 30)
+            if (str[i].toInt() in 0..9) list.add(str[i].toInt())
+        }
+    }
+    return decimal(list, base)
+}
 
 /**
  * Сложная
