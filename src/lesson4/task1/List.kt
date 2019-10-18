@@ -186,11 +186,9 @@ fun times(a: List<Int>, b: List<Int>): Int {
 fun polynom(p: List<Int>, x: Int): Int {
     var pt = 0
     var remP = 0
-    var remI = 0
     for ((i, el) in p.withIndex()) {
         remP = el
-        remI = i
-        for (k in 1..remI) {
+        for (k in 1..i) {
             remP *= x
         }
         pt += remP
@@ -224,10 +222,10 @@ fun accumulate(list: MutableList<Int>): MutableList<Int> {
  */
 fun factorize(n: Int): List<Int> {
     val need = mutableListOf<Int>()
-    var remDiv = 0
+    var remDiv = minDivisor(n)
     var remN = n
     while (remN != 1) {
-        remDiv = minDivisor(remN)
+        while (remN % remDiv != 0) remDiv += 1
         remN /= remDiv
         need.add(remDiv)
     }
@@ -323,23 +321,25 @@ fun decimalFromString(str: String, base: Int): Int {
     val list = mutableListOf<Int>()
     for (i in 0 until str.length) {
         if (base in 2..10) {
-            if (str[i].toInt() in 0..9) list.add(str[i].toInt())
+            if ((str[i].toInt() - 48) in 0..9) list.add(str[i].toInt() - 48)
         }
         if (base in 11..19) {
             for (j in 0..9) {
                 if (str[i] == lit1[j]) list.add(j + 10)
-                if (str[i].toInt() in 0..9) list.add(str[i].toInt())
+                else if ((str[i].toInt() - 48) in 0..9) list.add(str[i].toInt() - 48)
             }
         }
         if (base in 20..29) {
             for (j in 0..9) {
-                if (str[i] == lit2[j]) list.add(j + 20)
-                if (str[i].toInt() in 0..9) list.add(str[i].toInt())
+                if (str[i].toInt() == lit2[j].toInt()) list.add(j + 20)
+                else if ((str[i].toInt() - 48) in 0..9) list.add(str[i].toInt() - 48)
             }
         }
         if (base in 30..35) {
-            for (j in 0..5) if (str[i] == lit3[j]) list.add(j + 30)
-            if (str[i].toInt() in 0..9) list.add(str[i].toInt())
+            for (j in 0..5) {
+                if (str[i].toInt() == lit3[j].toInt()) list.add(j + 30)
+                else if ((str[i].toInt() - 48) in 0..9) list.add(str[i].toInt() - 48)
+            }
         }
     }
     return decimal(list, base)
@@ -381,8 +381,10 @@ fun roman(n: Int): String {
                 needStr += romDig[4]
                 needStr += romDig[5]
             }
-            countIter = remN / 100
-            for (i in 1 until countIter + 1) needStr += romDig[4]
+            if (remN / 100 in 1..3) {
+                countIter = remN / 100
+                for (i in 1 until countIter + 1) needStr += romDig[4]
+            }
         }
     }
     remN = n % 100
