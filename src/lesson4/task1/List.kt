@@ -10,6 +10,7 @@ import lesson3.task1.digitNumber
 import lesson3.task1.minDivisor
 import kotlin.math.pow
 import kotlin.math.sqrt
+import kotlin.text.StringBuilder
 
 /**
  * Пример
@@ -258,7 +259,7 @@ fun convert(n: Int, base: Int): List<Int> {
         save.add(rem)
         remN /= base
     }
-    return save.reversed().toList()
+    return save.reversed()
 }
 
 /**
@@ -274,19 +275,15 @@ fun convert(n: Int, base: Int): List<Int> {
  */
 fun convertToString(n: Int, base: Int): String {
     val newlist = convert(n, base)
-    val lit1 = "abcdefghij"
-    val lit2 = "klmnopqrst"
-    val lit3 = "uvwxyz"
-    var needStr = ""
+    val lit1 = "abcdefghijklmnopqrstuvwxyz"
+    val needStr = StringBuilder()
     for (i in 0 until newlist.size) {
         when {
-            newlist[i] in 0..9 -> needStr += newlist[i]
-            newlist[i] in 10..19 -> needStr += lit1[newlist[i] % 10]
-            newlist[i] in 20..29 -> needStr += lit2[newlist[i] % 10]
-            newlist[i] in 30..35 -> needStr += lit3[newlist[i] % 10]
+            newlist[i] in 0..9 -> needStr.append(newlist[i])
+            newlist[i] in 10..35 -> needStr.append(lit1[newlist[i] - 10])
         }
     }
-    return needStr
+    return needStr.toString()
 }
 
 
@@ -315,32 +312,10 @@ fun decimal(digits: List<Int>, base: Int): Int {
  * (например, str.toInt(base)), запрещается.
  */
 fun decimalFromString(str: String, base: Int): Int {
-    val lit1 = "abcdefghij"
-    val lit2 = "klmnopqrst"
-    val lit3 = "uvwxyz"
     val list = mutableListOf<Int>()
     for (i in 0 until str.length) {
-        if (base in 2..10) {
-            if ((str[i].toInt() - 48) in 0..9) list.add(str[i].toInt() - 48)
-        }
-        if (base in 11..19) {
-            for (j in 0..9) {
-                if (str[i] == lit1[j]) list.add(j + 10)
-                else if ((str[i].toInt() - 48) in 0..9) list.add(str[i].toInt() - 48)
-            }
-        }
-        if (base in 20..29) {
-            for (j in 0..9) {
-                if (str[i].toInt() == lit2[j].toInt()) list.add(j + 20)
-                else if ((str[i].toInt() - 48) in 0..9) list.add(str[i].toInt() - 48)
-            }
-        }
-        if (base in 30..35) {
-            for (j in 0..5) {
-                if (str[i].toInt() == lit3[j].toInt()) list.add(j + 30)
-                else if ((str[i].toInt() - 48) in 0..9) list.add(str[i].toInt() - 48)
-            }
-        }
+        if ((str[i].toInt() - 48) in 0..9) list.add(str[i].toInt() - 48)
+        else list.add(str[i].toInt() - 87)
     }
     return decimal(list, base)
 }
