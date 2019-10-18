@@ -3,8 +3,10 @@
 package lesson4.task1
 
 import javafx.scene.control.Separator
+import kotlinx.html.I
 import lesson1.task1.discriminant
 import lesson1.task1.sqr
+import lesson3.task1.digitNumber
 import lesson3.task1.minDivisor
 import kotlin.math.pow
 import kotlin.math.sqrt
@@ -351,7 +353,81 @@ fun decimalFromString(str: String, base: Int): Int {
  * 90 = XC, 100 = C, 400 = CD, 500 = D, 900 = CM, 1000 = M.
  * Например: 23 = XXIII, 44 = XLIV, 100 = C
  */
-fun roman(n: Int): String = TODO()
+fun roman(n: Int): String {
+    val romDig = "IVXLCDM"
+    var needStr = ""
+    var countLenOfDig = digitNumber(n)
+    var remN = n
+    var countIter = 0
+    if (countLenOfDig >= 4) {
+        remN = n / 1000
+        for (i in 1 until remN + 1) needStr += romDig[6]
+    }
+    remN = n % 1000
+    countLenOfDig = digitNumber(remN)
+    if (countLenOfDig == 3) {
+        if (remN / 100 == 9) {
+            needStr += romDig[4]
+            needStr += romDig[6]
+        }
+        if (((remN / 100) < 9) && (remN / 100 > 5)) {
+            countIter = (remN / 100) - 5
+            needStr += romDig[5]
+            for (i in 1 until countIter + 1) needStr += romDig[4]
+        }
+        if (remN / 100 == 5) needStr += romDig[5]
+        if (remN / 100 < 5) {
+            if (remN / 100 == 4) {
+                needStr += romDig[4]
+                needStr += romDig[5]
+            }
+            countIter = remN / 100
+            for (i in 1 until countIter + 1) needStr += romDig[4]
+        }
+    }
+    remN = n % 100
+    countLenOfDig = digitNumber(remN)
+    if (countLenOfDig == 2) {
+        if (remN / 10 == 9) {
+            needStr += romDig[2]
+            needStr += romDig[4]
+        }
+        if (remN / 10 in 5..8) {
+            needStr += romDig[3]
+            countIter = remN / 10 - 5
+            for (i in 1..countIter) needStr += romDig[2]
+        }
+        if (remN / 10 == 4) {
+            needStr += romDig[2]
+            needStr += romDig[3]
+        }
+        if (remN / 10 in 1..3) {
+            for (i in 1..remN / 10) needStr += romDig[2]
+        }
+    }
+    remN = n % 10
+    countLenOfDig = digitNumber(remN)
+    if (countLenOfDig == 1) {
+        if (remN == 9) {
+            needStr += romDig[0]
+            needStr += romDig[2]
+        }
+        if (remN in 5..8) {
+            needStr += romDig[1]
+            countIter = remN - 5
+            for (i in 1..countIter) needStr += romDig[0]
+        }
+        if (remN == 4) {
+            needStr += romDig[0]
+            needStr += romDig[1]
+        }
+        if (remN in 1..3) {
+            countIter = remN
+            for (i in 1..countIter) needStr += romDig[0]
+        }
+    }
+    return needStr
+}
 
 /**
  * Очень сложная

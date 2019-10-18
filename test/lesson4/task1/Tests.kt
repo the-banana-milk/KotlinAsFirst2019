@@ -223,6 +223,9 @@ class Tests {
     fun roman() {
         assertEquals("I", roman(1))
         assertEquals("MMM", roman(3000))
+        assertEquals("XL", roman(40))
+        assertEquals("IX", roman(9))
+        assertEquals("LXX", roman(70))
         assertEquals("MCMLXXVIII", roman(1978))
         assertEquals("DCXCIV", roman(694))
         assertEquals("XLIX", roman(49))
