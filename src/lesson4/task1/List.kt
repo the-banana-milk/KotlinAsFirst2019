@@ -7,6 +7,7 @@ import kotlinx.html.I
 import lesson1.task1.discriminant
 import lesson1.task1.sqr
 import lesson3.task1.digitNumber
+import lesson3.task1.isPrime
 import lesson3.task1.minDivisor
 import kotlin.math.pow
 import kotlin.math.sqrt
@@ -225,12 +226,14 @@ fun factorize(n: Int): List<Int> {
     val need = mutableListOf<Int>()
     var remDiv = minDivisor(n)
     var remN = n
-    while (remN != 1) {
-        while (remN % remDiv != 0) remDiv += 1
-        remN /= remDiv
-        need.add(remDiv)
-    }
-    return need.toList()
+    if (isPrime(n) == false) {
+        while (remN != 1) {
+            while (remN % remDiv != 0) remDiv += 1
+            remN /= remDiv
+            need.add(remDiv)
+        }
+    } else need.add(remN)
+    return need
 }
 
 /**
@@ -313,9 +316,9 @@ fun decimal(digits: List<Int>, base: Int): Int {
  */
 fun decimalFromString(str: String, base: Int): Int {
     val list = mutableListOf<Int>()
-    for (i in 0 until str.length) {
-        if ((str[i].toInt() - 48) in 0..9) list.add(str[i].toInt() - 48)
-        else list.add(str[i].toInt() - 87)
+    for (i in str) {
+        if (i in '0'..'9') list.add(i.toInt() - 48)
+        else list.add(i.toInt() - 87)
     }
     return decimal(list, base)
 }
@@ -328,83 +331,13 @@ fun decimalFromString(str: String, base: Int): Int {
  * 90 = XC, 100 = C, 400 = CD, 500 = D, 900 = CM, 1000 = M.
  * Например: 23 = XXIII, 44 = XLIV, 100 = C
  */
-fun roman(n: Int): String {
-    val romDig = "IVXLCDM"
-    var needStr = ""
-    var countLenOfDig = digitNumber(n)
-    var remN = n
-    var countIter = 0
-    if (countLenOfDig >= 4) {
-        remN = n / 1000
-        for (i in 1 until remN + 1) needStr += romDig[6]
-    }
-    remN = n % 1000
-    countLenOfDig = digitNumber(remN)
-    if (countLenOfDig == 3) {
-        if (remN / 100 == 9) {
-            needStr += romDig[4]
-            needStr += romDig[6]
-        }
-        if (((remN / 100) < 9) && (remN / 100 > 5)) {
-            countIter = (remN / 100) - 5
-            needStr += romDig[5]
-            for (i in 1 until countIter + 1) needStr += romDig[4]
-        }
-        if (remN / 100 == 5) needStr += romDig[5]
-        if (remN / 100 < 5) {
-            if (remN / 100 == 4) {
-                needStr += romDig[4]
-                needStr += romDig[5]
-            }
-            if (remN / 100 in 1..3) {
-                countIter = remN / 100
-                for (i in 1 until countIter + 1) needStr += romDig[4]
-            }
-        }
-    }
-    remN = n % 100
-    countLenOfDig = digitNumber(remN)
-    if (countLenOfDig == 2) {
-        if (remN / 10 == 9) {
-            needStr += romDig[2]
-            needStr += romDig[4]
-        }
-        if (remN / 10 in 5..8) {
-            needStr += romDig[3]
-            countIter = remN / 10 - 5
-            for (i in 1..countIter) needStr += romDig[2]
-        }
-        if (remN / 10 == 4) {
-            needStr += romDig[2]
-            needStr += romDig[3]
-        }
-        if (remN / 10 in 1..3) {
-            for (i in 1..remN / 10) needStr += romDig[2]
-        }
-    }
-    remN = n % 10
-    countLenOfDig = digitNumber(remN)
-    if (countLenOfDig == 1) {
-        if (remN == 9) {
-            needStr += romDig[0]
-            needStr += romDig[2]
-        }
-        if (remN in 5..8) {
-            needStr += romDig[1]
-            countIter = remN - 5
-            for (i in 1..countIter) needStr += romDig[0]
-        }
-        if (remN == 4) {
-            needStr += romDig[0]
-            needStr += romDig[1]
-        }
-        if (remN in 1..3) {
-            countIter = remN
-            for (i in 1..countIter) needStr += romDig[0]
-        }
-    }
-    return needStr
-}
+fun roman(n: Int): String = TODO()//{
+   // val romDig = listOf<String>("I")
+   // var needStr = StringBuilder()
+   // var countLenOfDig = digitNumber(n)
+   // var remN = n
+   // var countIter = 0
+//}
 
 /**
  * Очень сложная
@@ -413,4 +346,72 @@ fun roman(n: Int): String {
  * Например, 375 = "триста семьдесят пять",
  * 23964 = "двадцать три тысячи девятьсот шестьдесят четыре"
  */
-fun russian(n: Int): String = TODO()
+fun russian(n: Int): String {
+    val needStr = StringBuilder()
+    var lenNum = digitNumber(n)
+    var remN = n
+    val list1 = listOf<String>("один", "два", "три", "четыре", "пять", "шесть", "семь", "восемь", "девять")
+    val list2 = listOf<String>("одна", "две", "тысячи", "тысяч")
+    val list3 = listOf<String>("десять", "одиннадцать", "двенадцать", "тринадцать", "четырнадцать", "пятнадцать", "шестнадцать", "семнадцать", "восемнадцать", "девятнадцать")
+    val list4 = listOf<String>("двадцать", "тридцать", "сорок", "пятьдесят", "шестьдесят", "семдесят", "восемдесят", "девяносот")
+    val list5 = listOf<String>("сто", "двести", "триста", "четыреста", "пятьсот", "шестьсот", "семсот", "восемсот", "девятьсто", "тысяча")
+    if (lenNum == 1) {
+        if (remN % 100 in 1..9) {
+            needStr.append(list1[remN / 100 - 1])
+            remN /= 100
+        }
+    }
+    if (lenNum > 1) {
+        if (remN % 100 in 10..19) {
+            needStr.append(list3[remN / 100 - 10])
+            remN /= 100
+        } else if (remN % 100 in 20..90) {
+            needStr.append(list4[remN / 10 - 2])
+            if (remN % 10 in 1..9) needStr.append(list1[remN % 10 - 1])
+            remN /= 100
+        }
+    }
+    lenNum -= 2
+    if (lenNum >= 1) {
+        if (remN % 10 in 1..9) {
+            needStr.append(list5[remN % 10 - 1])
+            remN /= 10
+        }
+    }
+    lenNum -= 1
+    if (lenNum == 1) {
+        if (remN == 1) needStr.append(list5[9])
+        else if (remN == 2) {
+            needStr.append(list2[2])
+            needStr.append(list2[1])
+        }
+        else if (remN in 3..4) {
+            needStr.append(list2[2])
+            needStr.append(list1[remN - 1])
+        }
+        else if (remN in 5..9) {
+            needStr.append(list2[3])
+            needStr.append(list1[remN - 1])
+        }
+    }
+    if (lenNum > 1) {
+        if (((remN % 100) / 10 in 2..9) && (remN % 10 != 1)) {
+            needStr.append(list2[2])
+            needStr.append(list1[remN % 10 - 1])
+            needStr.append(list4[(remN % 100) / 10])
+        }
+        if (((remN % 100) / 10 in 2..9) && (remN % 10 == 1)) {
+            needStr.append(list5[9])
+            needStr.append(list2[0])
+            needStr.append(list4[(remN % 100) / 10])
+        }
+        if ((remN % 100 in 10..19)) {
+            needStr.append(list2[3])
+            needStr.append(list3[remN % 100 - 10])
+        }
+        if (remN / 100 in 1..9) {
+            needStr.append(list5[remN / 100 - 1])
+        }
+    }
+    return needStr.reverse().toString()
+}
