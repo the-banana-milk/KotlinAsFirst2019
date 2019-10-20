@@ -384,12 +384,10 @@ fun russian(n: Int): String {
         else if (remN == 2) {
             needStr.append(list2[2])
             needStr.append(list2[1])
-        }
-        else if (remN in 3..4) {
+        } else if (remN in 3..4) {
             needStr.append(list2[2])
             needStr.append(list1[remN - 1])
-        }
-        else if (remN in 5..9) {
+        } else if (remN in 5..9) {
             needStr.append(list2[3])
             needStr.append(list1[remN - 1])
         }
@@ -397,8 +395,9 @@ fun russian(n: Int): String {
     if (lenNum > 1) {
         if (((remN % 100) / 10 in 2..9) && (remN % 10 != 1)) {
             needStr.append(list2[2])
-            needStr.append(list1[remN % 10 - 1])
-            needStr.append(list4[(remN % 100) / 10])
+            if (remN % 10 == 2) needStr.append(list2[1])
+            else needStr.append(list1[remN % 10 - 1])
+            needStr.append(list4[((remN % 100) / 10) - 2])
         }
         if (((remN % 100) / 10 in 2..9) && (remN % 10 == 1)) {
             needStr.append(list5[9])
@@ -408,6 +407,10 @@ fun russian(n: Int): String {
         if ((remN % 100 in 10..19)) {
             needStr.append(list2[3])
             needStr.append(list3[remN % 100 - 10])
+        }
+        if ((remN / 100 in 1..9) && (remN % 100 == 0)) {
+            needStr.append(list2[3])
+            needStr.append(list5[remN / 100 - 1])
         }
         if (remN / 100 in 1..9) {
             needStr.append(list5[remN / 100 - 1])
