@@ -230,11 +230,16 @@ fun factorize(n: Int): List<Int> {
         need.add(2)
         remN /= 2
     }
-    while (remN != 1) {
-        while (remN % minDiv != 0) minDiv += 2
-        need.add(minDiv)
+    if (minDiv.toDouble() == sqrt(remN.toDouble())) {
         remN /= minDiv
-    }
+        need.add(minDiv)
+    }else if (minDiv.toDouble() < sqrt(remN.toDouble())) {
+        while (remN != 1) {
+            while (remN % minDiv != 0) minDiv += 2
+            need.add(minDiv)
+            remN /= minDiv
+        }
+    }else if ((minDiv.toDouble() > sqrt(remN.toDouble())) && remN > 1) need.add(remN)
     return need
 }
 
@@ -352,10 +357,10 @@ fun roman(n: Int): String {
     val needStr = StringBuilder()
     var remN = n
     var count = 0
-    for (i in 0 until romDig.size) {
-        while (remN >= romDig[i].first) {
-            remN -= romDig[i].first
-            needStr.append(romDig[i].second)
+    for ((value, string) in romDig) {
+        while (remN >= value) {
+            remN -= value
+            needStr.append(string)
         }
     }
     return needStr.toString()
