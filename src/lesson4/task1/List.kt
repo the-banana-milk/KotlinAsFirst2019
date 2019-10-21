@@ -226,18 +226,14 @@ fun factorize(n: Int): List<Int> {
     val need = mutableListOf<Int>()
     var minDiv = 3
     var remN = n
+    while (remN % 2 == 0) {
+        need.add(2)
+        remN /= 2
+    }
     while (remN != 1) {
-        if (remN % 2 != 0) {
-            while (remN % minDiv != 0) minDiv++
-            need.add(minDiv)
-            remN /= minDiv
-
-        } else {
-            while (remN % 2 == 0) {
-                need.add(2)
-                remN /= 2
-            }
-        }
+        while (remN % minDiv != 0) minDiv += 2
+        need.add(minDiv)
+        remN /= minDiv
     }
     return need
 }
@@ -324,7 +320,7 @@ fun decimalFromString(str: String, base: Int): Int {
     val list = mutableListOf<Int>()
     for (i in str) {
         if (i in '0'..'9') list.add(i - '0')
-        else list.add(i - 'W')
+        else list.add(i - 'a' + 10)
     }
     return decimal(list, base)
 }
@@ -371,75 +367,22 @@ fun roman(n: Int): String {
  * Например, 375 = "триста семьдесят пять",
  * 23964 = "двадцать три тысячи девятьсот шестьдесят четыре"
  */
-fun russian(n: Int): String {
-    val needStr = StringBuilder()
-    var lenNum = digitNumber(n)
-    var remN = n
-    val list1 = listOf<String>("один", "два", "три", "четыре", "пять", "шесть", "семь", "восемь", "девять")
-    val list2 = listOf<String>("одна", "две", "тысячи", "тысяч")
-    val list3 = listOf<String>("десять", "одиннадцать", "двенадцать", "тринадцать", "четырнадцать", "пятнадцать", "шестнадцать", "семнадцать", "восемнадцать", "девятнадцать")
-    val list4 = listOf<String>("двадцать", "тридцать", "сорок", "пятьдесят", "шестьдесят", "семдесят", "восемдесят", "девяносот")
-    val list5 = listOf<String>("сто", "двести", "триста", "четыреста", "пятьсот", "шестьсот", "семсот", "восемсот", "девятьсто", "тысяча")
-    if (lenNum == 1) {
-        if (remN % 100 in 1..9) {
-            needStr.append(list1[remN / 100 - 1])
-            remN /= 100
-        }
-    }
-    if (lenNum > 1) {
-        if (remN % 100 in 10..19) {
-            needStr.append(list3[remN / 100 - 10])
-            remN /= 100
-        } else if (remN % 100 in 20..90) {
-            needStr.append(list4[remN / 10 - 2])
-            if (remN % 10 in 1..9) needStr.append(list1[remN % 10 - 1])
-            remN /= 100
-        }
-    }
-    lenNum -= 2
-    if (lenNum >= 1) {
-        if (remN % 10 in 1..9) {
-            needStr.append(list5[remN % 10 - 1])
-            remN /= 10
-        }
-    }
-    lenNum -= 1
-    if (lenNum == 1) {
-        if (remN == 1) needStr.append(list5[9])
-        else if (remN == 2) {
-            needStr.append(list2[2])
-            needStr.append(list2[1])
-        } else if (remN in 3..4) {
-            needStr.append(list2[2])
-            needStr.append(list1[remN - 1])
-        } else if (remN in 5..9) {
-            needStr.append(list2[3])
-            needStr.append(list1[remN - 1])
-        }
-    }
-    if (lenNum > 1) {
-        if (((remN % 100) / 10 in 2..9) && (remN % 10 != 1)) {
-            needStr.append(list2[2])
-            if (remN % 10 == 2) needStr.append(list2[1])
-            else needStr.append(list1[remN % 10 - 1])
-            needStr.append(list4[((remN % 100) / 10) - 1])
-        }
-        if (((remN % 100) / 10 in 2..9) && (remN % 10 == 1)) {
-            needStr.append(list5[9])
-            needStr.append(list2[0])
-            needStr.append(list4[(remN % 100) / 10 - 1])
-        }
-        if ((remN % 100 in 10..19)) {
-            needStr.append(list2[3])
-            needStr.append(list3[remN % 100 - 10])
-        }
-        if ((remN / 100 in 1..9) && (remN % 100 == 0)) {
-            needStr.append(list2[3])
-            needStr.append(list5[remN / 100 - 1])
-        }
-        if (remN / 100 in 1..9) {
-            needStr.append(list5[remN / 100 - 1])
-        }
-    }
-    return needStr.reverse().toString()
-}
+fun russian(n: Int): String = TODO()//{
+    //val needStr = StringBuilder()
+    //val remNPartOne = n % 1000
+    //val remNPartTwo = n / 1000
+    //var lenNumOne = digitNumber(remNPartOne)
+    //var lenNumTwo = digitNumber(remNPartTwo)
+    //var lenNum = digitNumber(n)
+    //val list1 = listOf<String>("один", "два", "три", "четыре", "пять", "шесть", "семь", "восемь", "девять","десять")
+   // val list2 = listOf<String>("одиннадцать", "двенадцать", "тринадцать", "четырнадцать", "пятнадцать", "шестнадцать", "семнадцать", "восемнадцать", "девятнадцать")
+    //val list3 = listOf<String>("двадцать", "тридцать", "сорок", "пятьдесят", "шестьдесят", "семдесят", "восемдесят", "девяносот")
+   // val list4 = listOf<String>("сто", "двести", "триста", "четыреста", "пятьсот", "шестьсот", "семсот", "восемсот", "девятьсто")
+    //val list5 = listOf<String>("одна", "две")
+    //val list6 = listOf<String>("тысячи", "тысяч", "тысяча")
+   // if (lenNum >= 3) {
+       // if (remNPartOne % 100 in 1..10)
+
+ //   }
+
+//}
