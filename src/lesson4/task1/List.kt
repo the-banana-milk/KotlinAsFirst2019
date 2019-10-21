@@ -372,24 +372,61 @@ fun roman(n: Int): String {
  * Например, 375 = "триста семьдесят пять",
  * 23964 = "двадцать три тысячи девятьсот шестьдесят четыре"
  */
-fun russian(n: Int): String = TODO()//{
-    //val needStr = StringBuilder()
-    //val remNPartOne = n % 1000
-    //val remNPartTwo = n / 1000
-    //var lenNum = digitNumber(n)
-    //val list1 = listOf<String>("один", "два", "три", "четыре", "пять", "шесть", "семь", "восемь", "девять","десять")
-    //val list2 = listOf<String>("одиннадцать", "двенадцать", "тринадцать", "четырнадцать", "пятнадцать", "шестнадцать", "семнадцать", "восемнадцать", "девятнадцать")
-    //val list3 = listOf<String>("двадцать", "тридцать", "сорок", "пятьдесят", "шестьдесят", "семдесят", "восемдесят", "девяносот")
-    //val list4 = listOf<String>("сто", "двести", "триста", "четыреста", "пятьсот", "шестьсот", "семсот", "восемсот", "девятьсто")
-    //val list5 = listOf<String>("одна", "две")
-    //val list6 = listOf<String>("тысячи", "тысяч", "тысяча")
-    //if (lenNum >= 3) {
-        //if (remNPartOne % 100 in 1..10) needStr.append(list1[remNPartOne % 100 - 1])
-        //if (remNPartOne % 100 in 11..19) needStr.append(list2[remNPartOne % 100 - 11])
-        //if (remNPartOne % 100 in 20..99) {
-            //if (remNPartOne % 10 in 1..9) needStr.append(list1[remNPartOne % 10 - 1])
-            //if ((remNPartOne % 100) / 10 in 2..9) needStr.append(list3[(remNPartOne % 100) / 10 - 2])
-        //}
-    //}
-
-//}
+fun russian(n: Int): String {
+    val needStr = StringBuilder()
+    val remNPartOne = n % 1000
+    val remNPartTwo = n / 1000
+    var lenNum = digitNumber(n)
+    val lenPartOne = digitNumber(remNPartOne)
+    val lenPartTwo = digitNumber(remNPartTwo)
+    val list1 = listOf<String>("один", "два", "три", "четыре", "пять", "шесть", "семь", "восемь", "девять")
+    val list2 = listOf<String>("десять","одиннадцать", "двенадцать", "тринадцать", "четырнадцать", "пятнадцать", "шестнадцать", "семнадцать", "восемнадцать", "девятнадцать")
+    val list3 = listOf<String>("двадцать", "тридцать", "сорок", "пятьдесят", "шестьдесят", "семдесят", "восемдесят", "девяносот")
+    val list4 = listOf<String>("сто", "двести", "триста", "четыреста", "пятьсот", "шестьсот", "семсот", "восемсот", "девятьсто")
+    val list5 = listOf<String>("одна", "две")
+    val list6 = listOf<String>("тысячи", "тысяч", "тысяча")
+    if (lenPartOne >= 1) {
+        if (remNPartOne % 100 in 1..9) needStr.append(list1[remNPartOne % 100 - 1])
+        if (remNPartOne % 100 in 10..19) needStr.append(list2[remNPartOne % 100 - 10])
+        if (remNPartOne % 100 in 20..99) {
+            if (remNPartOne % 10 in 1..9) needStr.append(list1[remNPartOne % 10 - 1])
+            if ((remNPartOne % 100) / 10 in 2..9) needStr.append(list3[(remNPartOne % 100) / 10 - 2])
+        }
+        if (remNPartOne / 100 in 1..9) needStr.append(remNPartOne / 100 - 1)
+    }
+    if (lenPartTwo >= 1) {
+        if (remNPartTwo % 10 == 1) {
+            if ((remNPartTwo / 10 == 0) || ((remNPartTwo / 10) % 10 == 1)) {
+                needStr.append(list6[2])
+            } else if ((remNPartTwo / 10 != 0) || ((remNPartTwo / 10) % 10 != 1)) {
+                needStr.append(list6[2])
+                needStr.append(list5[1])
+            }
+        }
+        if ((remNPartTwo % 10 in 2..4) && ((remNPartTwo / 10) % 10 != 1)) {
+            needStr.append(list6[2])
+            if (remNPartTwo % 10 == 2) {
+                needStr.append(list5[1])
+            } else needStr.append(list1[(remNPartTwo % 100) - 1])
+        }
+        if ((remNPartTwo % 10 in 5..9) && (((remNPartTwo / 10) % 10) != 1)) {
+            needStr.append(list6[1])
+            needStr.append(list1[(remNPartTwo % 100) - 1])
+        }
+        if (remNPartTwo % 100 in 10..19) {
+            needStr.append(list6[1])
+            needStr.append(list2[(remNPartTwo % 100) - 10])
+        }
+        if (remNPartTwo % 100 in 20..99) {
+            //if (remNPartTwo % 10 in 1..9) needStr.append(list1[remNPartTwo % 10 - 1])
+            if (remNPartTwo % 10 == 0) needStr.append(list6[1])
+            if ((remNPartTwo % 100) / 10 in 2..9) needStr.append(list3[((remNPartTwo % 100) / 10) - 2])
+        }
+        if (remNPartTwo / 100 in 1..9) {
+            if (remNPartTwo % 100 == 0) needStr.append([list6[1]])
+            needStr.append(remNPartTwo / 100 - 1)
+        }
+    }
+    needStr.reverse()
+    return needStr.toString()
+}
