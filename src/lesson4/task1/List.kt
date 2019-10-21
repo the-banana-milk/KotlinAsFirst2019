@@ -187,7 +187,7 @@ fun times(a: List<Int>, b: List<Int>): Int {
  */
 fun polynom(p: List<Int>, x: Int): Int {
     var pt = 0
-    var remP = 0
+    var remP : Int
     for ((i, el) in p.withIndex()) {
         remP = el
         for (k in 1..i) {
@@ -356,7 +356,6 @@ fun roman(n: Int): String {
     )
     val needStr = StringBuilder()
     var remN = n
-    var count = 0
     for ((value, string) in romDig) {
         while (remN >= value) {
             remN -= value
@@ -385,48 +384,6 @@ fun russian(n: Int): String {
     val list4 = listOf<String>("сто", "двести", "триста", "четыреста", "пятьсот", "шестьсот", "семсот", "восемсот", "девятьсто")
     val list5 = listOf<String>("одна", "две")
     val list6 = listOf<String>("тысячи", "тысяч", "тысяча")
-    if (lenPartOne >= 1) {
-        if (remNPartOne % 100 in 1..9) needStr.append(list1[remNPartOne % 100 - 1])
-        if (remNPartOne % 100 in 10..19) needStr.append(list2[remNPartOne % 100 - 10])
-        if (remNPartOne % 100 in 20..99) {
-            if (remNPartOne % 10 in 1..9) needStr.append(list1[remNPartOne % 10 - 1])
-            if ((remNPartOne % 100) / 10 in 2..9) needStr.append(list3[(remNPartOne % 100) / 10 - 2])
-        }
-        if (remNPartOne / 100 in 1..9) needStr.append(remNPartOne / 100 - 1)
-    }
-    if (lenPartTwo >= 1) {
-        if (remNPartTwo % 10 == 1) {
-            if ((remNPartTwo / 10 == 0) || ((remNPartTwo / 10) % 10 == 1)) {
-                needStr.append(list6[2])
-            } else if ((remNPartTwo / 10 != 0) || ((remNPartTwo / 10) % 10 != 1)) {
-                needStr.append(list6[2])
-                needStr.append(list5[1])
-            }
-        }
-        if ((remNPartTwo % 10 in 2..4) && ((remNPartTwo / 10) % 10 != 1)) {
-            needStr.append(list6[2])
-            if (remNPartTwo % 10 == 2) {
-                needStr.append(list5[1])
-            } else needStr.append(list1[(remNPartTwo % 100) - 1])
-        }
-        if ((remNPartTwo % 10 in 5..9) && (((remNPartTwo / 10) % 10) != 1)) {
-            needStr.append(list6[1])
-            needStr.append(list1[(remNPartTwo % 100) - 1])
-        }
-        if (remNPartTwo % 100 in 10..19) {
-            needStr.append(list6[1])
-            needStr.append(list2[(remNPartTwo % 100) - 10])
-        }
-        if (remNPartTwo % 100 in 20..99) {
-            //if (remNPartTwo % 10 in 1..9) needStr.append(list1[remNPartTwo % 10 - 1])
-            if (remNPartTwo % 10 == 0) needStr.append(list6[1])
-            if ((remNPartTwo % 100) / 10 in 2..9) needStr.append(list3[((remNPartTwo % 100) / 10) - 2])
-        }
-        if (remNPartTwo / 100 in 1..9) {
-            if (remNPartTwo % 100 == 0) needStr.append([list6[1]])
-            needStr.append(remNPartTwo / 100 - 1)
-        }
-    }
     needStr.reverse()
     return needStr.toString()
 }
