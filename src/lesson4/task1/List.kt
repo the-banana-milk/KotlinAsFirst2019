@@ -363,6 +363,20 @@ fun roman(n: Int): String {
     }
     return needStr.toString()
 }
+
+fun translate(n: Int): List<String> {
+    val list = mutableListOf<String>()
+    val digits = listOf<String>("один", "два", "три", "четыре", "пять", "шесть", "семь", "восемь", "девять")
+    val ten1 = listOf<String>("десять","одиннадцать", "двенадцать", "тринадцать", "четырнадцать", "пятнадцать", "шестнадцать", "семнадцать", "восемнадцать", "девятнадцать")
+    val ten2 = listOf<String>("двадцать", "тридцать", "сорок", "пятьдесят", "шестьдесят", "семьдесят", "восемьдесят", "девяносто")
+    val hundred = listOf<String>("сто", "двести", "триста", "четыреста", "пятьсот", "шестьсот", "семсот", "восемсот", "девятьсот")
+    if (n / 100 in 1..9) list.add(hundred[(n / 100) - 1])
+    if ((n % 100) / 10 in 2..9) list.add(ten2[((n % 100) / 10) - 2])
+    if (n % 100 in 10..19) list.add(ten1[(n % 100) - 10])
+    if ((n % 10 in 1..9) && (n % 100 / 10 != 1)) list.add(digits[(n % 10) - 1])
+    return list
+}
+
 /**
  * Очень сложная
  *
@@ -371,60 +385,23 @@ fun roman(n: Int): String {
  * 23964 = "двадцать три тысячи девятьсот шестьдесят четыре"
  */
 fun russian(n: Int): String {
-    val needStr = StringBuilder()
-    var remNPart = n / 1000
-    var iter = 1
-    val digits = listOf<String>("один ", "два ", "три ", "четыре ", "пять ", "шесть ", "семь ", "восемь ", "девять ")
-    val ten1 = listOf<String>("десять ","одиннадцать ", "двенадцать ", "тринадцать ", "четырнадцать ", "пятнадцать ", "шестнадцать ", "семнадцать ", "восемнадцать ", "девятнадцать ")
-    val ten2 = listOf<String>("двадцать ", "тридцать ", "сорок ", "пятьдесят ", "шестьдесят ", "семдесят ", "восемдесят ", "девяносот ")
-    val hundred = listOf<String>("сто ", "двести ", "триста ", "четыреста ", "пятьсот ", "шестьсот ", "семсот ", "восемсот ", "девятьсто ")
-    val list5 = listOf<String>("одна ", "две ")
-    val list6 = listOf<String>("тысячи ", "тысяч ", "тысяча ")
-    if (remNPart != 0) {
-        while (iter != 3) {
-            if (remNPart / 100 in 1..9) {
-                needStr.append(hundred[(remNPart / 100) - 1])
-                if ((iter == 1) && (remNPart % 100 == 0)) {
-                    needStr.append(list6[1])
-                }
+    val remNPartOne = n / 1000
+    val remNPartTwo = n % 1000
+    val lenPtOne = digitNumber(remNPartOne)
+    val list1 = translate(remNPartOne).toMutableList()
+    val list2 = translate(remNPartTwo).toMutableList()
+    if (lenPtOne >= 1) {
+        if ((remNPartOne % 10 == 1) && ((n % 100) / 10 != 1)){
+            list1.removeAt(lenPtOne - 1)
+            list1.add("одна")
+            list1.add("тысяча")
+        } else if ((remNPartOne % 10 in 2..4) && (((n % 100) / 10) != 1)) {
+            if (remNPartOne % 10 == 2) {
+                list1.removeAt(lenPtOne - 1)
+                list1.add("две")
             }
-            if (remNPart % 100 / 10 in 2..9) {
-                needStr.append(ten2[((remNPart % 100) / 10) - 2])
-                if ((iter == 1) && (remNPart % 100 == 0)) needStr.append(list6[1])
-            }
-            if ((remNPart % 10 in 1..9)) {
-                if ((iter == 1) && (remNPart % 10 in 1..2) && (((remNPart % 100) / 10) != 1)) {
-                    if (remNPart % 10 == 1) {
-                        needStr.append(list5[0])
-                        needStr.append(list6[2])
-                    }
-                    if (remNPart % 10 == 2) {
-                        needStr.append(list5[1])
-                        needStr.append(list6[0])
-                    }
-                }
-                if ((iter == 1) && (remNPart % 10 in 3..4) && (((remNPart % 100) / 10) != 1)) {
-                    needStr.append(digits[(remNPart % 10) - 1])
-                    needStr.append(list6[0])
-                }
-                if ((iter == 1) && (remNPart % 10 in 5..9) && (((remNPart % 100) / 10) != 1)) {
-                    needStr.append(digits[(remNPart % 10) - 1])
-                    needStr.append(list6[1])
-                } else if (iter != 1) {
-                    needStr.append(digits[(remNPart % 10) - 1])
-                } else if (remNPart % 100 in 11..19) {
-                    needStr.append(ten1[(remNPart % 100) - 11])
-                    if (iter == 1) {
-                        needStr.append(list6[1])
-                    }
-                }
-            }
-            iter += 1
-            remNPart = n % 1000
-        }
-    } else if (remNPart == 0) {
-        iter += 1
-        remNPart = n % 1000
+            list1.add("тысячи")
+        } else if ((remNPartOne % 10 in 5..9) || ((remNPartOne % 10 == 0) && (remNPartOne / 10 != 0))) list1.add("тысяч")
     }
-   return needStr.toString()
+    return (list1 + list2).joinToString(" ")
 }
