@@ -392,15 +392,14 @@ fun translate(n: Int, partOfN : Int): List<String> {
 fun russian(n: Int): String {
     val remNPartOne = n / 1000
     val remNPartTwo = n % 1000
-    //val lenPtOne = digitNumber(remNPartOne)
     val firstPart = translate(n, remNPartOne).toMutableList()
-    val secondePart = translate(n, remNPartTwo).toMutableList()
+    val secondePart = translate(n, remNPartTwo)
     if (remNPartOne >= 1) {
         if ((remNPartOne % 10 == 1) && ((remNPartOne % 100) / 10 != 1)) {
             firstPart.add("тысяча")
         } else if ((remNPartOne % 10 in 2..4) && (((remNPartOne % 100) / 10) != 1)) {
             firstPart.add("тысячи")
-        } else if ((remNPartOne % 10 in 5..9) || ((remNPartOne % 10 == 0) && (remNPartOne / 10 != 0))) firstPart.add("тысяч")
+        } else firstPart.add("тысяч")
     }
     return (firstPart + secondePart).joinToString(" ")
 }
