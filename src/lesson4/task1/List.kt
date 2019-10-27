@@ -377,7 +377,7 @@ fun translate(n: Int, partOfN : Int): List<String> {
     if ((partOfN % 10 in 1..9) && (partOfN % 100 / 10 != 1)) {
         if ((partOfN == n / 1000) && (partOfN % 10 == 1)) list.add("одна")
         else if ((partOfN == n / 1000) && (partOfN % 10 == 2)) list.add("две")
-        else list.add(digits[(n % 10) - 1])
+        else list.add(digits[(partOfN % 10) - 1])
     }
     return list
 }
