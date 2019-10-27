@@ -364,16 +364,21 @@ fun roman(n: Int): String {
     return needStr.toString()
 }
 
-fun translate(n: Int): List<String> {
+fun translate(n: Int, partOfN : Int): List<String> {
     val list = mutableListOf<String>()
     val digits = listOf<String>("один", "два", "три", "четыре", "пять", "шесть", "семь", "восемь", "девять")
-    val ten1 = listOf<String>("десять","одиннадцать", "двенадцать", "тринадцать", "четырнадцать", "пятнадцать", "шестнадцать", "семнадцать", "восемнадцать", "девятнадцать")
+    val ten1 = listOf<String>("десять", "одиннадцать", "двенадцать", "тринадцать", "четырнадцать", "пятнадцать",
+        "шестнадцать", "семнадцать", "восемнадцать", "девятнадцать")
     val ten2 = listOf<String>("двадцать", "тридцать", "сорок", "пятьдесят", "шестьдесят", "семьдесят", "восемьдесят", "девяносто")
     val hundred = listOf<String>("сто", "двести", "триста", "четыреста", "пятьсот", "шестьсот", "семьсот", "восемьсот", "девятьсот")
-    if (n / 100 in 1..9) list.add(hundred[(n / 100) - 1])
-    if ((n % 100) / 10 in 2..9) list.add(ten2[((n % 100) / 10) - 2])
-    if (n % 100 in 10..19) list.add(ten1[(n % 100) - 10])
-    if ((n % 10 in 1..9) && (n % 100 / 10 != 1)) list.add(digits[(n % 10) - 1])
+    if (partOfN / 100 in 1..9) list.add(hundred[(partOfN / 100) - 1])
+    if ((partOfN % 100) / 10 in 2..9) list.add(ten2[((partOfN % 100) / 10) - 2])
+    if (partOfN % 100 in 10..19) list.add(ten1[(partOfN % 100) - 10])
+    if ((partOfN % 10 in 1..9) && (partOfN % 100 / 10 != 1)) {
+        if ((partOfN == n / 1000) && (partOfN % 10 == 1)) list.add("одна")
+        else if ((partOfN == n / 1000) && (partOfN % 10 == 2)) list.add("две")
+        else list.add(digits[(n % 10) - 1])
+    }
     return list
 }
 
@@ -388,18 +393,12 @@ fun russian(n: Int): String {
     val remNPartOne = n / 1000
     val remNPartTwo = n % 1000
     val lenPtOne = digitNumber(remNPartOne)
-    val list1 = translate(remNPartOne).toMutableList()
-    val list2 = translate(remNPartTwo).toMutableList()
-    if (lenPtOne >= 1) {
-        if ((remNPartOne % 10 == 1) && ((n % 100) / 10 != 1)){
-            list1.removeAt(lenPtOne - 1)
-            list1.add("одна")
+    val list1 = translate(n, remNPartOne).toMutableList()
+    val list2 = translate(n, remNPartTwo).toMutableList()
+    if (remNPartOne >= 0) {
+        if ((remNPartOne % 10 == 1) && ((n % 100) / 10 != 1)) {
             list1.add("тысяча")
         } else if ((remNPartOne % 10 in 2..4) && (((n % 100) / 10) != 1)) {
-            if (remNPartOne % 10 == 2) {
-                list1.removeAt(lenPtOne - 1)
-                list1.add("две")
-            }
             list1.add("тысячи")
         } else if ((remNPartOne % 10 in 5..9) || ((remNPartOne % 10 == 0) && (remNPartOne / 10 != 0))) list1.add("тысяч")
     }
