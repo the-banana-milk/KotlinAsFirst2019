@@ -364,19 +364,21 @@ fun roman(n: Int): String {
     return needStr.toString()
 }
 
-fun translate(n: Int, partOfN : Int): List<String> {
+fun translate(i: Boolean, partOfN : Int): List<String> {
     val list = mutableListOf<String>()
     val digits = listOf<String>("один", "два", "три", "четыре", "пять", "шесть", "семь", "восемь", "девять")
     val ten1 = listOf<String>("десять", "одиннадцать", "двенадцать", "тринадцать", "четырнадцать", "пятнадцать",
         "шестнадцать", "семнадцать", "восемнадцать", "девятнадцать")
-    val ten2 = listOf<String>("двадцать", "тридцать", "сорок", "пятьдесят", "шестьдесят", "семьдесят", "восемьдесят", "девяносто")
-    val hundred = listOf<String>("сто", "двести", "триста", "четыреста", "пятьсот", "шестьсот", "семьсот", "восемьсот", "девятьсот")
+    val ten2 = listOf<String>("двадцать", "тридцать", "сорок", "пятьдесят", "шестьдесят",
+        "семьдесят", "восемьдесят", "девяносто")
+    val hundred = listOf<String>("сто", "двести", "триста", "четыреста", "пятьсот", "шестьсот",
+        "семьсот", "восемьсот", "девятьсот")
     if (partOfN / 100 in 1..9) list.add(hundred[(partOfN / 100) - 1])
     if ((partOfN % 100) / 10 in 2..9) list.add(ten2[((partOfN % 100) / 10) - 2])
     if (partOfN % 100 in 10..19) list.add(ten1[(partOfN % 100) - 10])
     if ((partOfN % 10 in 1..9) && (partOfN % 100 / 10 != 1)) {
-        if ((partOfN == n / 1000) && (partOfN % 10 == 1)) list.add("одна")
-        else if ((partOfN == n / 1000) && (partOfN % 10 == 2)) list.add("две")
+        if ((i == true) && (partOfN % 10 == 1)) list.add("одна")
+        else if ((i == true) && (partOfN % 10 == 2)) list.add("две")
         else list.add(digits[(partOfN % 10) - 1])
     }
     return list
@@ -392,8 +394,10 @@ fun translate(n: Int, partOfN : Int): List<String> {
 fun russian(n: Int): String {
     val remNPartOne = n / 1000
     val remNPartTwo = n % 1000
-    val firstPart = translate(n, remNPartOne).toMutableList()
-    val secondePart = translate(n, remNPartTwo)
+    val i:Boolean = true
+    val k:Boolean = false
+    val firstPart = translate(i, remNPartOne).toMutableList()
+    val secondePart = translate(k, remNPartTwo)
     if (remNPartOne >= 1) {
         if ((remNPartOne % 10 == 1) && ((remNPartOne % 100) / 10 != 1)) {
             firstPart.add("тысяча")
