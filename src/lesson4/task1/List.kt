@@ -364,7 +364,7 @@ fun roman(n: Int): String {
     return needStr.toString()
 }
 
-fun translate(i: Boolean, partOfN : Int): List<String> {
+fun translate(partOfN: Int, i: Boolean): List<String> {
     val list = mutableListOf<String>()
     val digits = listOf<String>("один", "два", "три", "четыре", "пять", "шесть", "семь", "восемь", "девять")
     val ten1 = listOf<String>("десять", "одиннадцать", "двенадцать", "тринадцать", "четырнадцать", "пятнадцать",
@@ -394,10 +394,8 @@ fun translate(i: Boolean, partOfN : Int): List<String> {
 fun russian(n: Int): String {
     val remNPartOne = n / 1000
     val remNPartTwo = n % 1000
-    val i:Boolean = true
-    val k:Boolean = false
-    val firstPart = translate(i, remNPartOne).toMutableList()
-    val secondePart = translate(k, remNPartTwo)
+    val firstPart = translate(remNPartOne, true).toMutableList()
+    val secondePart = translate(remNPartTwo, false)
     if (remNPartOne >= 1) {
         if ((remNPartOne % 10 == 1) && ((remNPartOne % 100) / 10 != 1)) {
             firstPart.add("тысяча")

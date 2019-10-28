@@ -113,13 +113,12 @@ fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>>{
 fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean {
     val size = a.size
     var countPair = 0
-    for ((key, value) in a) {
-        for ((key1, value1) in b) {
-            if (key1 == key && value1 == value) countPair += 1
+    for ((keyA, valueA) in a) {
+        for ((keyB, valueB) in b) {
+            if (keyB == keyA && valueB == valueA) countPair += 1
         }
     }
-    return if (countPair == size) true
-    else false
+    return countPair == size
 }
 
 /**
@@ -136,7 +135,16 @@ fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean {
  *   subtractOf(a = mutableMapOf("a" to "z"), mapOf("a" to "z"))
  *     -> a changes to mutableMapOf() aka becomes empty
  */
-fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>): Unit = TODO()
+fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>): Unit {
+    for ((keyA, valueA) in a) {
+        for ((keyB, valueB) in b) {
+          if ((keyA == keyB) && (valueA == valueB)) {
+              a.remove(keyA)
+          }
+        }
+    }
+    return
+}
 
 /**
  * Простая
