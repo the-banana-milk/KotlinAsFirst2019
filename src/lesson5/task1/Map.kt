@@ -91,19 +91,11 @@ fun buildWordSet(text: List<String>): MutableSet<String> {
  *   buildGrades(mapOf("Марат" to 3, "Семён" to 5, "Михаил" to 5))
  *     -> mapOf(5 to listOf("Семён", "Михаил"), 3 to listOf("Марат"))
  *     {
-val need: MutableMap<Int, MutableList<String>> = mutableMapOf()
-for ((key, value) in grades) {
-need.getOrPut(
-key = value,
-defaultValue = () -> MutableList<String>
-}
-return need
-}
  */
 fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
     val need: MutableMap<Int, MutableList<String>> = mutableMapOf()
     for ((key, value) in grades) {
-        need.getOrPut(value, defaultValue = )
+        need.getOrPut(value) {}
     }
     return need
 }
@@ -142,7 +134,7 @@ fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean {
  */
 fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>): Unit {
     for ((key, value) in b) {
-        if (a[key] == value) a.remove(key)
+        if (a[key] == value) a.remove(key, value)
     }
 }
 
