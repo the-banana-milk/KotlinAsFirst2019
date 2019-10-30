@@ -90,11 +90,20 @@ fun buildWordSet(text: List<String>): MutableSet<String> {
  * Например:
  *   buildGrades(mapOf("Марат" to 3, "Семён" to 5, "Михаил" to 5))
  *     -> mapOf(5 to listOf("Семён", "Михаил"), 3 to listOf("Марат"))
+ *     {
+val need: MutableMap<Int, MutableList<String>> = mutableMapOf()
+for ((key, value) in grades) {
+need.getOrPut(
+key = value,
+defaultValue = () -> MutableList<String>
+}
+return need
+}
  */
-fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>>{
+fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
     val need: MutableMap<Int, MutableList<String>> = mutableMapOf()
     for ((key, value) in grades) {
-        need.getOrPut(value) { mutableListOf(key)}
+        need.getOrPut(value, defaultValue = )
     }
     return need
 }
@@ -110,14 +119,11 @@ fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>>{
  *   containsIn(mapOf("a" to "z"), mapOf("a" to "zee", "b" to "sweet")) -> false
  */
 fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean {
-    val size = a.size
-    var countPair = 0
-    for ((keyA, valueA) in a) {
-        for ((keyB, valueB) in b) {
-            if (keyB == keyA && valueB == valueA) countPair += 1
-        }
+    var sizeA = a.size
+    for ((key, value) in a) {
+        if (b[key] == value) sizeA -= 1
     }
-    return countPair == size
+    return if (sizeA == 0) true else false
 }
 
 /**
@@ -135,14 +141,9 @@ fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean {
  *     -> a changes to mutableMapOf() aka becomes empty
  */
 fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>): Unit {
-    for ((keyA, valueA) in a) {
-        for ((keyB, valueB) in b) {
-          if ((keyA == keyB) && (valueA == valueB)) {
-              a.remove(keyA)
-          }
-        }
+    for ((key, value) in b) {
+        if (a[key] == value) a.remove(key)
     }
-    return
 }
 
 /**
