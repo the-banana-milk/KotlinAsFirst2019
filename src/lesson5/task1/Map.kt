@@ -95,7 +95,7 @@ fun buildWordSet(text: List<String>): MutableSet<String> {
 fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
     val need: MutableMap<Int, MutableList<String>> = mutableMapOf()
     for ((key, value) in grades) {
-        need.getOrPut(value) {}
+        need.getOrPut(value) { mutableListOf(key) }
     }
     return need
 }
@@ -111,11 +111,10 @@ fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
  *   containsIn(mapOf("a" to "z"), mapOf("a" to "zee", "b" to "sweet")) -> false
  */
 fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean {
-    var sizeA = a.size
     for ((key, value) in a) {
-        if (b[key] == value) sizeA -= 1
+        if (b[key] != value) return false
     }
-    return if (sizeA == 0) true else false
+    return true
 }
 
 /**
