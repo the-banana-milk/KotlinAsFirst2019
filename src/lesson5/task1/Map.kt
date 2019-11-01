@@ -165,15 +165,14 @@ fun whoAreInBoth(a: List<String>, b: List<String>): List<String> = (a.intersect(
  */
 fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<String, String> {
     val need1: MutableMap<String, MutableList<String>> = mutableMapOf()
-    val need2: MutableMap<String, String> = mutableMapOf()
     for ((nameA, numberA) in mapA) {
         need1[nameA] = mutableListOf(numberA)
     }
     for ((nameB, numberB) in mapB) {
         if (nameB !in need1) need1[nameB] = mutableListOf(numberB)
         else if (mapA[nameB] != numberB) {
-            val newValue = mapA[nameB]
-            if (newValue != null) need1[nameB]?.add(numberB)
+            val newValue = need1[nameB]
+            if (newValue != null) newValue.add(numberB)
         }
     }
     return need1.mapValues { it.value.joinToString(", ") }
@@ -188,6 +187,18 @@ fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<S
  * Например:
  *   averageStockPrice(listOf("MSFT" to 100.0, "MSFT" to 200.0, "NFLX" to 40.0))
  *     -> mapOf("MSFT" to 150.0, "NFLX" to 40.0)
+ *     {
+var count = 0
+val need = mutableMapOf<String, Double>()
+val previousName: String = String()
+var prices = 0.0
+for ((name, price) in stockPrices) {
+if (previousName == name) {
+count += 1
+prices += price
+}
+}
+}
  */
 fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> = TODO()
 
