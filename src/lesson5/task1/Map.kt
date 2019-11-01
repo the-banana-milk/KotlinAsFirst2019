@@ -167,8 +167,7 @@ fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<S
     val need1: MutableMap<String, MutableList<String>> = mutableMapOf()
     val need2: MutableMap<String, String> = mutableMapOf()
     for ((nameA, numberA) in mapA) {
-        need1[nameA] = mutableListOf()
-        need1[nameA]?.add(numberA)
+        need1[nameA] = mutableListOf(numberA)
     }
     for ((nameB, numberB) in mapB) {
         if (nameB !in need1) need1[nameB] = mutableListOf(numberB)
