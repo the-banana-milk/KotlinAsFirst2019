@@ -192,7 +192,7 @@ fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<S
 fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> {
     var count = 1.0
     val need = mutableMapOf<String, Double>()
-    var previousName: String = String()
+    var previousName: String? = null
     var previousPrice = 0.0
     var iter = 0
     val listSize = stockPrices.size
@@ -203,11 +203,11 @@ fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Doub
             previousName = name
             previousPrice += price
             if (iter == listSize) need.put(previousName, previousPrice / count)
-        } else if (previousName.isEmpty()) {
+        } else if (previousName == null) {
             iter += 1
             previousName = name
             previousPrice = price
-            if (iter == listSize) need.put(previousName, previousPrice)
+            if (iter == listSize) need.put(previousName, previousPrice / count)
         } else if (iter == listSize) {
             need.put(name, price)
         } else if (previousName != name) {
