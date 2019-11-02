@@ -210,8 +210,8 @@ class Tests {
             averageStockPrice(listOf("MSFT" to 100.0, "MSFT" to 200.0, "NFLX" to 40.0, "NFLX" to 50.0))
         )
         assertEquals(
-            mapOf("MSFT" to 100.0, "NFLX" to 40.0),
-            averageStockPrice(listOf("MSFT" to 100.0, "NFLX" to 40.0))
+            mapOf("MSFT" to 100.0),
+            averageStockPrice(listOf("MSFT" to 100.0))
         )
     }
 
