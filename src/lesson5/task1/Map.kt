@@ -187,20 +187,47 @@ fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<S
  * Например:
  *   averageStockPrice(listOf("MSFT" to 100.0, "MSFT" to 200.0, "NFLX" to 40.0))
  *     -> mapOf("MSFT" to 150.0, "NFLX" to 40.0)
- *     {
-var count = 0
-val need = mutableMapOf<String, Double>()
-val previousName: String = String()
-var prices = 0.0
-for ((name, price) in stockPrices) {
-if (previousName == name) {
-count += 1
-prices += price
-}
-}
-}
+ *
  */
-fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> = TODO()
+fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> {
+    var count = 1.0
+    val need = mutableMapOf<String, Double>()
+    var previousName: String = String()
+    var previousPrice = 0.0
+    var iter = 0
+    val listSize = stockPrices.size
+    for ((name, price) in stockPrices) {
+        if (previousName == name) {
+            iter += 1
+            count += 1.0
+            previousName = name
+            previousPrice += price
+            if (iter == listSize) need.put(previousName, previousPrice / count)
+        } else if (previousName.isEmpty()) {
+            iter += 1
+            previousName = name
+            previousPrice = price
+        } else if (iter == listSize) {
+            need.put(name, price)
+        } else if (previousName != name) {
+            iter += 1
+            if (count != 1.0) {
+                need.put(previousName, previousPrice / count)
+                count = 1.0
+                previousPrice = price
+                previousName = name
+            } else {
+                need.put(previousName, previousPrice / count)
+                previousName = name
+                previousPrice = price
+            }
+            if (iter == listSize) {
+                need.put(name, price)
+            }
+        }
+    }
+    return need
+}
 
 /**
  * Средняя
