@@ -208,6 +208,7 @@ fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Doub
             iter += 1
             previousName = name
             previousPrice = price
+            if (price != 0.0) count += 1.0
             if ((iter == listSize) && (count != 0.0)) need.put(previousName, previousPrice / count)
             else if ((iter == listSize) && (count == 0.0)) need.put(previousName, previousPrice)
         } else if (iter == listSize) {
