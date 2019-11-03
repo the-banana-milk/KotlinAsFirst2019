@@ -213,6 +213,10 @@ class Tests {
             mapOf("MSFT" to 100.0),
             averageStockPrice(listOf("MSFT" to 100.0))
         )
+        assertEquals(
+            mapOf("" to 0.5),
+            averageStockPrice(listOf("" to 0.0, "" to 1.0))
+        )
     }
 
     @Test

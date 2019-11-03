@@ -199,7 +199,7 @@ fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Doub
     for ((name, price) in stockPrices) {
         if (previousName == name) {
             iter += 1
-            if (price != 0.0) count += 1.0
+            count += 1.0
             previousName = name
             previousPrice += price
             if ((iter == listSize) && (count != 0.0)) need.put(previousName, previousPrice / count)
@@ -208,7 +208,7 @@ fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Doub
             iter += 1
             previousName = name
             previousPrice = price
-            if (price != 0.0) count += 1.0
+            count += 1.0
             if ((iter == listSize) && (count != 0.0)) need.put(previousName, previousPrice / count)
             else if ((iter == listSize) && (count == 0.0)) need.put(previousName, previousPrice)
         } else if (iter == listSize) {
@@ -256,15 +256,11 @@ fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): S
     var need: String? = String()
     var price = Double.POSITIVE_INFINITY
     for ((name, kindAndPrice) in stuff) {
-        if (price == 0.0 && kind == kindAndPrice.first) {
+        if ((kind == kindAndPrice.first) && (price > kindAndPrice.second)) {
             need = name
             price = kindAndPrice.second
-        } else if (kindAndPrice.first == kind) {
-            if (price > kindAndPrice.second) {
-                need = name
-                price = kindAndPrice.second
-            }
-        } else need = null
+        }
+        else if (kind != kindAndPrice.first) need = null
     }
     return need
 }
