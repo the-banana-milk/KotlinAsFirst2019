@@ -187,55 +187,27 @@ fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<S
  * Например:
  *   averageStockPrice(listOf("MSFT" to 100.0, "MSFT" to 200.0, "NFLX" to 40.0))
  *     -> mapOf("MSFT" to 150.0, "NFLX" to 40.0)
- *
- */
-fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> {
-    var count = 0.0
-    val need = mutableMapOf<String, Double>()
-    var previousName: String? = null
-    var previousPrice = 0.0
-    var iter = 0
-    val listSize = stockPrices.size
-    for ((name, price) in stockPrices) {
-        if (previousName == name) {
-            iter += 1
-            count += 1.0
-            previousName = name
-            previousPrice += price
-            if ((iter == listSize) && (count != 0.0)) need.put(previousName, previousPrice / count)
-            else if ((iter == listSize) && (count == 0.0)) need.put(previousName, previousPrice)
-        } else if (previousName == null) {
-            iter += 1
-            previousName = name
-            previousPrice = price
-            count += 1.0
-            if ((iter == listSize) && (count != 0.0)) need.put(previousName, previousPrice / count)
-            else if ((iter == listSize) && (count == 0.0)) need.put(previousName, previousPrice)
-        } else if (iter == listSize) {
-            need.put(name, price)
-        } else if (previousName != name) {
-            iter += 1
-            if (count > 1.0) {
-                need.put(previousName, previousPrice / count)
-                count = 1.0
-                previousPrice = price
-                previousName = name
-            } else if (count == 1.0) {
-                need.put(previousName, previousPrice / count)
-                previousName = name
-                previousPrice = price
-            }else if (count == 0.0) {
-                need.put(previousName, previousPrice)
-                previousName = name
-                previousPrice = price
-            }
-            if (iter == listSize) {
-                need.put(name, price)
-            }
-        }
-    }
-    return need
+ *{
+var count = 0.0
+val need = mutableMapOf<String, Double>()
+var counts = mutableListOf<Int>()
+var iter = 0
+val listSize = stockPrices.size
+for ((name, price) in stockPrices) {
+if (name !in need) {
+need.put(name, price)
+counts.add(1)
+} else {
+need[name]?.plus(price)
+while (need[name] !=  ){
+
 }
+}
+}
+return need
+}
+ */
+fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> = TODO()
 
 /**
  * Средняя
@@ -260,7 +232,6 @@ fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): S
             need = name
             price = kindAndPrice.second
         }
-        else if (kind != kindAndPrice.first) need = null
     }
     return need
 }

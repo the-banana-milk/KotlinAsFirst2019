@@ -217,6 +217,10 @@ class Tests {
             mapOf("" to 0.5),
             averageStockPrice(listOf("" to 0.0, "" to 1.0))
         )
+        assertEquals(
+            mapOf("" to 0.0, "a" to 0.3333333333333333),
+            averageStockPrice(listOf("" to 0.0, "a" to 0.0, "" to 0.0, "a" to 0.0, "" to 0.0, "a" to 1.0))
+        )
     }
 
     @Test
