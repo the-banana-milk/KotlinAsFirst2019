@@ -169,10 +169,10 @@ fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<S
         need1[nameA] = mutableListOf(numberA)
     }
     for ((nameB, numberB) in mapB) {
-        if (nameB !in need1) need1[nameB] = mutableListOf(numberB)
+        val newValue = need1[nameB]
+        if (newValue == null) need1[nameB] = mutableListOf(numberB)
         else if (mapA[nameB] != numberB) {
-            val newValue = need1[nameB]
-            if (newValue != null) newValue.add(numberB)
+            newValue.add(numberB)
         }
     }
     return need1.mapValues { it.value.joinToString(", ") }
@@ -191,23 +191,18 @@ fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<S
  */
 fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> {
     val need = mutableMapOf<String, Double>()
-    val names = mutableListOf<String>()
-    val counts = mutableListOf<Int>()
-    val prices = mutableListOf<Double>()
-    var iter = 0
+    val information = mutableMapOf<String, Pair<Double?, Int?>>()
     for ((name, price) in stockPrices) {
-        if (name !in names) {
-            names.add(name)
-            prices.add(price)
-            counts.add(1)
+        if (name !in information) {
+            information[name] = Pair(price, 1)
         } else {
-            iter = names.indexOf(name)
-            prices[iter] += price
-            counts[iter] += 1
+            val newPrice = information[name]?.first?.plus(price)
+            val newCount = information[name]?.second?.plus(1)
+            information[name] = Pair(newPrice, newCount)
         }
     }
-    for (i in 0..names.size - 1) {
-        need.put(names[i], prices[i] / counts[i])
+    for ((name, priceAndCount) in information) {
+        need.put(name, priceAndCount.first!!.div(priceAndCount.second!!.toDouble()))
     }
     return need
 }
@@ -252,6 +247,8 @@ fun canBuildFrom(chars: List<Char>, word: String): Boolean {
     for (letter in chars) {
         if ((letter.toString()) in word) {
            newWord = newWord.filter { it != letter }
+            newWord = newWord.filter { it != letter.toLowerCase() }
+            newWord = newWord.filter { it != letter.toUpperCase() }
         }
     }
     return newWord.isEmpty()
