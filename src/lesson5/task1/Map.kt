@@ -285,7 +285,7 @@ fun canBuildFrom(chars: List<Char>, word: String): Boolean {
            newWord = newWord.filter { it != letter }
         }
     }
-    return newWord.length == 0
+    return newWord.isEmpty()
 }
 /**
  * Средняя
