@@ -278,8 +278,15 @@ fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): S
  * Например:
  *   canBuildFrom(listOf('a', 'b', 'o'), "baobab") -> true
  */
-fun canBuildFrom(chars: List<Char>, word: String): Boolean = TODO()
-
+fun canBuildFrom(chars: List<Char>, word: String): Boolean {
+    var newWord = word
+    for (letter in chars) {
+        if ((letter.toString()) in word) {
+           newWord = newWord.filter { it != letter }
+        }
+    }
+    return newWord.length == 0
+}
 /**
  * Средняя
  *
@@ -371,4 +378,4 @@ fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> = TODO()
  *     450
  *   ) -> emptySet()
  */
-fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> = TODO()
+ fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> = TODO()
