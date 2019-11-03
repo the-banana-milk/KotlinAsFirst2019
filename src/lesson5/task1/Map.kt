@@ -254,7 +254,7 @@ fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Doub
  */
 fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): String? {
     var need: String? = String()
-    var price = 0.0
+    var price = Double.POSITIVE_INFINITY
     for ((name, kindAndPrice) in stuff) {
         if (price == 0.0 && kind == kindAndPrice.first) {
             need = name
