@@ -187,28 +187,30 @@ fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<S
  * Например:
  *   averageStockPrice(listOf("MSFT" to 100.0, "MSFT" to 200.0, "NFLX" to 40.0))
  *     -> mapOf("MSFT" to 150.0, "NFLX" to 40.0)
- *{
-var count = 0.0
-val need = mutableMapOf<String, Double>()
-var counts = mutableListOf<Int>()
-var iter = 0
-val listSize = stockPrices.size
-for ((name, price) in stockPrices) {
-if (name !in need) {
-need.put(name, price)
-counts.add(1)
-} else {
-need[name]?.plus(price)
-while (need[name] !=  ){
-
-}
-}
-}
-return need
-}
+ *
  */
-fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> = TODO()
-
+fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> {
+    val need = mutableMapOf<String, Double>()
+    val names = mutableListOf<String>()
+    val counts = mutableListOf<Int>()
+    val prices = mutableListOf<Double>()
+    var iter = 0
+    for ((name, price) in stockPrices) {
+        if (name !in names) {
+            names.add(name)
+            prices.add(price)
+            counts.add(1)
+        } else {
+            iter = names.indexOf(name)
+            prices[iter] += price
+            counts[iter] += 1
+        }
+    }
+    for (i in 0..names.size - 1) {
+        need.put(names[i], prices[i] / counts[i])
+    }
+    return need
+}
 /**
  * Средняя
  *
@@ -225,7 +227,7 @@ fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Doub
  *   ) -> "Мария"
  */
 fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): String? {
-    var need: String? = String()
+    var need: String? = null
     var price = Double.POSITIVE_INFINITY
     for ((name, kindAndPrice) in stuff) {
         if ((kind == kindAndPrice.first) && (price > kindAndPrice.second)) {
