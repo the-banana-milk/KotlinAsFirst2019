@@ -202,10 +202,7 @@ fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Doub
             information[name] = Pair(newPrice, newCount)
         }
     }
-    for ((name, price) in information) {
-        need.put(name, price.first / price.second.toDouble())
-    }
-    return need
+    return information.mapValues { it.value.first.div(it.value.second.toDouble()) }
 }
 /**
  * Средняя
@@ -265,13 +262,11 @@ fun canBuildFrom(chars: List<Char>, word: String): Boolean {
  *   extractRepeats(listOf("a", "b", "a")) -> mapOf("a" to 2)
  */
 fun extractRepeats(list: List<String>): Map<String, Int> {
-    val need = mutableMapOf<String, Int>()
+    val need: MutableMap<String, Int> = mutableMapOf()
     for (letter in list) {
         if (letter !in need) need.put(letter, 1)
         else {
-            val nameInNeed = need[letter]
-            val newCount = nameInNeed!!.plus(1)
-            need.put(letter, newCount)
+            need[letter]!!.plus(1)
         }
     }
     for ((name, count) in need) {
