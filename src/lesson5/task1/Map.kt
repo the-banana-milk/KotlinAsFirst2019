@@ -191,18 +191,19 @@ fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<S
  */
 fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> {
     val need = mutableMapOf<String, Double>()
-    val information = mutableMapOf<String, Pair<Double?, Int?>>()
+    val information = mutableMapOf<String, Pair<Double, Int>>()
     for ((name, price) in stockPrices) {
         if (name !in information) {
-            information[name] = Pair(price, 1)
+            information.put(name, Pair(price, 1))
         } else {
-            val newPrice = information[name]?.first?.plus(price)
-            val newCount = information[name]?.second?.plus(1)
+            val infName = information[name]
+            val newPrice = infName!!.first.plus(price)
+            val newCount = infName.second.plus(1)
             information[name] = Pair(newPrice, newCount)
         }
     }
-    for ((name, priceAndCount) in information) {
-        need.put(name, priceAndCount.first!!.div(priceAndCount.second!!.toDouble()))
+    for ((name, price) in information) {
+        need.put(name, price.first / price.second.toDouble())
     }
     return need
 }
@@ -243,9 +244,10 @@ fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): S
  *   canBuildFrom(listOf('a', 'b', 'o'), "baobab") -> true
  */
 fun canBuildFrom(chars: List<Char>, word: String): Boolean {
+    val newChars = chars.toSet()
     val newWord = word
     for (letter in newWord) {
-        if ((letter !in chars) && (letter !in chars.map { it.toLowerCase() }) && (letter !in chars.map { it.toLowerCase() })) return false
+        if ((letter !in newChars) && (letter !in newChars.map { it.toLowerCase() }) && (letter !in newChars.map { it.toLowerCase() })) return false
 
     }
     return true
