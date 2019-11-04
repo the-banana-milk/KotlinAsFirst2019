@@ -190,14 +190,13 @@ fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<S
  *
  */
 fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> {
-    val need = mutableMapOf<String, Double>()
     val information = mutableMapOf<String, Pair<Double, Int>>()
     for ((name, price) in stockPrices) {
+        val infName = information[name]
         if (name !in information) {
             information.put(name, Pair(price, 1))
-        } else {
-            val infName = information[name]
-            val newPrice = infName!!.first.plus(price)
+        } else if (infName != null){
+            val newPrice = infName.first.plus(price)
             val newCount = infName.second.plus(1)
             information[name] = Pair(newPrice, newCount)
         }
@@ -244,7 +243,7 @@ fun canBuildFrom(chars: List<Char>, word: String): Boolean {
     val newChars = chars.toSet()
     val newWord = word
     for (letter in newWord) {
-        if ((letter !in newChars) && (letter !in newChars.map { it.toLowerCase() }) && (letter !in newChars.map { it.toLowerCase() })) return false
+        if ((letter !in newChars) && (letter.toLowerCase() !in newChars.map { it.toLowerCase() }) && (letter.toUpperCase() !in newChars.map { it.toLowerCase() })) return false
 
     }
     return true
