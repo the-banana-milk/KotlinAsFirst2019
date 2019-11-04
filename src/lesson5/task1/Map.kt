@@ -193,9 +193,9 @@ fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Doub
     val information = mutableMapOf<String, Pair<Double, Int>>()
     for ((name, price) in stockPrices) {
         val infName = information[name]
-        if (name !in information) {
+        if (infName == null) {
             information.put(name, Pair(price, 1))
-        } else if (infName != null){
+        } else {
             val newPrice = infName.first.plus(price)
             val newCount = infName.second.plus(1)
             information[name] = Pair(newPrice, newCount)
