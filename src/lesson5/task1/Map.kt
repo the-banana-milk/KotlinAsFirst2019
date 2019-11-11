@@ -261,15 +261,10 @@ fun canBuildFrom(chars: List<Char>, word: String): Boolean {
 fun extractRepeats(list: List<String>): Map<String, Int> {
     val need: MutableMap<String, Int> = mutableMapOf()
     for (letter in list) {
-        if (letter !in need) need.put(letter, 1)
-        else {
-            need[letter]!!.plus(1)
-        }
+        val count = need.getOrDefault(letter, 0)
+        need.put(letter, count + 1)
     }
-    for ((name, count) in need) {
-        if (count == 1) need.remove(name, count)
-    }
-    return need
+    return need.filterValues { it > 1 }
 }
 
 /**
@@ -281,7 +276,16 @@ fun extractRepeats(list: List<String>): Map<String, Int> {
  * Например:
  *   hasAnagrams(listOf("тор", "свет", "рот")) -> true
  */
-fun hasAnagrams(words: List<String>): Boolean = TODO()
+fun hasAnagrams(words: List<String>): Boolean {
+    val newWords = words.toSet()
+    val revNewWord = newWords.map { it.reversed() }
+    for (i in newWords) {
+        for (j in revNewWord) {
+            if (i == j) return true
+        }
+    }
+    return false
+}
 
 /**
  * Сложная
