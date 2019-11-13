@@ -294,20 +294,10 @@ fun hasAnagrams(words: List<String>): Boolean {
             val count = addedMap.getOrDefault(letter, 0)
             addedMap.put(letter, count + 1)
         }
-        need.add(addedMap)
+        if (addedMap !in need) need.add(addedMap)
+        else return true
     }
-    for (k in 0 until words.size) {
-        val mapToCompare = mutableMapOf<Char, Int>()
-        for (letter in words[k]) {
-            val count = mapToCompare.getOrDefault(letter, 0)
-            mapToCompare.put(letter, count + 1)
-        }
-        if (mapToCompare in need) {
-            val count = compared.getOrDefault(mapToCompare, 0)
-            compared.put(mapToCompare, count + 1)
-        }
-    }
-    return compared.filter{ it.value >= 2 }.isNotEmpty()
+    return false
 }
 
 /**
