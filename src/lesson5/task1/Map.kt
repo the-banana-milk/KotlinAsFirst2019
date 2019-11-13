@@ -275,18 +275,39 @@ fun extractRepeats(list: List<String>): Map<String, Int> {
  *
  * Например:
  *   hasAnagrams(listOf("тор", "свет", "рот")) -> true
+ *   val newListOne = words.map { it.toLowerCase().toList().sorted() }
+for (i in 0 until newListOne.size) {
+val compare1 = newListOne[i]
+for (j in i + 1 until newListOne.size) {
+val compare2 = newListOne[j]
+if (compare1 == compare2) return true
+}
+}
+return false
  */
 fun hasAnagrams(words: List<String>): Boolean {
-    val newListOne = words.map { it.toLowerCase() }
-    val newListTwo = newListOne.map { it.toList().sorted() }
-    for (i in 0 until newListTwo.size) {
-        val compare1 = newListTwo[i]
-        for (j in i + 1 until newListTwo.size) {
-            val compare2 = newListTwo[j]
-            if (compare1 == compare2) return true
+    val need = mutableSetOf<Map<Char, Int>>()
+    val compared = mutableMapOf<Map<Char, Int>, Int>()
+    for (i in 0 until words.size) {
+        val addedMap = mutableMapOf<Char, Int>()
+        for (letter in words[i]) {
+            val count = addedMap.getOrDefault(letter, 0)
+            addedMap.put(letter, count + 1)
+        }
+        need.add(addedMap)
+    }
+    for (k in 0 until words.size) {
+        val mapToCompare = mutableMapOf<Char, Int>()
+        for (letter in words[k]) {
+            val count = mapToCompare.getOrDefault(letter, 0)
+            mapToCompare.put(letter, count + 1)
+        }
+        if (mapToCompare in need) {
+            val count = compared.getOrDefault(mapToCompare, 0)
+            compared.put(mapToCompare, count + 1)
         }
     }
-    return false
+    return compared.filter{ it.value >= 2 }.isNotEmpty()
 }
 
 /**
@@ -296,7 +317,8 @@ fun hasAnagrams(words: List<String>): Boolean {
  * необходимо построить его максимальное расширение по рукопожатиям, то есть,
  * для каждого человека найти всех людей, с которыми он знаком через любое
  * количество рукопожатий.
- * Считать, что все имена людей являются уникальными, а также что рукопожатия
+ * Считать, что все и
+ * мена людей являются уникальными, а также что рукопожатия
  * являются направленными, то есть, если Марат знает Свету, то это не означает,
  * что Света знает Марата.
  *
