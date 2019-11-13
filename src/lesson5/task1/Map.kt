@@ -277,11 +277,13 @@ fun extractRepeats(list: List<String>): Map<String, Int> {
  *   hasAnagrams(listOf("тор", "свет", "рот")) -> true
  */
 fun hasAnagrams(words: List<String>): Boolean {
-    for (i in 0 until words.size) {
-        val listOfLettersOne = words[i].toList().sorted()
-        for (j in i + 1 until words.size) {
-            val listOfLettersTwo = words[j].toList().sorted()
-            if (listOfLettersOne == listOfLettersTwo) return true
+    val newListOne = words.map { it.toLowerCase() }
+    val newListTwo = newListOne.map { it.toList().sorted() }
+    for (i in 0 until newListTwo.size) {
+        val compare1 = newListTwo[i]
+        for (j in i + 1 until newListTwo.size) {
+            val compare2 = newListTwo[j]
+            if (compare1 == compare2) return true
         }
     }
     return false
