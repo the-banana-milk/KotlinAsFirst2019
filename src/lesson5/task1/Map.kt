@@ -320,9 +320,13 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
     val need = mutableMapOf<String, MutableSet<String>>()
     for (nameAndFriends in friends) {
         val appenedSet = nameAndFriends.value.toMutableSet()
-        for (j in nameAndFriends.value) {
-            val newSet = friends[j]!!.filter { it != nameAndFriends.key }.toMutableSet()
-            appenedSet.union(newSet)
+        for (j in appenedSet) {
+            if (j in friends) {
+                val newSet = friends[j]!!.filter { it != nameAndFriends.key }
+                appenedSet.addAll(newSet)
+            }else if (j !in friends) {
+                need.put(j, mutableSetOf())
+            }
         }
         need.put(nameAndFriends.key, appenedSet)
     }
