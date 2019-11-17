@@ -315,24 +315,38 @@ fun hasAnagrams(words: List<String>): Boolean {
  *          "Sveta" to setOf("Marat", "Mikhail"),
  *          "Mikhail" to setOf("Sveta", "Marat")
  *        )
+ *        for ((name, friend) in friends) {
+val appenedSet = friend.toMutableSet()
+val newSet = mutableSetOf<String>()
+for (j in appenedSet) {
+if (j in friends) {
+newSet.addAll(friends[j]!!.filter { it != name })
+}
+if (j !in friends) {
+need.put(j, mutableSetOf())
+}
+}
+need.put(name, appenedSet.union(newSet))
+}
+return need
  */
 fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<String>> {
-    val need = mutableMapOf<String, MutableSet<String>>()
+    val need = mutableMapOf<String, Set<String>>()
     for ((name, friend) in friends) {
         val appenedSet = friend.toMutableSet()
+        val newSet = mutableSetOf<String>()
         for (j in appenedSet) {
-            if ((j in friends) && (j != name)) {
-                val newSet = friends[j]!!.filter { it != name }
-                appenedSet.addAll(newSet)
-            }else if (j !in friends) {
+            if (j in friends) {
+                newSet.addAll(friends[j]!!.filter { it != name })
+            }
+            if (j !in friends) {
                 need.put(j, mutableSetOf())
             }
         }
-        need.put(name, appenedSet)
+        need.put(name, appenedSet.union(newSet))
     }
     return need
 }
-
 /**
  * Сложная
  *
