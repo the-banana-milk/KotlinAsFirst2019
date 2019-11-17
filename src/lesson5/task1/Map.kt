@@ -2,6 +2,8 @@
 
 package lesson5.task1
 
+import java.util.*
+
 /**
  * Пример
  *
@@ -315,7 +317,10 @@ fun hasAnagrams(words: List<String>): Boolean {
  *          "Sveta" to setOf("Marat", "Mikhail"),
  *          "Mikhail" to setOf("Sveta", "Marat")
  *        )
- *        for ((name, friend) in friends) {
+ *
+return need
+val need = mutableMapOf<String, Set<String>>()
+for ((name, friend) in friends) {
 val appenedSet = friend.toMutableSet()
 val newSet = mutableSetOf<String>()
 for (j in appenedSet) {
@@ -333,19 +338,19 @@ return need
 fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<String>> {
     val need = mutableMapOf<String, Set<String>>()
     for ((name, friend) in friends) {
-        val appenedSet = friend.toMutableSet()
+        val friendsOfName = friend.toMutableSet()
         val newSet = mutableSetOf<String>()
-        for (j in appenedSet) {
+        for (j in friendsOfName) {
             if (j in friends) {
                 newSet.addAll(friends[j]!!.filter { it != name })
-            }
-            if (j !in friends) {
+            } else if (j !in friends) {
                 need.put(j, mutableSetOf())
             }
         }
-        need.put(name, appenedSet.union(newSet))
+        need.put(name, friendsOfName.union(newSet))
     }
-    return need
+    if (need == friends) return need
+    else return propagateHandshakes(need)
 }
 /**
  * Сложная
@@ -363,21 +368,19 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
  * Например:
  *   findSumOfTwo(listOf(1, 2, 3), 4) -> Pair(0, 2)
  *   findSumOfTwo(listOf(1, 2, 3), 6) -> Pair(-1, -1)
- */
-fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
-    var firstIndex = -1
-    var secondIndex = -1
-    for (i in 0 until list.size) {
-        for (j in i + 1 until list.size) {
-            if (list[i] + list[j] == number) {
-                firstIndex = i
-                secondIndex = j
-            }
-        }
-    }
-    return Pair(firstIndex, secondIndex)
+ *   {
+val indexAndValue = mutableMapOf<Int, Int>()
+for (i in 0 until list.size) {
+indexAndValue.put(i, list[i])
+}
+for ((index, value) in indexAndValue) {
+val new = number - value
+if (new > 0) indexAndValue.put(index, new)
+}
 }
 
+ */
+fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> = TODO()
 /**
  * Очень сложная
  *
