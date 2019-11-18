@@ -318,36 +318,20 @@ fun hasAnagrams(words: List<String>): Boolean {
  *          "Mikhail" to setOf("Sveta", "Marat")
  *        )
  *
-return need
-val need = mutableMapOf<String, Set<String>>()
-for ((name, friend) in friends) {
-val appenedSet = friend.toMutableSet()
-val newSet = mutableSetOf<String>()
-for (j in appenedSet) {
-if (j in friends) {
-newSet.addAll(friends[j]!!.filter { it != name })
-}
-if (j !in friends) {
-need.put(j, mutableSetOf())
-}
-}
-need.put(name, appenedSet.union(newSet))
-}
-return need
  */
 fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<String>> {
     val need = mutableMapOf<String, Set<String>>()
     for ((name, friend) in friends) {
-        val friendsOfName = friend.toMutableSet()
-        val newSet = mutableSetOf<String>()
-        for (j in friendsOfName) {
+        val newSet = friend.toMutableSet()
+        for (j in friend) {
+            val fr = friends[j]
             if (j in friends) {
-                newSet.addAll(friends[j]!!.filter { it != name })
-            } else if (j !in friends) {
-                need.put(j, mutableSetOf())
+                fr!!.filterTo(newSet) { it != name }
+            } else {
+                need.put(j, setOf())
             }
         }
-        need.put(name, friendsOfName.union(newSet))
+        need.put(name, newSet.union(newSet))
     }
     if (need == friends) return need
     else return propagateHandshakes(need)
@@ -369,6 +353,7 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
  *   findSumOfTwo(listOf(1, 2, 3), 4) -> Pair(0, 2)
  *   findSumOfTwo(listOf(1, 2, 3), 6) -> Pair(-1, -1)
  *   {
+ *   {
 val indexAndValue = mutableMapOf<Int, Int>()
 for (i in 0 until list.size) {
 indexAndValue.put(i, list[i])
@@ -378,9 +363,9 @@ val new = number - value
 if (new > 0) indexAndValue.put(index, new)
 }
 }
-
  */
 fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> = TODO()
+
 /**
  * Очень сложная
  *
