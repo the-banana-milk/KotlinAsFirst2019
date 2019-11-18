@@ -360,15 +360,12 @@ tailrec fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, 
 fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
     val valueAndIndex = mutableMapOf<Int, Int>()
     for (i in 0 until list.size) {
-        valueAndIndex.put(list[i], i)
+        valueAndIndex.put(number - list[i], i)
     }
-    for ((value, index) in valueAndIndex) {
-        val num = number - value
-        for (i in 0 until list.size) {
-            if ((num - list[i] == 0) && ((index < i) || (i < index))) {
-                return if (index < i) return Pair(index, i)
-                else Pair(i, index)
-            }
+    for (i in 0 until list.size) {
+        if (list[i] in valueAndIndex && i != valueAndIndex[list[i]]) {
+            return if (i < valueAndIndex[list[i]]!!) Pair(i, valueAndIndex[list[i]]!!)
+            else Pair(valueAndIndex[list[i]]!!, i)
         }
     }
     return Pair(-1, -1)
