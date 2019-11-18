@@ -2,6 +2,7 @@
 
 package lesson5.task1
 
+import lesson1.task1.accountInThreeYears
 import java.util.*
 
 /**
@@ -319,7 +320,7 @@ fun hasAnagrams(words: List<String>): Boolean {
  *        )
  *
  */
-fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<String>> {
+tailrec fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<String>> {
     val need = mutableMapOf<String, Set<String>>()
     for ((name, friend) in friends) {
         val newSet = friend.toMutableSet()
@@ -354,17 +355,25 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
  *   findSumOfTwo(listOf(1, 2, 3), 6) -> Pair(-1, -1)
  *   {
  *   {
- *       val indexAndValue = mutableMapOf<Int, Int>()
-for (i in 0 until list.size) {
-indexAndValue.put(list[i], i)
-}
-for ((index, value) in indexAndValue) {
-val new = number - value
-if (new > 0) indexAndValue.put(index, new)
-}
-}
+ *
  */
-fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> = TODO()
+fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
+    val valueAndIndex = mutableMapOf<Int, Int>()
+    for (i in 0 until list.size) {
+        valueAndIndex.put(list[i], i)
+    }
+    for ((value, index) in valueAndIndex) {
+        val num = number - value
+        for ((value1, index1) in valueAndIndex) {
+            if ((num - value1 == 0) && ((index < index1) || (index1 < index))) {
+                return if (index < index1) return Pair(index, index1)
+                else Pair(index1, index)
+            }
+        }
+    }
+    return Pair(-1, -1)
+}
+
 /**
  * Очень сложная
  *
