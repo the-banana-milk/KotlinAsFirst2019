@@ -364,10 +364,10 @@ fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
     }
     for ((value, index) in valueAndIndex) {
         val num = number - value
-        for ((value1, index1) in valueAndIndex) {
-            if ((num - value1 == 0) && ((index < index1) || (index1 < index))) {
-                return if (index < index1) return Pair(index, index1)
-                else Pair(index1, index)
+        for (i in 0 until list.size) {
+            if ((num - list[i] == 0) && ((index < i) || (i < index))) {
+                return if (index < i) return Pair(index, i)
+                else Pair(i, index)
             }
         }
     }
