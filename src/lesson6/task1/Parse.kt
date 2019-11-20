@@ -76,17 +76,17 @@ fun dateStrToDigit(str: String): String {
         "июля" to 7, "августа" to 8, "сентября" to 9, "октября" to 10, "ноября" to 11, "декабря" to 12 )
     val input = str.split(" ").toMutableList()
     if (input.size == 3) {
-        if (input[1] in map.keys) {
-            val num1 = map[input[1]]
-            input[1] = "$num1"
-        } else return String()
-    } else return String()
-    val day = input[0].toInt()
-    val month = input[1].toInt()
-    val year = input[2].toInt()
-    val a = daysInMonth(month, year)
-    return if (day <= a) String.format("%02d.%02d.%d", day, month, year)
-    else String()
+        val num1 = map[input[1]]
+        if (num1 != null) {
+            val day = input[0].toIntOrNull()
+            val month = num1.toInt()
+            val year = input[2].toIntOrNull()
+            if (month in 1..12 && day != null && year != null) {
+                val a = daysInMonth(month, year)
+                return if ((day <= a) && (day > 0)) String.format("%02d.%02d.%d", day, month, year) else ""
+            } else return ""
+        } else return ""
+    } else return ""
 }
 
 /**
