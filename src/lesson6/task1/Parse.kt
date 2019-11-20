@@ -85,7 +85,7 @@ fun dateStrToDigit(str: String): String {
     val month = input[1].toInt()
     val year = input[2].toInt()
     val a = daysInMonth(month, year)
-    return if (day <= a) String.format("%02d.%02d.%4d", day, month, year)
+    return if (day <= a) String.format("%02d.%02d.%d", day, month, year)
     else String()
 }
 
