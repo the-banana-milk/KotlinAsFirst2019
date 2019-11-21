@@ -74,19 +74,20 @@ fun main() {
 fun dateStrToDigit(str: String): String {
     val map = mapOf<String, Int>( "января" to 1, "февраля" to 2, "марта" to 3, "апреля" to 4, "мая" to 5, "июня" to 6,
         "июля" to 7, "августа" to 8, "сентября" to 9, "октября" to 10, "ноября" to 11, "декабря" to 12 )
-    val input = str.split(" ").toMutableList()
-    if (input.size == 3) {
+    val input = str.split(" ")
+    if (input.size != 3) return ""
+    else {
         val num1 = map[input[1]]
         if (num1 != null) {
             val day = input[0].toIntOrNull()
-            val month = num1.toInt()
+            val month = num1
             val year = input[2].toIntOrNull()
-            if (num1 in 1..12 && day != null && year != null) {
+            if (day != null && year != null) {
                 val a = daysInMonth(month, year)
                 return if ((day <= a) && (day > 0)) String.format("%02d.%02d.%d", day, month, year) else ""
             } else return ""
         } else return ""
-    } else return ""
+    }
 }
 
 /**
@@ -98,8 +99,26 @@ fun dateStrToDigit(str: String): String {
  *
  * Обратите внимание: некорректная с точки зрения календаря дата (например, 30 февраля 2009) считается неверными
  * входными данными.
+ *
  */
-fun dateDigitToStr(digital: String): String = TODO()
+fun dateDigitToStr(digital: String): String {
+    val map = mapOf<Int, String>( 1 to "января", 2 to "февраля", 3 to "марта", 4 to "апреля", 5 to "мая", 6 to "июня",
+        7 to "июля", 8 to "августа", 9 to "сентября", 10 to "октября", 11 to "ноября", 12 to "декабря" )
+    val input = digital.split(".")
+    if (input.size != 3) return ""
+    else {
+        val name = map[input[1].toInt()]
+        if (name != null) {
+            val day = input[0].toIntOrNull()
+            val month = input[1].toInt()
+            val year = input[2].toIntOrNull()
+            if (day != null && year != null) {
+                val a = daysInMonth(month, year)
+                return if ((day <= a) && (day > 0)) String.format("%d %s %d", day, name, year)else ""
+            } else return ""
+        } else return ""
+    }
+}
 
 /**
  * Средняя
