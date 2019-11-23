@@ -4,6 +4,7 @@ package lesson6.task1
 
 import lesson2.task2.daysInMonth
 import java.lang.NumberFormatException
+import kotlin.math.pow
 
 /**
  * Пример
@@ -106,7 +107,7 @@ fun dateDigitToStr(digital: String): String {
     val input = digital.split(".")
     try {
         if (input.size != 3) return ""
-        if ((input[1].toInt() == 0) || (input[1].toInt() == 13)) return ""
+        if (input[1].toInt() !in 1..12) return ""
         val name = inf[input[1].toInt() - 1]
         val day = input[0].toIntOrNull()
         val month = input[1].toIntOrNull()
@@ -158,6 +159,20 @@ fun flattenPhoneNumber(phone: String): String {
     return newPhone.toString()
 }
 
+
+fun num (list: List<Char>): Int {
+    val l = mapOf<Char, Int>('0' to 0, '1' to 1, '2' to 2, '3' to 3, '4' to 4, '5' to 5, '6' to 6, '7' to 7, '8' to 8, '9' to 9)
+    var a = list.size
+    var number = 0.0
+    for (i in 0 until a) {
+        val n = list[i]
+        if (n in l.keys) {
+            number += l[n]!!.toDouble() * 10.0.pow(a - 1)
+            a -= 1
+        }
+    }
+    return number.toInt()
+}
 /**
  * Средняя
  *
@@ -168,7 +183,40 @@ fun flattenPhoneNumber(phone: String): String {
  * Прочитать строку и вернуть максимальное присутствующее в ней число (717 в примере).
  * При нарушении формата входной строки или при отсутствии в ней чисел, вернуть -1.
  */
-fun bestLongJump(jumps: String): Int = TODO()
+fun bestLongJump(jumps: String): Int {
+    val list = mutableListOf<Int>()
+    var rem = 0
+    val rememberNumber = mutableListOf<Char>()
+    var previous: Char
+    var max = 0
+    try {
+        for (char in jumps) {
+            if ((char == ' ') || (char in '0'..'9') || (char == '-') || (char == '%')) {
+                if ((char in '0'..'9') && (rem == 0)) {
+                    previous = char
+                    rem += 1
+                    rememberNumber.add(char)
+                } else if ((char in '0'..'9') && (rem != 0) && (rememberNumber.isNotEmpty())) {
+                    previous = char
+                    rem += 1
+                    rememberNumber.add(char)
+                } else if ((char !in '0'..'9') && (rem != 0) && (rememberNumber.isNotEmpty())) {
+                    rem = 0
+                    list.add(num(rememberNumber))
+                    rememberNumber.clear()
+                    previous = char
+                }
+            } else return -1
+        }
+        for (i in list) {
+            if (i > max) max = i
+        }
+        if (list.isEmpty()) return -1
+    } catch (e: NumberFormatException) {
+        return -1
+    }
+    return max
+}
 
 /**
  * Сложная
