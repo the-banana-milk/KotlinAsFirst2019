@@ -3,6 +3,7 @@
 package lesson6.task1
 
 import lesson2.task2.daysInMonth
+import java.lang.NumberFormatException
 
 /**
  * Пример
@@ -76,18 +77,16 @@ fun dateStrToDigit(str: String): String {
         "июля" to 7, "августа" to 8, "сентября" to 9, "октября" to 10, "ноября" to 11, "декабря" to 12 )
     val input = str.split(" ")
     if (input.size != 3) return ""
-    else {
-        val num1 = map[input[1]]
-        if (num1 != null) {
-            val day = input[0].toIntOrNull()
-            val month = num1
-            val year = input[2].toIntOrNull()
-            if (day != null && year != null) {
-                val a = daysInMonth(month, year)
-                return if ((day <= a) && (day > 0)) String.format("%02d.%02d.%d", day, month, year) else ""
-            } else return ""
-        } else return ""
+    val num1 = map[input[1]]
+    if (num1 == null) return ""
+    val day = input[0].toIntOrNull()
+    val year = input[2].toIntOrNull()
+    if (day == null && year == null) return ""
+    else if (day != null && year != null) {
+        val a = daysInMonth(num1, year)
+        return if ((day <= a) && (day > 0)) String.format("%02d.%02d.%d", day, num1, year) else ""
     }
+    return ""
 }
 
 /**
@@ -102,21 +101,22 @@ fun dateStrToDigit(str: String): String {
  *
  */
 fun dateDigitToStr(digital: String): String {
-    val map = mapOf<Int, String>( 1 to "января", 2 to "февраля", 3 to "марта", 4 to "апреля", 5 to "мая", 6 to "июня",
-        7 to "июля", 8 to "августа", 9 to "сентября", 10 to "октября", 11 to "ноября", 12 to "декабря" )
+    val inf = listOf< String>("января", "февраля", "марта", "апреля", "мая", "июня",
+        "июля", "августа", "сентября", "октября", "ноября", "декабря" )
     val input = digital.split(".")
-    if (input.size != 3) return ""
-    else {
-        val name = map[input[1].toInt()]
-        if (name != null) {
-            val day = input[0].toIntOrNull()
-            val month = input[1].toInt()
-            val year = input[2].toIntOrNull()
-            if (day != null && year != null) {
-                val a = daysInMonth(month, year)
-                return if ((day <= a) && (day > 0)) String.format("%d %s %d", day, name, year)else ""
-            } else return ""
+    try {
+        if (input.size != 3) return ""
+        if ((input[1].toInt() == 0) || (input[1].toInt() == 13)) return ""
+        val name = inf[input[1].toInt() - 1]
+        val day = input[0].toIntOrNull()
+        val month = input[1].toIntOrNull()
+        val year = input[2].toIntOrNull()
+        if (day != null && year != null && month != null) {
+            val a = daysInMonth(month, year)
+            return if ((day <= a) && (day > 0)) String.format("%d %s %d", day, name, year) else ""
         } else return ""
+    } catch (e: NumberFormatException) {
+        return ""
     }
 }
 
@@ -134,7 +134,29 @@ fun dateDigitToStr(digital: String): String {
  *
  * PS: Дополнительные примеры работы функции можно посмотреть в соответствующих тестах.
  */
-fun flattenPhoneNumber(phone: String): String = TODO()
+fun flattenPhoneNumber(phone: String): String {
+    val newPhone = StringBuilder()
+    val rem = StringBuilder()
+    var i = 0
+    try {
+        for (char in phone) {
+            if (char == '+' || char == ')' || char == '(' || char == '-' || char == ' ' || char in '0'..'9') {
+                if ((char == '+') || (char in '0'..'9')) {
+                    newPhone.append(char)
+                    if (i == 1) i += 1
+                }
+                if (char == '(') {
+                    rem.append('(')
+                    i = 1
+                }
+                if (('(' in rem) && (char == ')') && (i == 1)) return ""
+            } else return ""
+        }
+    } catch (e: NumberFormatException) {
+        return ""
+    }
+    return newPhone.toString()
+}
 
 /**
  * Средняя

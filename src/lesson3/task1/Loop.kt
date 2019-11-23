@@ -337,6 +337,8 @@ fun fibSequenceDigit(n: Int): Int {
         count += countDig
         if (count >= n) break
     }
-    if (count > n) for (i in 1..count - n) remeber /= 10
+    if (count > n) {
+        for (i in 1..count - n) remeber /= 10
+    }
     return remeber % 10
 }
