@@ -187,31 +187,36 @@ fun bestLongJump(jumps: String): Int {
     val list = mutableListOf<Int>()
     var rem = 0
     val rememberNumber = mutableListOf<Char>()
-    var previous: Char
+    var previous = 0
     var max = 0
+    val jl = jumps.length
     try {
         for (char in jumps) {
             if ((char == ' ') || (char in '0'..'9') || (char == '-') || (char == '%')) {
+                previous += 1
                 if ((char in '0'..'9') && (rem == 0)) {
-                    previous = char
                     rem += 1
                     rememberNumber.add(char)
                 } else if ((char in '0'..'9') && (rem != 0) && (rememberNumber.isNotEmpty())) {
-                    previous = char
                     rem += 1
                     rememberNumber.add(char)
-                } else if ((char !in '0'..'9') && (rem != 0) && (rememberNumber.isNotEmpty())) {
+                    if (previous == jl) {
+                        rem = 0
+                        list.add(num(rememberNumber))
+                        rememberNumber.clear()
+                    }
+                } else if ((char !in '0'..'9') && (rem != 0) && (rememberNumber.isNotEmpty()) || previous == jl) {
                     rem = 0
                     list.add(num(rememberNumber))
                     rememberNumber.clear()
-                    previous = char
                 }
             } else return -1
         }
+        if (list.isEmpty()) return -1
         for (i in list) {
             if (i > max) max = i
         }
-        if (list.isEmpty()) return -1
+        if (max == 0) return -1
     } catch (e: NumberFormatException) {
         return -1
     }
