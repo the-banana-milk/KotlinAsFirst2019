@@ -82,12 +82,9 @@ fun dateStrToDigit(str: String): String {
     if (num1 == null) return ""
     val day = input[0].toIntOrNull()
     val year = input[2].toIntOrNull()
-    if (day == null && year == null) return ""
-    else if (day != null && year != null) {
-        val a = daysInMonth(num1, year)
-        return if ((day <= a) && (day > 0)) String.format("%02d.%02d.%d", day, num1, year) else ""
-    }
-    return ""
+    if (day == null || year == null) return ""
+    val a = daysInMonth(num1, year)
+    return if ((day <= a) && (day > 0)) String.format("%02d.%02d.%d", day, num1, year) else ""
 }
 
 /**
@@ -107,15 +104,14 @@ fun dateDigitToStr(digital: String): String {
     val input = digital.split(".")
     try {
         if (input.size != 3) return ""
-        if (input[1].toInt() !in 1..12) return ""
-        val name = inf[input[1].toInt() - 1]
-        val day = input[0].toIntOrNull()
         val month = input[1].toIntOrNull()
+        if (month !in 1..12 || month == null) return ""
+        val name = inf[month - 1]
+        val day = input[0].toIntOrNull()
         val year = input[2].toIntOrNull()
-        if (day != null && year != null && month != null) {
-            val a = daysInMonth(month, year)
-            return if ((day <= a) && (day > 0)) String.format("%d %s %d", day, name, year) else ""
-        } else return ""
+        if ((day == null) || (year == null)) return ""
+        val a = daysInMonth(month, year)
+        return if ((day <= a) && (day > 0)) String.format("%d %s %d", day, name, year) else ""
     } catch (e: NumberFormatException) {
         return ""
     }
@@ -134,6 +130,7 @@ fun dateDigitToStr(digital: String): String {
  * При неверном формате вернуть пустую строку.
  *
  * PS: Дополнительные примеры работы функции можно посмотреть в соответствующих тестах.
+ *
  */
 fun flattenPhoneNumber(phone: String): String {
     val newPhone = StringBuilder()
@@ -158,6 +155,7 @@ fun flattenPhoneNumber(phone: String): String {
     }
     return newPhone.toString()
 }
+
 
 
 fun num (list: List<Char>): Int {
