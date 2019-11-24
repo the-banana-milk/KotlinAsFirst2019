@@ -130,30 +130,34 @@ fun dateDigitToStr(digital: String): String {
  * При неверном формате вернуть пустую строку.
  *
  * PS: Дополнительные примеры работы функции можно посмотреть в соответствующих тестах.
- *
+ *    val newPhone = StringBuilder()
+val rem = StringBuilder()
+var i = 0
+try {
+for (char in phone) {
+if (char == '+' || char == ')' || char == '(' || char == '-' || char == ' ' || char in '0'..'9') {
+if ((char == '+') || (char in '0'..'9')) {
+newPhone.append(char)
+if (i == 1) i += 1
+}
+if (char == '(') {
+rem.append('(')
+i = 1
+}
+if (('(' in rem) && (char == ')') && (i == 1)) return ""
+} else return ""
+}
+} catch (e: NumberFormatException) {
+return ""
+}
+return newPhone.toString()
  */
 fun flattenPhoneNumber(phone: String): String {
-    val newPhone = StringBuilder()
-    val rem = StringBuilder()
-    var i = 0
-    try {
-        for (char in phone) {
-            if (char == '+' || char == ')' || char == '(' || char == '-' || char == ' ' || char in '0'..'9') {
-                if ((char == '+') || (char in '0'..'9')) {
-                    newPhone.append(char)
-                    if (i == 1) i += 1
-                }
-                if (char == '(') {
-                    rem.append('(')
-                    i = 1
-                }
-                if (('(' in rem) && (char == ')') && (i == 1)) return ""
-            } else return ""
-        }
-    } catch (e: NumberFormatException) {
-        return ""
-    }
-    return newPhone.toString()
+    val a = Regex(pattern = """^\+?[0-9]+|\ *[-]*|[(]?[0-9]+[)]?""").matchEntire(phone).toString()
+    if (a == phone) {
+        val need = phone.filter { it in '0'..'9' || it == '+' }
+        return need
+    } else return ""
 }
 
 
