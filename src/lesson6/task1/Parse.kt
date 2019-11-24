@@ -102,19 +102,15 @@ fun dateDigitToStr(digital: String): String {
     val inf = listOf< String>("января", "февраля", "марта", "апреля", "мая", "июня",
         "июля", "августа", "сентября", "октября", "ноября", "декабря" )
     val input = digital.split(".")
-    try {
-        if (input.size != 3) return ""
-        val month = input[1].toIntOrNull()
-        if (month !in 1..12 || month == null) return ""
-        val name = inf[month - 1]
-        val day = input[0].toIntOrNull()
-        val year = input[2].toIntOrNull()
-        if ((day == null) || (year == null)) return ""
-        val a = daysInMonth(month, year)
-        return if ((day <= a) && (day > 0)) String.format("%d %s %d", day, name, year) else ""
-    } catch (e: NumberFormatException) {
-        return ""
-    }
+    if (input.size != 3) return ""
+    val month = input[1].toInt()
+    if (month !in 1..12) return ""
+    val name = inf[month - 1]
+    val day = input[0].toIntOrNull()
+    val year = input[2].toIntOrNull()
+    if ((day == null) || (year == null)) return ""
+    val a = daysInMonth(month, year)
+    return if ((day <= a) && (day > 0)) String.format("%d %s %d", day, name, year) else ""
 }
 
 /**
@@ -153,14 +149,11 @@ return ""
 return newPhone.toString()
  */
 fun flattenPhoneNumber(phone: String): String {
-    val a = Regex(pattern = """^\+?[0-9]+|\ *[-]*|[(]?[0-9]+[)]?""").matchEntire(phone).toString()
-    if (a == phone) {
+    if (Regex(pattern = """^\+?[0-9]+|\ *[-]*|[(]?[0-9]+[)]?""").matches(phone)) {
         val need = phone.filter { it in '0'..'9' || it == '+' }
         return need
     } else return ""
 }
-
-
 
 fun num (list: List<Char>): Int {
     val l = mapOf<Char, Int>('0' to 0, '1' to 1, '2' to 2, '3' to 3, '4' to 4, '5' to 5, '6' to 6, '7' to 7, '8' to 8, '9' to 9)
@@ -186,43 +179,17 @@ fun num (list: List<Char>): Int {
  * При нарушении формата входной строки или при отсутствии в ней чисел, вернуть -1.
  */
 fun bestLongJump(jumps: String): Int {
-    val list = mutableListOf<Int>()
-    var rem = 0
-    val rememberNumber = mutableListOf<Char>()
-    var previous = 0
+    val newJumps = jumps.split(" ")
+    val list = newJumps.filter { it in "1".."1000" }
     var max = 0
-    val jl = jumps.length
-    try {
-        for (char in jumps) {
-            if ((char == ' ') || (char in '0'..'9') || (char == '-') || (char == '%')) {
-                previous += 1
-                if ((char in '0'..'9') && (rem == 0)) {
-                    rem += 1
-                    rememberNumber.add(char)
-                } else if ((char in '0'..'9') && (rem != 0) && (rememberNumber.isNotEmpty())) {
-                    rem += 1
-                    rememberNumber.add(char)
-                    if (previous == jl) {
-                        rem = 0
-                        list.add(num(rememberNumber))
-                        rememberNumber.clear()
-                    }
-                } else if ((char !in '0'..'9') && (rem != 0) && (rememberNumber.isNotEmpty()) || previous == jl) {
-                    rem = 0
-                    list.add(num(rememberNumber))
-                    rememberNumber.clear()
-                }
-            } else return -1
+    if (list.isEmpty()) return -1
+    else {
+        for (num in list) {
+            val rem = num.toInt()
+            if (rem > max) max = rem
         }
-        if (list.isEmpty()) return -1
-        for (i in list) {
-            if (i > max) max = i
-        }
-        if (max == 0) return -1
-    } catch (e: NumberFormatException) {
-        return -1
+        return max
     }
-    return max
 }
 
 /**
