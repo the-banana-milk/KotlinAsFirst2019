@@ -126,31 +126,11 @@ fun dateDigitToStr(digital: String): String {
  * При неверном формате вернуть пустую строку.
  *
  * PS: Дополнительные примеры работы функции можно посмотреть в соответствующих тестах.
- *    val newPhone = StringBuilder()
-val rem = StringBuilder()
-var i = 0
-try {
-for (char in phone) {
-if (char == '+' || char == ')' || char == '(' || char == '-' || char == ' ' || char in '0'..'9') {
-if ((char == '+') || (char in '0'..'9')) {
-newPhone.append(char)
-if (i == 1) i += 1
-}
-if (char == '(') {
-rem.append('(')
-i = 1
-}
-if (('(' in rem) && (char == ')') && (i == 1)) return ""
-} else return ""
-}
-} catch (e: NumberFormatException) {
-return ""
-}
-return newPhone.toString()
+ *
  */
 fun flattenPhoneNumber(phone: String): String {
     val newphone = phone.filter { it != ' ' && it != '-' }
-    if (newphone.matches(Regex(pattern = """^\+?[0-9]+\([0-9]+\)[0-9]+|^\+?[0-9]*"""))) {
+    if (newphone.matches(Regex(pattern = """\+?[0-9]+\([0-9]+\)[0-9]+|\+?[0-9]+"""))) {
         val need = phone.filter { it in '0'..'9' || it == '+' }
         return need
     } else return ""
@@ -182,17 +162,18 @@ fun num (list: List<Char>): Int {
 fun bestLongJump(jumps: String): Int {
     val newJumps = jumps.split(' ')
     var max = -1
-    if (newJumps.isEmpty()) return -1
-    else {
-        for (num in newJumps) {
-            if (num != "-" && num != " " && num !in "1".."${Int.MAX_VALUE}") return -1
-            if (num in "1".."${Int.MAX_VALUE}") {
-                if (num.toInt() > max) max = num.toInt()
-            }
+    for (num in newJumps) {
+        if (num != "-" || num != " " || num !in "1".."${Int.MAX_VALUE}") return -1
+        if (num in "1".."${Int.MAX_VALUE}") {
+            val list = mutableListOf<Char>()
+            for (i in num) list.add(i)
+            val k = num(list)
+            if (k > max) max = k
         }
-        return max
     }
+    return max
 }
+
 
 /**
  * Сложная
