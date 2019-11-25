@@ -103,8 +103,8 @@ fun dateDigitToStr(digital: String): String {
         "июля", "августа", "сентября", "октября", "ноября", "декабря" )
     val input = digital.split(".")
     if (input.size != 3) return ""
-    val month = input[1].toInt()
-    if (month !in 1..12) return ""
+    val month = input[1].toIntOrNull()
+    if (month !in 1..12 || month == null) return ""
     val name = inf[month - 1]
     val day = input[0].toIntOrNull()
     val year = input[2].toIntOrNull()
@@ -149,7 +149,8 @@ return ""
 return newPhone.toString()
  */
 fun flattenPhoneNumber(phone: String): String {
-    if (Regex(pattern = """^\+?[0-9]+|\ *[-]*|[(]?[0-9]+[)]?""").matches(phone)) {
+    val newphone = phone.filter { it != ' ' && it != '-' }
+    if (newphone.matches(Regex(pattern = """^\+?[0-9]+\([0-9]+\)[0-9]+|^\+?[0-9]*"""))) {
         val need = phone.filter { it in '0'..'9' || it == '+' }
         return need
     } else return ""
@@ -179,14 +180,15 @@ fun num (list: List<Char>): Int {
  * При нарушении формата входной строки или при отсутствии в ней чисел, вернуть -1.
  */
 fun bestLongJump(jumps: String): Int {
-    val newJumps = jumps.split(" ")
-    val list = newJumps.filter { it in "1".."1000" }
-    var max = 0
-    if (list.isEmpty()) return -1
+    val newJumps = jumps.split(' ')
+    var max = -1
+    if (newJumps.isEmpty()) return -1
     else {
-        for (num in list) {
-            val rem = num.toInt()
-            if (rem > max) max = rem
+        for (num in newJumps) {
+            if (num != "-" && num != " " && num !in "1".."${Int.MAX_VALUE}") return -1
+            if (num in "1".."${Int.MAX_VALUE}") {
+                if (num.toInt() > max) max = num.toInt()
+            }
         }
         return max
     }
