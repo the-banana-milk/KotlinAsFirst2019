@@ -136,19 +136,6 @@ fun flattenPhoneNumber(phone: String): String {
     } else return ""
 }
 
-fun num (list: List<Char>): Int {
-    val l = mapOf<Char, Int>('0' to 0, '1' to 1, '2' to 2, '3' to 3, '4' to 4, '5' to 5, '6' to 6, '7' to 7, '8' to 8, '9' to 9)
-    var a = list.size
-    var number = 0.0
-    for (i in 0 until a) {
-        val n = list[i]
-        if (n in l.keys) {
-            number += l[n]!!.toDouble() * 10.0.pow(a - 1)
-            a -= 1
-        }
-    }
-    return number.toInt()
-}
 /**
  * Средняя
  *
@@ -160,14 +147,12 @@ fun num (list: List<Char>): Int {
  * При нарушении формата входной строки или при отсутствии в ней чисел, вернуть -1.
  */
 fun bestLongJump(jumps: String): Int {
-    val newJumps = jumps.split(' ')
+    val newJumps = jumps.split(" ")
     var max = -1
     for (num in newJumps) {
-        if (num != "-" || num != " " || num !in "1".."${Int.MAX_VALUE}") return -1
-        if (num in "1".."${Int.MAX_VALUE}") {
-            val list = mutableListOf<Char>()
-            for (i in num) list.add(i)
-            val k = num(list)
+        if (num != "-" || num != "%" || num.toInt() !in 1..Int.MAX_VALUE) return -1
+        if (num.toInt() in 1..Int.MAX_VALUE) {
+            val k = num.toInt()
             if (k > max) max = k
         }
     }
