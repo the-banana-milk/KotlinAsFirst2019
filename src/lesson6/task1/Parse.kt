@@ -150,11 +150,12 @@ fun bestLongJump(jumps: String): Int {
     val newJumps = jumps.split(" ")
     var max = -1
     for (num in newJumps) {
-        if (num != "-" || num != "%" || num.toInt() !in 1..Int.MAX_VALUE) return -1
-        if (num.toInt() in 1..Int.MAX_VALUE) {
-            val k = num.toInt()
-            if (k > max) max = k
-        }
+        if (num == "-" || num == "%" || num.matches(Regex("""\d+"""))) {
+            if (num.matches(Regex("""\d+"""))) {
+                val k = num.toInt()
+                if (k > max) max = k
+            }
+        }else return -1
     }
     return max
 }
@@ -181,6 +182,11 @@ fun bestHighJump(jumps: String): Int = TODO()
  * Наличие двух знаков подряд "13 + + 10" или двух чисел подряд "1 2" не допускается.
  * Вернуть значение выражения (6 для примера).
  * Про нарушении формата входной строки бросить исключение IllegalArgumentException
+ *     val list = expression.split(" ")
+for (i in list) {
+if (i != "+" || i != "-" || i.toInt() in 1..Int.MAX_VALUE)
+}
+}
  */
 fun plusMinus(expression: String): Int = TODO()
 
