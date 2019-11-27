@@ -209,25 +209,27 @@ fun plusMinus(expression: String): Int {
     var willChange = 0
     var action = ""
     var k = 1
-    if (expression.matches(Regex("""(^\+)|(^\-+)|(\+{2,})|(\-+)|(\-${'$'})|(\+${'$'})|([a-z]+)|(\d+\ +\d+)"""))) throw IllegalArgumentException()
-    for (i in list) {
-        if (i == "+" || i == "-" || i.matches(Regex("""\d+"""))) {
-            if (i.matches(Regex("""\d+""")) && k == 1) {
-                willChange = i.toInt()
-                k += 1
-            }
-            if (i == "+" || i == "-") action = i
-            if (i.matches(Regex("""\d+""")) && ((action == "+") || (action == "-"))) {
-                val rem = i.toInt()
-                if (action == "+") {
-                    willChange += rem
+    val fromList = list.joinToString("")
+    if (fromList.matches(Regex("""\d+([\++|\-+]\d+)*"""))) {
+        for (i in list) {
+            if (i == "+" || i == "-" || i.matches(Regex("""\d+"""))) {
+                if (i.matches(Regex("""\d+""")) && k == 1) {
+                    willChange = i.toInt()
+                    k += 1
                 }
-                if (action == "-") {
-                    willChange -= rem
+                if (i == "+" || i == "-") action = i
+                if (i.matches(Regex("""\d+""")) && ((action == "+") || (action == "-"))) {
+                    val rem = i.toInt()
+                    if (action == "+") {
+                        willChange += rem
+                    }
+                    if (action == "-") {
+                        willChange -= rem
+                    }
                 }
             }
-        } else throw IllegalArgumentException()
-    }
+        }
+    } else throw IllegalArgumentException()
     return willChange
 }
 
