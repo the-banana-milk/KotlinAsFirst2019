@@ -177,7 +177,7 @@ fun bestHighJump(jumps: String): Int {
     val div = jumps.split(" ")
     var rem = 0
     var max = 0
-    if (jumps.contains(Regex("""\d+([\s-+]*\d+)*"""))) else return -1
+    if (jumps.contains(Regex("""\d+([\s-+]*\d+)*\w"""))) else return -1
     for (i in div) {
         if (i.matches(Regex("""\d+"""))) {
             rem = i.toInt()
@@ -241,8 +241,37 @@ fun plusMinus(expression: String): Int {
  * Слова, отличающиеся только регистром, считать совпадающими.
  * Вернуть индекс начала первого повторяющегося слова, или -1, если повторов нет.
  * Пример: "Он пошёл в в школу" => результат 9 (индекс первого 'в')
+ *         if (set.contains(map.keys)) set.add(map)
+else {
+for (j in set) {
+rem += j.size - 1
+if (j == map) {
+return rem
+}
  */
-fun firstDuplicateIndex(str: String): Int = TODO()
+fun firstDuplicateIndex(str: String): Int {
+    val words = str.toLowerCase().split(" ")
+    var theBegin = words.size
+    var indOfBeg = mutableListOf<Int>()
+    var set = mutableSetOf<Map<Char, Int>>()
+    var rem = 0
+    var ind = 0
+    for (i in 0 until words.size) {
+        val map = mutableMapOf<Char, Int>()
+        var k = 1
+        for (char in words[i]) {
+            if (k == 1) {
+                indOfBeg.add(ind)
+                k += 1
+            }
+            map.put(char, ind)
+            ind += 1
+        }
+        map.put(' ', ind)
+        ind += 1
+    }
+    return -1
+}
 
 /**
  * Сложная
