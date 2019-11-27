@@ -182,13 +182,35 @@ fun bestHighJump(jumps: String): Int = TODO()
  * Наличие двух знаков подряд "13 + + 10" или двух чисел подряд "1 2" не допускается.
  * Вернуть значение выражения (6 для примера).
  * Про нарушении формата входной строки бросить исключение IllegalArgumentException
- *     val list = expression.split(" ")
-for (i in list) {
-if (i != "+" || i != "-" || i.toInt() in 1..Int.MAX_VALUE)
-}
-}
+ *
  */
-fun plusMinus(expression: String): Int = TODO()
+fun plusMinus(expression: String): Int {
+    val list = expression.split(" ")
+    val matches = Regex("""(^\+)|(^\-+)|(\+{2,})|(\-+)|(\-${'$'})|(\+${'$'})|([a-z]+)|(\d+\ +\d+)""").find(expression).toString()
+    var willChange = 0
+    var action = ""
+    var k = 1
+    if (matches.isNotEmpty()) throw IllegalArgumentException()
+    for (i in list) {
+        if (i == "+" || i == "-" || i.matches(Regex("""\d+"""))) {
+            if (i.matches(Regex("""\d+""")) && k == 1) {
+                willChange = i.toInt()
+                k += 1
+            }
+            if (i == "+" || i == "-") action = i
+            if (i.matches(Regex("""\d+""")) && ((action == "+") || (action == "-"))) {
+                val rem = i.toInt()
+                if (action == "+") {
+                    willChange += rem
+                }
+                if (action == "-") {
+                    willChange -= rem
+                }
+            }
+        } else throw IllegalArgumentException()
+    }
+    return willChange
+}
 
 /**
  * Сложная
