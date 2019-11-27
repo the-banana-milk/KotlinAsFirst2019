@@ -172,7 +172,27 @@ fun bestLongJump(jumps: String): Int {
  * При нарушении формата входной строки, а также в случае отсутствия удачных попыток,
  * вернуть -1.
  */
-fun bestHighJump(jumps: String): Int = TODO()
+fun bestHighJump(jumps: String): Int {
+    val save = mutableListOf<Int>()
+    val div = jumps.split(" ")
+    var rem = 0
+    var max = 0
+    if (jumps.contains(Regex("""\d+([\s-+]*\d+)*"""))) else return -1
+    for (i in div) {
+        if (i.matches(Regex("""\d+"""))) {
+            rem = i.toInt()
+        }
+        if (i.matches(Regex("""\D"""))) {
+            if (i == "+") save.add(rem)
+            else {
+                val tries = i.split("")
+                if (tries[tries.size - 1] == "+") save.add(rem)
+            }
+        }
+    }
+    for (i in save) if (i > max) max = i
+    return max
+}
 
 /**
  * Сложная
@@ -186,11 +206,10 @@ fun bestHighJump(jumps: String): Int = TODO()
  */
 fun plusMinus(expression: String): Int {
     val list = expression.split(" ")
-    val matches = Regex("""(^\+)|(^\-+)|(\+{2,})|(\-+)|(\-${'$'})|(\+${'$'})|([a-z]+)|(\d+\ +\d+)""").find(expression).toString()
     var willChange = 0
     var action = ""
     var k = 1
-    if (matches.isNotEmpty()) throw IllegalArgumentException()
+    if (expression.matches(Regex("""(^\+)|(^\-+)|(\+{2,})|(\-+)|(\-${'$'})|(\+${'$'})|([a-z]+)|(\d+\ +\d+)"""))) throw IllegalArgumentException()
     for (i in list) {
         if (i == "+" || i == "-" || i.matches(Regex("""\d+"""))) {
             if (i.matches(Regex("""\d+""")) && k == 1) {
