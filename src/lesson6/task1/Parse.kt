@@ -173,24 +173,22 @@ fun bestLongJump(jumps: String): Int {
  * вернуть -1.
  */
 fun bestHighJump(jumps: String): Int {
-    val save = mutableListOf<Int>()
+    //val save = mutableListOf<Int>()
     val div = jumps.split(" ")
+    // val k = div.joinToString("")
     var rem = 0
-    var max = 0
-    if (jumps.contains(Regex("""\d+([\s-+]*\d+)*\w"""))) else return -1
+    var max = -1
+    var check = 0
     for (i in div) {
-        if (i.matches(Regex("""\d+"""))) {
+        if (i.matches(Regex("""\d+""")) && check % 2 == 0) {
             rem = i.toInt()
-        }
-        if (i.matches(Regex("""\D"""))) {
-            if (i == "+") save.add(rem)
-            else {
-                val tries = i.split("")
-                if (tries[tries.size - 1] == "+") save.add(rem)
+        } else if (i.matches(Regex("""[%\-+]*""")) && check % 2 != 0) {
+            if ("+" in i) {
+                if (rem > max) max = rem
             }
-        }
+        } else return -1
+        check += 1
     }
-    for (i in save) if (i > max) max = i
     return max
 }
 
@@ -248,30 +246,50 @@ rem += j.size - 1
 if (j == map) {
 return rem
 }
- */
-fun firstDuplicateIndex(str: String): Int {
-    val words = str.toLowerCase().split(" ")
-    var theBegin = words.size
-    var indOfBeg = mutableListOf<Int>()
-    var set = mutableSetOf<Map<Char, Int>>()
-    var rem = 0
-    var ind = 0
-    for (i in 0 until words.size) {
-        val map = mutableMapOf<Char, Int>()
-        var k = 1
-        for (char in words[i]) {
-            if (k == 1) {
-                indOfBeg.add(ind)
-                k += 1
-            }
-            map.put(char, ind)
-            ind += 1
-        }
-        map.put(' ', ind)
-        ind += 1
-    }
-    return -1
+val words = str.toLowerCase().split(" ")
+val indOfBeg = mutableListOf<Int>()
+val sizes = mutableListOf<Int>()
+val list = mutableListOf<Map<Char, Int>>()
+var ind = 0
+for (i in 0 until words.size) {
+val map = mutableMapOf<Char, Int>()
+var k = 1
+for (char in words[i]) {
+if (k == 1) {
+indOfBeg.add(ind)
+k += 1
 }
+map.put(char, ind)
+ind += 1
+}
+map.put(' ', ind)
+list.add(map)
+val size = map.size
+if (size in sizes) {
+for (i in 0 until sizes.size) {
+if (sizes[i] == size) {
+if (map.keys == list[i].keys) return indOfBeg[i]
+}
+}
+} else sizes.add(size)
+}
+return -1
+ */
+fun firstDuplicateIndex(str: String): Int = TODO() //{
+    //val words = str.split(" ")
+    //val indOfBeg = mutableListOf<Int>()
+    //val list = mutableListOf<String>()
+    //val k = 1
+    //var ind = 0
+    //for (i in words) {
+        //if (k != 0) {
+            //indOfBeg.add(ind)
+        //}
+        //if (i in list) {
+
+        //} else list.add(i)
+    //}
+//}
 
 /**
  * Сложная
