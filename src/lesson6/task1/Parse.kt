@@ -206,28 +206,20 @@ fun plusMinus(expression: String): Int {
     val list = expression.split(" ")
     var willChange = 0
     var action = ""
-    var k = 1
-    val fromList = list.joinToString("")
-    if (fromList.matches(Regex("""\d+([\++|\-+]\d+)*"""))) {
-        for (i in list) {
-            if (i == "+" || i == "-" || i.matches(Regex("""\d+"""))) {
-                if (i.matches(Regex("""\d+""")) && k == 1) {
-                    willChange = i.toInt()
-                    k += 1
-                }
-                if (i == "+" || i == "-") action = i
-                if (i.matches(Regex("""\d+""")) && ((action == "+") || (action == "-"))) {
-                    val rem = i.toInt()
-                    if (action == "+") {
-                        willChange += rem
-                    }
-                    if (action == "-") {
-                        willChange -= rem
-                    }
-                }
+    var check = 0
+    for (i in list) {
+        if (i.matches(Regex("""\d+""")) && action.isEmpty() && (check % 2 == 0)) {
+            willChange = i.toInt()
+        } else if (i.matches(Regex("""[+-]""")) && (check % 2 != 0)) action = i
+        else if (i.matches(Regex("""\d+""")) && ((action == "+") || (action == "-")) && (check % 2 == 0)) {
+            val rem = i.toInt()
+            when {
+                (action == "+") -> willChange += rem
+                (action == "-") -> willChange -= rem
             }
-        }
-    } else throw IllegalArgumentException()
+        } else throw IllegalArgumentException()
+        check += 1
+    }
     return willChange
 }
 
