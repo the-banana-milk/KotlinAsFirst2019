@@ -173,21 +173,21 @@ fun bestLongJump(jumps: String): Int {
  * вернуть -1.
  */
 fun bestHighJump(jumps: String): Int {
-    //val save = mutableListOf<Int>()
     val div = jumps.split(" ")
-    // val k = div.joinToString("")
     var rem = 0
     var max = -1
     var check = 0
-    for (i in div) {
-        if (i.matches(Regex("""\d+""")) && check % 2 == 0) {
-            rem = i.toInt()
-        } else if (i.matches(Regex("""[%\-+]*""")) && check % 2 != 0) {
-            if ("+" in i) {
-                if (rem > max) max = rem
-            }
-        } else return -1
-        check += 1
+    div.forEachIndexed { index, value
+        ->
+        when {
+            (value.matches(Regex("""\d+""")) && index % 2 == 0) ->
+                rem = value.toInt()
+            (value.matches(Regex("""[%\-+]+""")) && index % 2 != 0) ->
+                if ("+" in value) {
+                    if (rem > max) max = rem
+                }
+             else -> return -1
+        }
     }
     return max
 }
@@ -207,17 +207,20 @@ fun plusMinus(expression: String): Int {
     var willChange = 0
     var action = ""
     var check = 0
+    var rem = 0
     for (i in list) {
-        if (i.matches(Regex("""\d+""")) && action.isEmpty() && (check % 2 == 0)) {
-            willChange = i.toInt()
-        } else if (i.matches(Regex("""[+-]""")) && (check % 2 != 0)) action = i
-        else if (i.matches(Regex("""\d+""")) && ((action == "+") || (action == "-")) && (check % 2 == 0)) {
-            val rem = i.toInt()
-            when {
-                (action == "+") -> willChange += rem
-                (action == "-") -> willChange -= rem
+        when {
+            (i.matches(Regex("""\d+""")) && action.isEmpty() && (check % 2 == 0)) -> willChange = i.toInt()
+            (i.matches(Regex("""[+-]""")) && (check % 2 != 0)) -> action = i
+            (i.matches(Regex("""\d+""")) && ((action == "+") || (action == "-")) && (check % 2 == 0)) -> {
+                rem = i.toInt()
+                when {
+                    (action == "+") -> willChange += rem
+                    (action == "-") -> willChange -= rem
+                    else -> throw IllegalArgumentException()
+                }
             }
-        } else throw IllegalArgumentException()
+        }
         check += 1
     }
     return willChange
@@ -267,21 +270,15 @@ if (map.keys == list[i].keys) return indOfBeg[i]
 }
 return -1
  */
-fun firstDuplicateIndex(str: String): Int = TODO() //{
-    //val words = str.split(" ")
-    //val indOfBeg = mutableListOf<Int>()
-    //val list = mutableListOf<String>()
-    //val k = 1
-    //var ind = 0
-    //for (i in words) {
-        //if (k != 0) {
-            //indOfBeg.add(ind)
-        //}
-        //if (i in list) {
-
-        //} else list.add(i)
-    //}
-//}
+fun firstDuplicateIndex(str: String): Int {
+    val words = str.toLowerCase().split(" ")
+    var ind = 0
+    for (i in 0 until words.size - 1) {
+        if (words[i] == words[i + 1]) return ind
+        ind += words[i].length + 1
+    }
+    return -1
+}
 
 /**
  * Сложная
