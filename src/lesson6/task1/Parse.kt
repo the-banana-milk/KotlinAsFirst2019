@@ -234,41 +234,7 @@ fun plusMinus(expression: String): Int {
  * Слова, отличающиеся только регистром, считать совпадающими.
  * Вернуть индекс начала первого повторяющегося слова, или -1, если повторов нет.
  * Пример: "Он пошёл в в школу" => результат 9 (индекс первого 'в')
- *         if (set.contains(map.keys)) set.add(map)
-else {
-for (j in set) {
-rem += j.size - 1
-if (j == map) {
-return rem
-}
-val words = str.toLowerCase().split(" ")
-val indOfBeg = mutableListOf<Int>()
-val sizes = mutableListOf<Int>()
-val list = mutableListOf<Map<Char, Int>>()
-var ind = 0
-for (i in 0 until words.size) {
-val map = mutableMapOf<Char, Int>()
-var k = 1
-for (char in words[i]) {
-if (k == 1) {
-indOfBeg.add(ind)
-k += 1
-}
-map.put(char, ind)
-ind += 1
-}
-map.put(' ', ind)
-list.add(map)
-val size = map.size
-if (size in sizes) {
-for (i in 0 until sizes.size) {
-if (sizes[i] == size) {
-if (map.keys == list[i].keys) return indOfBeg[i]
-}
-}
-} else sizes.add(size)
-}
-return -1
+ *
  */
 fun firstDuplicateIndex(str: String): Int {
     val words = str.toLowerCase().split(" ")
@@ -291,7 +257,26 @@ fun firstDuplicateIndex(str: String): Int {
  * или пустую строку при нарушении формата строки.
  * Все цены должны быть больше либо равны нуля.
  */
-fun mostExpensive(description: String): String = TODO()
+fun mostExpensive(description: String): String {
+    val listOfgoods = description.split(" ")
+    var max = 0.0
+    var name = ""
+    listOfgoods.forEachIndexed { index, s ->
+        if (s.matches(Regex("""([А-Я]*[а-я]*)|([0-9]*[.,]?[0-9]+[;]?)"""))) {
+            when {
+                s.matches(Regex("""[0-9]*[.,]?[0-9]+[;]?""")) && index % 2 != 0 -> {
+                    var rem = 0.0
+                    if (";" in s) rem = Regex("""[;]""").replace(s, " ").toDouble() else rem = s.toDouble()
+                    if (rem >= max) {
+                        max = rem
+                        name = listOfgoods[index - 1]
+                    }
+                }
+            }
+        } else return ""
+    }
+    return name
+}
 
 /**
  * Сложная
