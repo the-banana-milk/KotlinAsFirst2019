@@ -208,7 +208,8 @@ fun plusMinus(expression: String): Int {
     var action = ""
     var check = 0
     var rem = 0
-    for (i in list) {
+    if (expression.isEmpty()) throw IllegalArgumentException("Only signed numbers are allowed")
+    else for (i in list) {
         when {
             (i.matches(Regex("""\d+""")) && action.isEmpty() && (check % 2 == 0)) -> willChange = i.toInt()
             (i.matches(Regex("""[+-]""")) && (check % 2 != 0)) -> action = i
@@ -220,6 +221,7 @@ fun plusMinus(expression: String): Int {
                     else -> throw IllegalArgumentException()
                 }
             }
+            else -> throw IllegalArgumentException()
         }
         check += 1
     }
@@ -275,7 +277,7 @@ fun mostExpensive(description: String): String {
             }
         } else return ""
     }
-    return name
+    return if (max == 0.0 && description != "") "Any good with price 0.0" else name
 }
 
 /**
@@ -289,7 +291,41 @@ fun mostExpensive(description: String): String {
  *
  * Вернуть -1, если roman не является корректным римским числом
  */
-fun fromRoman(roman: String): Int = TODO()
+fun fromRoman(roman: String): Int {
+    var list = mapOf<String, Int>(
+        "M" to 1000,
+        "CM" to 900,
+        "D" to 500,
+        "CD" to 400,
+        "C" to 100,
+        "XC" to 90,
+        "L" to 50,
+        "XL" to 40,
+        "X" to 10,
+        "IX" to 9,
+        "V" to 5,
+        "IV" to 4,
+        "I" to 1
+    )
+    var newRoman = roman
+    var len = newRoman.length
+    var n = 0
+    if (roman.matches(Regex("""[IVXLCDM]+"""))) {
+        for ((str, value) in list) {
+            val strlen = str.length
+            while ((str == newRoman[0].toString() || str == newRoman.substring(0, 1)) && len != 1) {
+                newRoman = newRoman.substring(strlen, len)
+                n += value
+                len = newRoman.length
+            }
+            if (((len == 1) || (str == newRoman.substring(0, 1))) && list[newRoman] != null) {
+                n += list[newRoman]!!
+                return n
+            }
+        }
+    }
+    return -1
+}
 
 /**
  * Очень сложная
@@ -327,4 +363,11 @@ fun fromRoman(roman: String): Int = TODO()
  * IllegalArgumentException должен бросаться даже если ошибочная команда не была достигнута в ходе выполнения.
  *
  */
-fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> = TODO()
+fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> = TODO()// {
+//    val com = commands.split(" ").joinToString("")
+//    val cellsList = mutableListOf<Int>()
+//    for (i in 1..cells) cellsList.add(0)
+//    for (i in 1..com.length) {
+//
+//    }
+//}
