@@ -180,7 +180,6 @@ fun bestHighJump(jumps: String): Int {
     val div = jumps.split(" ")
     var rem = 0
     var max = -1
-    var check = 0
     if (div.size % 2 != 0) return -1
     div.forEachIndexed { index, value
         ->
@@ -215,7 +214,7 @@ fun plusMinus(expression: String): Int {
     var rem = 0
     if (list.size % 2 == 0) throw IllegalArgumentException()
     if (expression.isEmpty()) throw IllegalArgumentException("Only signed numbers are allowed")
-    else for (i in list) {
+    for (i in list) {
         when {
             (i.matches(Regex("""\d+""")) && action.isEmpty() && (check % 2 == 0)) -> willChange = i.toInt()
             (i.matches(Regex("""[+-]""")) && (check % 2 != 0)) -> action = i
@@ -266,15 +265,15 @@ fun firstDuplicateIndex(str: String): Int {
  * Все цены должны быть больше либо равны нуля.
  */
 fun mostExpensive(description: String): String {
-    val listOfgoods = description.split(" ")
+    val listOfgoods = description.split(" ", "; ")
     var max = 0.0
     var name = ""
+    var rem = 0.0
     listOfgoods.forEachIndexed { index, s ->
-        if (s.matches(Regex("""([А-Я]*[а-я]*[A-Z]*[a-z]*)|([0-9]*[.,]?[0-9]+[;]?)"""))) {
+        if (s.matches(Regex("""([^\ ]+)|([0-9]*[.,]?[0-9]+)"""))) {
             when {
-                s.matches(Regex("""[0-9]*[.,]?[0-9]+[;]?""")) && index % 2 != 0 -> {
-                    var rem = 0.0
-                    if (";" in s) rem = Regex("""[;]""").replace(s, " ").toDouble() else rem = s.toDouble()
+                s.matches(Regex("""[0-9]*[.,]?[0-9]+""")) && index % 2 != 0 -> {
+                    rem = s.toDouble()
                     if (rem >= max) {
                         max = rem
                         name = listOfgoods[index - 1]
@@ -298,7 +297,7 @@ fun mostExpensive(description: String): String {
  * Вернуть -1, если roman не является корректным римским числом
  */
 fun fromRoman(roman: String): Int {
-    val list = mapOf<String, Int>(
+    val map = mapOf<String, Int>(
         "M" to 1000,
         "CM" to 900,
         "D" to 500,
@@ -316,16 +315,19 @@ fun fromRoman(roman: String): Int {
     var newRoman = roman
     var len = newRoman.length
     var n = 0
-    if (roman.matches(Regex("""[IVXLCDM]+"""))) {
-        for ((str, value) in list) {
-            val strlen = str.length
-            while ((str == newRoman[0].toString() || str == newRoman.substring(0, 1)) && len != 1) {
+    if (!roman.matches(Regex("""[IVXLCDM]+"""))) return -1
+    for ((str, value) in map) {
+        val strlen = str.length
+        if (len !in 1..2) {
+            while ((str == newRoman[0].toString() || str == newRoman.substring(0, 2))) {
                 newRoman = newRoman.substring(strlen, len)
                 n += value
                 len = newRoman.length
+                if (len == 0) return n
             }
-            if (((len == 1) || (str == newRoman.substring(0, 1))) && list[newRoman] != null) {
-                n += list[newRoman]!!
+        } else {
+            if (str == newRoman) {
+                n += value
                 return n
             }
         }
@@ -381,7 +383,6 @@ fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
         com.remove(com[0])
         com.remove(com[com.size - 1])
     }
-    var brackets = 0
     val size = com.size
     var countOfbrackets = 0
     while ((indexOfCom in 0 until size) || (lim != 0)) {
@@ -397,42 +398,43 @@ fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
         } else if (com[indexOfCom] == "-") {
             cellsList[ind] -= 1
             indexOfCom += 1
-        } else if (com[indexOfCom] == "[" && brackets >= 0) {
+        } else if (com[indexOfCom] == "[") {
             if (cellsList[ind] == 0) {
-                while (com[indexOfCom] != "]" && countOfbrackets == 0) {
+                countOfbrackets += 1
+                while (countOfbrackets != 0 && (indexOfCom == com.size - 1)) {
                     indexOfCom += 1
                     if (com[indexOfCom] == "[") {
                         countOfbrackets += 1
                     } else if (com[indexOfCom] == "]" && countOfbrackets != 0) {
                         countOfbrackets -= 1
-                    }
+                    } else if (com[indexOfCom] == "]" && countOfbrackets == 1) countOfbrackets -= 1
+                    if (countOfbrackets > 0 && ((lim == 0) || (indexOfCom == com.size - 1))) throw IllegalArgumentException()
                 }
                 indexOfCom += 1
             } else {
                 indexOfCom += 1
             }
-            brackets += 1
         } else if (com[indexOfCom] == "]") {
             if (cellsList[ind] != 0) {
-                while (com[indexOfCom] != "[") {
+                countOfbrackets -= 1
+                while (countOfbrackets != 0 && (indexOfCom == com.size - 1)) {
                     indexOfCom -= 1
                     if (com[indexOfCom] == "]") {
-                        countOfbrackets += 1
-                    } else if (com[indexOfCom] == "[" && countOfbrackets != 0) {
                         countOfbrackets -= 1
-                        indexOfCom -= 1
+                    } else if (com[indexOfCom] == "[" && countOfbrackets != 0) {
+                        countOfbrackets += 1
                     }
+                    if (countOfbrackets > 0 && ((lim == 0) || (indexOfCom == com.size - 1))) throw IllegalArgumentException()
                 }
             } else {
                 indexOfCom += 1
             }
-            brackets -= 1
         } else if (com[indexOfCom] == " ") {
             indexOfCom += 1
         }
         lim -= 1
         if (ind !in 0 until cellsList.size) throw IllegalStateException()
+        if (countOfbrackets > 0 && ((lim == 0) || (indexOfCom == com.size - 1))) throw IllegalArgumentException()
     }
-    if (brackets > 0 && (lim == 0) || (indexOfCom == com.size - 1)) throw IllegalArgumentException()
     return cellsList
 }
