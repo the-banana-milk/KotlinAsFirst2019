@@ -134,7 +134,7 @@ fun dateDigitToStr(digital: String): String {
  */
 fun flattenPhoneNumber(phone: String): String {
     val newphone = phone.filter { it != ' ' && it != '-' }
-    if (newphone.matches(Regex(pattern = """\+[0-9]+\([0-9]+\)[0-9]+|\+?[0-9]+"""))) {
+    if (newphone.matches(Regex(pattern = """(\+[0-9]+)?\([0-9]+\)[0-9]+|\+?[0-9]+"""))) {
         val need = phone.filter { it in '0'..'9' || it == '+' }
         return need
     } else return ""
@@ -381,7 +381,8 @@ fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
     }
     var brackets = 0
     val size = com.size
-    while ((indexOfCom in 0 until size) && (lim != 0)) {
+    var countOfbrackets = 0
+    while ((indexOfCom in 0 until size) || (lim != 0)) {
         if (com[indexOfCom] == ">") {
             ind += 1
             indexOfCom += 1
@@ -394,20 +395,33 @@ fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
         } else if (com[indexOfCom] == "-") {
             cellsList[ind] -= 1
             indexOfCom += 1
-        } else if (com[indexOfCom] == "[") {
+        } else if (com[indexOfCom] == "[" && brackets >= 0) {
             if (cellsList[ind] == 0) {
-                while (com[indexOfCom] != "]") {
+                while (com[indexOfCom] != "]" && countOfbrackets == 0) {
                     indexOfCom += 1
+                    if (com[indexOfCom] == "[") {
+                        countOfbrackets += 1
+                        indexOfCom += 1
+                    } else if (com[indexOfCom] == "]" && countOfbrackets != 0) {
+                        countOfbrackets -= 1
+                        indexOfCom += 1
+                    }
                 }
                 indexOfCom += 1
             } else {
                 indexOfCom += 1
             }
             brackets += 1
-        } else if (com[indexOfCom] == "]" && brackets > 0) {
+        } else if (com[indexOfCom] == "]") {
             if (cellsList[ind] != 0) {
                 while (com[indexOfCom] != "[") {
                     indexOfCom -= 1
+                    if (com[indexOfCom] == "]") {
+                        countOfbrackets += 1
+                    } else if (com[indexOfCom] == "[" && countOfbrackets != 0) {
+                        countOfbrackets -= 1
+                        indexOfCom -= 1
+                    }
                 }
             } else {
                 indexOfCom += 1
