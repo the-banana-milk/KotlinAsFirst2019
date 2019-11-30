@@ -134,7 +134,7 @@ fun dateDigitToStr(digital: String): String {
  */
 fun flattenPhoneNumber(phone: String): String {
     val newphone = phone.filter { it != ' ' && it != '-' }
-    if (newphone.matches(Regex(pattern = """(\+[0-9]+)?\([0-9]+\)[0-9]+|\+?[0-9]+"""))) {
+    if (newphone.matches(Regex(pattern = """(\+[0-9]+)?(\([0-9]+\))?[0-9]+"""))) {
         val need = phone.filter { it in '0'..'9' || it == '+' }
         return need
     } else return ""
@@ -181,6 +181,7 @@ fun bestHighJump(jumps: String): Int {
     var rem = 0
     var max = -1
     var check = 0
+    if (div.size % 2 != 0) return -1
     div.forEachIndexed { index, value
         ->
         when {
@@ -212,6 +213,7 @@ fun plusMinus(expression: String): Int {
     var action = ""
     var check = 0
     var rem = 0
+    if (list.size % 2 == 0) throw IllegalArgumentException()
     if (expression.isEmpty()) throw IllegalArgumentException("Only signed numbers are allowed")
     else for (i in list) {
         when {
@@ -401,10 +403,8 @@ fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
                     indexOfCom += 1
                     if (com[indexOfCom] == "[") {
                         countOfbrackets += 1
-                        indexOfCom += 1
                     } else if (com[indexOfCom] == "]" && countOfbrackets != 0) {
                         countOfbrackets -= 1
-                        indexOfCom += 1
                     }
                 }
                 indexOfCom += 1
