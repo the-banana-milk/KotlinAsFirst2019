@@ -318,22 +318,23 @@ fun fromRoman(roman: String): Int {
     if (!roman.matches(Regex("""[IVXLCDM]+"""))) return -1
     for ((str, value) in map) {
         val strlen = str.length
-        if (len !in 1..2) {
+        if (len != 1) {
             while ((str == newRoman[0].toString() || str == newRoman.substring(0, 2))) {
                 newRoman = newRoman.substring(strlen, len)
                 n += value
                 len = newRoman.length
                 if (len == 0) return n
             }
-        } else {
-            if (str == newRoman) {
-                n += value
-                return n
-            }
+        }
+        if (str == newRoman && len == 1) {
+            n += value
+            return n
         }
     }
     return -1
 }
+
+
 
 /**
  * Очень сложная
@@ -401,7 +402,7 @@ fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
         } else if (com[indexOfCom] == "[") {
             if (cellsList[ind] == 0) {
                 countOfbrackets += 1
-                while (countOfbrackets != 0 && (indexOfCom == com.size - 1)) {
+                while (countOfbrackets != 0 && (indexOfCom == com.size - 1) && com[indexOfCom] != "]") {
                     indexOfCom += 1
                     if (com[indexOfCom] == "[") {
                         countOfbrackets += 1
@@ -417,7 +418,7 @@ fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
         } else if (com[indexOfCom] == "]") {
             if (cellsList[ind] != 0) {
                 countOfbrackets -= 1
-                while (countOfbrackets != 0 && (indexOfCom == com.size - 1)) {
+                while (countOfbrackets != 0 && (indexOfCom == com.size - 1) && com[indexOfCom] != "[") {
                     indexOfCom -= 1
                     if (com[indexOfCom] == "]") {
                         countOfbrackets -= 1
