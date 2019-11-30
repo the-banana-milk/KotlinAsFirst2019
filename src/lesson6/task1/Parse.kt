@@ -74,8 +74,10 @@ fun main() {
  * входными данными.
  */
 fun dateStrToDigit(str: String): String {
-    val map = mapOf<String, Int>( "января" to 1, "февраля" to 2, "марта" to 3, "апреля" to 4, "мая" to 5, "июня" to 6,
-        "июля" to 7, "августа" to 8, "сентября" to 9, "октября" to 10, "ноября" to 11, "декабря" to 12 )
+    val map = mapOf<String, Int>(
+        "января" to 1, "февраля" to 2, "марта" to 3, "апреля" to 4, "мая" to 5, "июня" to 6,
+        "июля" to 7, "августа" to 8, "сентября" to 9, "октября" to 10, "ноября" to 11, "декабря" to 12
+    )
     val input = str.split(" ")
     if (input.size != 3) return ""
     val num1 = map[input[1]]
@@ -99,8 +101,10 @@ fun dateStrToDigit(str: String): String {
  *
  */
 fun dateDigitToStr(digital: String): String {
-    val inf = listOf< String>("января", "февраля", "марта", "апреля", "мая", "июня",
-        "июля", "августа", "сентября", "октября", "ноября", "декабря" )
+    val inf = listOf<String>(
+        "января", "февраля", "марта", "апреля", "мая", "июня",
+        "июля", "августа", "сентября", "октября", "ноября", "декабря"
+    )
     val input = digital.split(".")
     if (input.size != 3) return ""
     val month = input[1].toIntOrNull()
@@ -155,7 +159,7 @@ fun bestLongJump(jumps: String): Int {
                 val k = num.toInt()
                 if (k > max) max = k
             }
-        }else return -1
+        } else return -1
     }
     return max
 }
@@ -186,7 +190,7 @@ fun bestHighJump(jumps: String): Int {
                 if ("+" in value) {
                     if (rem > max) max = rem
                 }
-             else -> return -1
+            else -> return -1
         }
     }
     return max
@@ -277,7 +281,7 @@ fun mostExpensive(description: String): String {
             }
         } else return ""
     }
-    return if (max == 0.0 && description != "") "Any good with price 0.0" else name
+    return name
 }
 
 /**
@@ -292,7 +296,7 @@ fun mostExpensive(description: String): String {
  * Вернуть -1, если roman не является корректным римским числом
  */
 fun fromRoman(roman: String): Int {
-    var list = mapOf<String, Int>(
+    val list = mapOf<String, Int>(
         "M" to 1000,
         "CM" to 900,
         "D" to 500,
@@ -364,61 +368,57 @@ fun fromRoman(roman: String): Int {
  *
  */
 fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
-    val com1 = commands.split(" ").joinToString("")
-    val com2 = commands.split("").joinToString("")
-    var check = ""
-    if (com1.length <= com2.length) check = com1 else check = com2
     val cellsList = mutableListOf<Int>()
     var ind = cells / 2
     var indexOfCom = 0
     var lim = limit
     for (i in 1..cells) cellsList.add(0)
-    if (check.matches(Regex("""[+-<>[\[\]]*]|[+-<>]*""")) && cells != 0) {
-        val com = check.split("").toMutableList()
+    if (!commands.matches(Regex("""[+\-<>\[\]\ ]*"""))) throw IllegalArgumentException()
+    val com = commands.split("").toMutableList()
+    if (com[0] == "" && com[com.size - 1] == "") {
         com.remove(com[0])
         com.remove(com[com.size - 1])
-        val size = com.size
-        while ((indexOfCom in 0 until size) && (lim != 0) && (ind in 0 until cellsList.size)) {
-            if (com[indexOfCom] == ">") {
-                ind += 1
-                indexOfCom += 1
-                lim -= 1
-            } else if (com[indexOfCom] == "<") {
-                ind -= 1
-                indexOfCom += 1
-                lim -= 1
-            } else if (com[indexOfCom] == "+") {
-                cellsList[ind] += 1
-                indexOfCom += 1
-                lim -= 1
-            } else if (com[indexOfCom] == "-") {
-                cellsList[ind] -= 1
-                indexOfCom += 1
-                lim -= 1
-            } else if (com[indexOfCom] == "[") {
-                if (cellsList[ind] == 0) {
-                    lim -= 1
-                    while (com[indexOfCom] != "]") {
-                        indexOfCom += 1
-                    }
-                    indexOfCom += 1
-                } else {
-                    lim -= 1
+    }
+    var brackets = 0
+    val size = com.size
+    while ((indexOfCom in 0 until size) && (lim != 0)) {
+        if (com[indexOfCom] == ">") {
+            ind += 1
+            indexOfCom += 1
+        } else if (com[indexOfCom] == "<") {
+            ind -= 1
+            indexOfCom += 1
+        } else if (com[indexOfCom] == "+") {
+            cellsList[ind] += 1
+            indexOfCom += 1
+        } else if (com[indexOfCom] == "-") {
+            cellsList[ind] -= 1
+            indexOfCom += 1
+        } else if (com[indexOfCom] == "[") {
+            if (cellsList[ind] == 0) {
+                while (com[indexOfCom] != "]") {
                     indexOfCom += 1
                 }
-            } else if (com[indexOfCom] == "]") {
-                if (cellsList[ind] == 1) {
-                    lim -= 1
-                    while (com[indexOfCom] != "[") {
-                        indexOfCom -= 1
-                    }
-                } else {
-                    lim -= 1
-                    indexOfCom += 1
-                }
+                indexOfCom += 1
+            } else {
+                indexOfCom += 1
             }
+            brackets += 1
+        } else if (com[indexOfCom] == "]" && brackets > 0) {
+            if (cellsList[ind] != 0) {
+                while (com[indexOfCom] != "[") {
+                    indexOfCom -= 1
+                }
+            } else {
+                indexOfCom += 1
+            }
+            brackets -= 1
+        } else if (com[indexOfCom] == " ") {
+            indexOfCom += 1
         }
+        lim -= 1
         if (ind !in 0 until cellsList.size) throw IllegalStateException()
-    } else throw IllegalArgumentException()
+    }
+    if (brackets > 0 && (lim == 0) || (indexOfCom == com.size - 1)) throw IllegalArgumentException()
     return cellsList
 }
