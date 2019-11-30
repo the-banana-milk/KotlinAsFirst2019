@@ -264,7 +264,7 @@ fun mostExpensive(description: String): String {
     var max = 0.0
     var name = ""
     listOfgoods.forEachIndexed { index, s ->
-        if (s.matches(Regex("""([А-Я]*[а-я]*)|([0-9]*[.,]?[0-9]+[;]?)"""))) {
+        if (s.matches(Regex("""([А-Я]*[а-я]*[A-Z]*[a-z]*)|([0-9]*[.,]?[0-9]+[;]?)"""))) {
             when {
                 s.matches(Regex("""[0-9]*[.,]?[0-9]+[;]?""")) && index % 2 != 0 -> {
                     var rem = 0.0
@@ -363,11 +363,62 @@ fun fromRoman(roman: String): Int {
  * IllegalArgumentException должен бросаться даже если ошибочная команда не была достигнута в ходе выполнения.
  *
  */
-fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> = TODO()// {
-//    val com = commands.split(" ").joinToString("")
-//    val cellsList = mutableListOf<Int>()
-//    for (i in 1..cells) cellsList.add(0)
-//    for (i in 1..com.length) {
-//
-//    }
-//}
+fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
+    val com1 = commands.split(" ").joinToString("")
+    val com2 = commands.split("").joinToString("")
+    var check = ""
+    if (com1.length <= com2.length) check = com1 else check = com2
+    val cellsList = mutableListOf<Int>()
+    var ind = cells / 2
+    var indexOfCom = 0
+    var lim = limit
+    for (i in 1..cells) cellsList.add(0)
+    if (check.matches(Regex("""[+-<>[\[\]]*]|[+-<>]*""")) && cells != 0) {
+        val com = check.split("").toMutableList()
+        com.remove(com[0])
+        com.remove(com[com.size - 1])
+        val size = com.size
+        while ((indexOfCom in 0 until size) && (lim != 0) && (ind in 0 until cellsList.size)) {
+            if (com[indexOfCom] == ">") {
+                ind += 1
+                indexOfCom += 1
+                lim -= 1
+            } else if (com[indexOfCom] == "<") {
+                ind -= 1
+                indexOfCom += 1
+                lim -= 1
+            } else if (com[indexOfCom] == "+") {
+                cellsList[ind] += 1
+                indexOfCom += 1
+                lim -= 1
+            } else if (com[indexOfCom] == "-") {
+                cellsList[ind] -= 1
+                indexOfCom += 1
+                lim -= 1
+            } else if (com[indexOfCom] == "[") {
+                if (cellsList[ind] == 0) {
+                    lim -= 1
+                    while (com[indexOfCom] != "]") {
+                        indexOfCom += 1
+                    }
+                    indexOfCom += 1
+                } else {
+                    lim -= 1
+                    indexOfCom += 1
+                }
+            } else if (com[indexOfCom] == "]") {
+                if (cellsList[ind] == 1) {
+                    lim -= 1
+                    while (com[indexOfCom] != "[") {
+                        indexOfCom -= 1
+                    }
+                } else {
+                    lim -= 1
+                    indexOfCom += 1
+                }
+            }
+        }
+        if (ind !in 0 until cellsList.size) throw IllegalStateException()
+    } else throw IllegalArgumentException()
+    return cellsList
+}
