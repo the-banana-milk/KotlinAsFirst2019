@@ -288,9 +288,46 @@ fun mostExpensive(description: String): String {
  * Например: XXIII = 23, XLIV = 44, C = 100
  *
  * Вернуть -1, если roman не является корректным римским числом
+ *     val map = mapOf<String, Int>(
+"M" to 1000,
+"CM" to 900,
+"D" to 500,
+"CD" to 400,
+"C" to 100,
+"XC" to 90,
+"L" to 50,
+"XL" to 40,
+"X" to 10,
+"IX" to 9,
+"V" to 5,
+"IV" to 4,
+"I" to 1
+)
+var newRoman = roman
+var len = newRoman.length
+var n = 0
+if (!roman.matches(Regex("""[IVXLCDM]+"""))) return -1
+for ((str, value) in map) {
+if (len != 1) {
+while ((str == newRoman[0].toString() || str == newRoman.substring(0, 2))) {
+newRoman = newRoman.removePrefix(str)
+n += value
+len = newRoman.length
+if (len == 0) return n
+if (len == 1) return n + map[newRoman]!!
+}
+} else {
+if (str == newRoman) {
+n += value
+return n
+}
+}
+}
+return -1
+}
  */
 fun fromRoman(roman: String): Int {
-    val map = mapOf<String, Int>(
+    val list = listOf(
         "M" to 1000,
         "CM" to 900,
         "D" to 500,
@@ -310,15 +347,13 @@ fun fromRoman(roman: String): Int {
     var len1 = 0
     var n = 0
     if (!roman.matches(Regex("""[IVXLCDM]+"""))) return -1
-    for ((str, value) in map) {
+    for ((str, value) in list) {
         val size = str.length
         if (len != 1) {
-            while ((str == newRoman[0].toString() || str in newRoman.substring(len1, len))) {
+            while ((str == newRoman[len1].toString() || str == newRoman.substring(len1, len1 + 2))) {
                 n += value
                 len -= size
                 len1 += size
-                if (len == 0) return n
-                if (len == 1) return n + map[newRoman]!!
             }
         } else {
             if (str == newRoman) {
