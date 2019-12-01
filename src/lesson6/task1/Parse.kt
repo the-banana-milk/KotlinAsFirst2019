@@ -264,18 +264,19 @@ fun firstDuplicateIndex(str: String): Int {
  * Все цены должны быть больше либо равны нуля.
  */
 fun mostExpensive(description: String): String {
-    val listOfgoods = description.split(" ", "; ")
+    val listOfgoods = description.split("; ")
     var max = 0.0
     var name = ""
     var rem = 0.0
-    listOfgoods.forEachIndexed { index, s ->
-        if (s.matches(Regex("""([^\ ]+)|([0-9]*[.,]?[0-9]+)"""))) {
+    for (s in listOfgoods) {
+        val temp = s.split(" ")
+        if (temp[0].matches(Regex("""([^\ ]+)""")) && temp[1].matches(Regex("""([0-9]*[.,]?[0-9]+)"""))) {
             when {
-                s.matches(Regex("""[0-9]*[.,]?[0-9]+""")) && index % 2 != 0 -> {
-                    rem = s.toDouble()
+                temp[1].matches(Regex("""[0-9]*[.,]?[0-9]+""")) -> {
+                    rem = temp[1].toDouble()
                     if (rem >= max) {
                         max = rem
-                        name = listOfgoods[index - 1]
+                        name = temp[0]
                     }
                 }
             }
@@ -316,13 +317,13 @@ fun fromRoman(roman: String): Int {
     var n = 0
     if (!roman.matches(Regex("""[IVXLCDM]+"""))) return -1
     for ((str, value) in map) {
-        val strlen = str.length
         if (len != 1) {
             while ((str == newRoman[0].toString() || str == newRoman.substring(0, 2))) {
                 newRoman = newRoman.removePrefix(str)
                 n += value
                 len = newRoman.length
                 if (len == 0) return n
+                if (len == 1) return n + map[newRoman]!!
             }
         } else {
             if (str == newRoman) {
@@ -373,69 +374,64 @@ fun fromRoman(roman: String): Int {
  *
  */
 fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
-    val cellsList = mutableListOf<Int>()
+    val cellsList: MutableList<Int> = MutableList(cells) { 0 }
     var ind = cells / 2
     var indexOfCom = 0
     var lim = limit
-    for (i in 1..cells) cellsList.add(0)
     if (!commands.matches(Regex("""[+\-<>\[\]\ ]*"""))) throw IllegalArgumentException()
-    val com = commands.split("").toMutableList()
-    if (com[0] == "" && com[com.size - 1] == "") {
-        com.remove(com[0])
-        com.remove(com[com.size - 1])
-    }
-    val size = com.size
+    val size = commands.length
     var countOfbrackets = 0
-    while ((indexOfCom in 0 until size) || (lim != 0)) {
-        if (com[indexOfCom] == ">") {
+    while ((indexOfCom != size) && (lim != 0) && ind in 0 until cellsList.size) {
+        if (commands[indexOfCom] == '>') {
             ind += 1
             indexOfCom += 1
-        } else if (com[indexOfCom] == "<") {
+        } else if (commands[indexOfCom] == '<') {
             ind -= 1
             indexOfCom += 1
-        } else if (com[indexOfCom] == "+") {
+        } else if (commands[indexOfCom] == '+') {
             cellsList[ind] += 1
             indexOfCom += 1
-        } else if (com[indexOfCom] == "-") {
+        } else if (commands[indexOfCom] == '-') {
             cellsList[ind] -= 1
             indexOfCom += 1
-        } else if (com[indexOfCom] == "[") {
+        } else if (commands[indexOfCom] == '[') {
             if (cellsList[ind] == 0) {
                 countOfbrackets += 1
-                while (countOfbrackets != 0 && (indexOfCom == com.size - 1) && com[indexOfCom] != "]") {
+                while (countOfbrackets != 0 && commands[indexOfCom + 1] != ']' && lim != 0) {
                     indexOfCom += 1
-                    if (com[indexOfCom] == "[") {
+                    if (commands[indexOfCom] == '[') {
                         countOfbrackets += 1
-                    } else if (com[indexOfCom] == "]" && countOfbrackets != 0) {
+                    } else if (commands[indexOfCom] == ']' && countOfbrackets != 0) {
                         countOfbrackets -= 1
-                    } else if (com[indexOfCom] == "]" && countOfbrackets == 1) countOfbrackets -= 1
-                    if (countOfbrackets > 0 && ((lim == 0) || (indexOfCom == com.size - 1))) throw IllegalArgumentException()
+                    }
+                    if (countOfbrackets > 0 && ((lim == 0) || (indexOfCom == size - 1))) throw IllegalArgumentException()
                 }
                 indexOfCom += 1
             } else {
                 indexOfCom += 1
             }
-        } else if (com[indexOfCom] == "]") {
+        } else if (commands[indexOfCom] == ']') {
             if (cellsList[ind] != 0) {
                 countOfbrackets -= 1
-                while (countOfbrackets != 0 && (indexOfCom == com.size - 1) && com[indexOfCom] != "[") {
+                while (countOfbrackets != 0 && commands[indexOfCom - 1] != '[' && lim != 0) {
                     indexOfCom -= 1
-                    if (com[indexOfCom] == "]") {
+                    if (commands[indexOfCom] == ']') {
                         countOfbrackets -= 1
-                    } else if (com[indexOfCom] == "[" && countOfbrackets != 0) {
+                    } else if (commands[indexOfCom] == '[' && countOfbrackets != 0) {
                         countOfbrackets += 1
                     }
-                    if (countOfbrackets > 0 && ((lim == 0) || (indexOfCom == com.size - 1))) throw IllegalArgumentException()
+                    if (countOfbrackets > 0 && ((lim == 0) || (indexOfCom == size - 1))) throw IllegalArgumentException()
                 }
+                indexOfCom -= 1
             } else {
                 indexOfCom += 1
             }
-        } else if (com[indexOfCom] == " ") {
+        } else if (commands[indexOfCom] == ' ') {
             indexOfCom += 1
         }
         lim -= 1
-        if (ind !in 0 until cellsList.size) throw IllegalStateException()
-        if (countOfbrackets > 0 && ((lim == 0) || (indexOfCom == com.size - 1))) throw IllegalArgumentException()
+        if (ind !in 0 until cellsList.size && indexOfCom == size) throw IllegalStateException()
+        if (countOfbrackets > 0 && ((lim == 0) || (indexOfCom == size))) throw IllegalArgumentException()
     }
     return cellsList
 }
