@@ -209,17 +209,14 @@ fun bestHighJump(jumps: String): Int {
 fun plusMinus(expression: String): Int {
     val list = expression.split(" ")
     var willChange = 0
-    var action = ""
-    var check = 0
-    var rem = 0
+    var action = "+"
     if (list.size % 2 == 0) throw IllegalArgumentException()
     if (expression.isEmpty()) throw IllegalArgumentException("Only signed numbers are allowed")
     for ((check, i) in list.withIndex()) {
         when {
-            (i.matches(Regex("""\d+""")) && action.isEmpty() && (check % 2 == 0)) -> willChange = i.toInt()
             (i.matches(Regex("""[+-]""")) && (check % 2 != 0)) -> action = i
             (i.matches(Regex("""\d+""")) && ((action == "+") || (action == "-")) && (check % 2 == 0)) -> {
-                rem = i.toInt()
+                val rem = i.toInt()
                 when {
                     (action == "+") -> willChange += rem
                     (action == "-") -> willChange -= rem
@@ -267,20 +264,19 @@ fun mostExpensive(description: String): String {
     val listOfgoods = description.split("; ")
     var max = 0.0
     var name = ""
-    var rem = 0.0
     for (s in listOfgoods) {
         val temp = s.split(" ")
-        if (temp[0].matches(Regex("""([^\ ]+)""")) && temp[1].matches(Regex("""([0-9]*[.,]?[0-9]+)"""))) {
-            when {
-                temp[1].matches(Regex("""[0-9]*[.,]?[0-9]+""")) -> {
-                    rem = temp[1].toDouble()
+        if (temp.size == 2) {
+            if (temp[1].matches(Regex("""([0-9]*[.,]?[0-9]+)"""))) {
+                if (temp[1].matches(Regex("""[0-9]*[.,]?[0-9]+"""))) {
+                    val rem = temp[1].toDouble()
                     if (rem >= max) {
                         max = rem
                         name = temp[0]
                     }
                 }
-            }
-        } else return ""
+            } else return ""
+        }
     }
     return name
 }
@@ -336,7 +332,6 @@ fun fromRoman(roman: String): Int {
 }
 
 
-
 /**
  * Очень сложная
  *
@@ -372,13 +367,14 @@ fun fromRoman(roman: String): Int {
  * IllegalArgumentException.
  * IllegalArgumentException должен бросаться даже если ошибочная команда не была достигнута в ходе выполнения.
  *
+ *
  */
 fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
     val cellsList: MutableList<Int> = MutableList(cells) { 0 }
     var ind = cells / 2
     var indexOfCom = 0
     var lim = limit
-    if (!commands.matches(Regex("""[+\-<>\[\]\ ]*"""))) throw IllegalArgumentException()
+    if (!commands.matches(Regex("""[+\-<>\[\] ]*"""))) throw IllegalArgumentException()
     val size = commands.length
     var countOfbrackets = 0
     while ((indexOfCom != size) && (lim != 0) && ind in 0 until cellsList.size) {
@@ -397,32 +393,34 @@ fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
         } else if (commands[indexOfCom] == '[') {
             if (cellsList[ind] == 0) {
                 countOfbrackets += 1
-                while (countOfbrackets != 0 && commands[indexOfCom + 1] != ']' && lim != 0) {
+                while (countOfbrackets != 0) {
                     indexOfCom += 1
                     if (commands[indexOfCom] == '[') {
                         countOfbrackets += 1
                     } else if (commands[indexOfCom] == ']' && countOfbrackets != 0) {
                         countOfbrackets -= 1
+                        indexOfCom += 1
                     }
                     if (countOfbrackets > 0 && ((lim == 0) || (indexOfCom == size - 1))) throw IllegalArgumentException()
                 }
-                indexOfCom += 1
+                indexOfCom -= 1
             } else {
                 indexOfCom += 1
             }
         } else if (commands[indexOfCom] == ']') {
             if (cellsList[ind] != 0) {
                 countOfbrackets -= 1
-                while (countOfbrackets != 0 && commands[indexOfCom - 1] != '[' && lim != 0) {
+                while (countOfbrackets != 0) {
                     indexOfCom -= 1
                     if (commands[indexOfCom] == ']') {
                         countOfbrackets -= 1
                     } else if (commands[indexOfCom] == '[' && countOfbrackets != 0) {
                         countOfbrackets += 1
+                        indexOfCom -= 1
                     }
                     if (countOfbrackets > 0 && ((lim == 0) || (indexOfCom == size - 1))) throw IllegalArgumentException()
                 }
-                indexOfCom -= 1
+                indexOfCom += 1
             } else {
                 indexOfCom += 1
             }
@@ -431,7 +429,7 @@ fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
         }
         lim -= 1
         if (ind !in 0 until cellsList.size && indexOfCom == size) throw IllegalStateException()
-        if (countOfbrackets > 0 && ((lim == 0) || (indexOfCom == size))) throw IllegalArgumentException()
+        if (countOfbrackets > 0 && ((lim == 0) || (indexOfCom == size - 1))) throw IllegalArgumentException()
     }
     return cellsList
 }
