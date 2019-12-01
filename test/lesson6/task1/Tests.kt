@@ -126,13 +126,13 @@ class Tests {
     @Test
     @Tag("Hard")
     fun fromRoman() {
+        assertEquals(2, fromRoman("II"))
         assertEquals(1978, fromRoman("MCMLXXVIII"))
         assertEquals(1900, fromRoman("MCM"))
         assertEquals(1, fromRoman("I"))
         assertEquals(694, fromRoman("DCXCIV"))
         assertEquals(49, fromRoman("XLIX"))
         assertEquals(-1, fromRoman("Z"))
-        assertEquals(2, fromRoman("II"))
         assertEquals(3, fromRoman("III"))
     }
 

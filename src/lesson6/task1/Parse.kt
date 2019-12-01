@@ -214,7 +214,7 @@ fun plusMinus(expression: String): Int {
     var rem = 0
     if (list.size % 2 == 0) throw IllegalArgumentException()
     if (expression.isEmpty()) throw IllegalArgumentException("Only signed numbers are allowed")
-    for (i in list) {
+    for ((check, i) in list.withIndex()) {
         when {
             (i.matches(Regex("""\d+""")) && action.isEmpty() && (check % 2 == 0)) -> willChange = i.toInt()
             (i.matches(Regex("""[+-]""")) && (check % 2 != 0)) -> action = i
@@ -228,7 +228,6 @@ fun plusMinus(expression: String): Int {
             }
             else -> throw IllegalArgumentException()
         }
-        check += 1
     }
     return willChange
 }
@@ -320,15 +319,16 @@ fun fromRoman(roman: String): Int {
         val strlen = str.length
         if (len != 1) {
             while ((str == newRoman[0].toString() || str == newRoman.substring(0, 2))) {
-                newRoman = newRoman.substring(strlen, len)
+                newRoman = newRoman.removePrefix(str)
                 n += value
                 len = newRoman.length
                 if (len == 0) return n
             }
-        }
-        if (str == newRoman && len == 1) {
-            n += value
-            return n
+        } else {
+            if (str == newRoman) {
+                n += value
+                return n
+            }
         }
     }
     return -1
