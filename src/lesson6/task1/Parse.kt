@@ -266,17 +266,14 @@ fun mostExpensive(description: String): String {
     var name = ""
     for (s in listOfgoods) {
         val temp = s.split(" ")
-        if (temp.size == 2) {
-            if (temp[1].matches(Regex("""([0-9]*[.,]?[0-9]+)"""))) {
-                if (temp[1].matches(Regex("""[0-9]*[.,]?[0-9]+"""))) {
-                    val rem = temp[1].toDouble()
-                    if (rem >= max) {
-                        max = rem
-                        name = temp[0]
-                    }
-                }
-            } else return ""
-        }
+        if (temp.size != 2) return ""
+        if (temp[1].matches(Regex("""([0-9]*[.,]?[0-9]+)"""))) {
+            val rem = temp[1].toDouble()
+            if (rem >= max) {
+                max = rem
+                name = temp[0]
+            }
+        } else return ""
     }
     return name
 }
@@ -310,14 +307,16 @@ fun fromRoman(roman: String): Int {
     )
     var newRoman = roman
     var len = newRoman.length
+    var len1 = 0
     var n = 0
     if (!roman.matches(Regex("""[IVXLCDM]+"""))) return -1
     for ((str, value) in map) {
+        val size = str.length
         if (len != 1) {
-            while ((str == newRoman[0].toString() || str == newRoman.substring(0, 2))) {
-                newRoman = newRoman.removePrefix(str)
+            while ((str == newRoman[0].toString() || str in newRoman.substring(len1, len))) {
                 n += value
-                len = newRoman.length
+                len -= size
+                len1 += size
                 if (len == 0) return n
                 if (len == 1) return n + map[newRoman]!!
             }
@@ -330,6 +329,7 @@ fun fromRoman(roman: String): Int {
     }
     return -1
 }
+
 
 
 /**
@@ -377,7 +377,7 @@ fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
     if (!commands.matches(Regex("""[+\-<>\[\] ]*"""))) throw IllegalArgumentException()
     val size = commands.length
     var countOfbrackets = 0
-    while ((indexOfCom != size) && (lim != 0) && ind in 0 until cellsList.size) {
+    while ((indexOfCom != size) && (lim != 0) && (ind in 0 until cellsList.size)) {
         if (commands[indexOfCom] == '>') {
             ind += 1
             indexOfCom += 1
