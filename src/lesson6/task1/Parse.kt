@@ -288,43 +288,7 @@ fun mostExpensive(description: String): String {
  * Например: XXIII = 23, XLIV = 44, C = 100
  *
  * Вернуть -1, если roman не является корректным римским числом
- *     val map = mapOf<String, Int>(
-"M" to 1000,
-"CM" to 900,
-"D" to 500,
-"CD" to 400,
-"C" to 100,
-"XC" to 90,
-"L" to 50,
-"XL" to 40,
-"X" to 10,
-"IX" to 9,
-"V" to 5,
-"IV" to 4,
-"I" to 1
-)
-var newRoman = roman
-var len = newRoman.length
-var n = 0
-if (!roman.matches(Regex("""[IVXLCDM]+"""))) return -1
-for ((str, value) in map) {
-if (len != 1) {
-while ((str == newRoman[0].toString() || str == newRoman.substring(0, 2))) {
-newRoman = newRoman.removePrefix(str)
-n += value
-len = newRoman.length
-if (len == 0) return n
-if (len == 1) return n + map[newRoman]!!
-}
-} else {
-if (str == newRoman) {
-n += value
-return n
-}
-}
-}
-return -1
-}
+ *
  */
 fun fromRoman(roman: String): Int {
     val list = listOf(
@@ -342,28 +306,29 @@ fun fromRoman(roman: String): Int {
         "IV" to 4,
         "I" to 1
     )
-    var newRoman = roman
-    var len = newRoman.length
+    var len = roman.length
     var len1 = 0
     var n = 0
     if (!roman.matches(Regex("""[IVXLCDM]+"""))) return -1
     for ((str, value) in list) {
-        val size = str.length
         if (len != 1) {
-            while ((str == newRoman[len1].toString() || str == newRoman.substring(len1, len1 + 2))) {
+            while ((str == roman[len1].toString() || len != 1 && str == roman.substring(len1, len1 + 2))) {
+                val size = str.length
                 n += value
                 len -= size
                 len1 += size
+                if (len == 0) return n
+                else if (len == 1 && str == roman[len1].toString()) return n + value
+                else if (len == 1 && str != roman[len1].toString()) break
             }
-        } else {
-            if (str == newRoman) {
-                n += value
-                return n
-            }
+        } else if (len == 1 && str == roman[len1].toString()) {
+            return n + value
         }
     }
     return -1
 }
+
+
 
 
 
@@ -406,13 +371,22 @@ fun fromRoman(roman: String): Int {
  */
 fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
     val cellsList: MutableList<Int> = MutableList(cells) { 0 }
+    val indexOfOpenBracket = mutableListOf<Int>()
     var ind = cells / 2
     var indexOfCom = 0
     var lim = limit
     if (!commands.matches(Regex("""[+\-<>\[\] ]*"""))) throw IllegalArgumentException()
     val size = commands.length
     var countOfbrackets = 0
-    while ((indexOfCom != size) && (lim != 0) && (ind in 0 until cellsList.size)) {
+    for (i in 0 until commands.length) {
+        if (commands[i] == '[') indexOfOpenBracket.add(i)
+        if (commands[i] == ']') {
+            if (indexOfOpenBracket.isEmpty()) throw IllegalArgumentException()
+            indexOfOpenBracket.remove(indexOfOpenBracket.last())
+        }
+    }
+    if (indexOfOpenBracket.isNotEmpty()) throw IllegalArgumentException()
+    while ((indexOfCom in 0 until size) && (lim != 0) && (ind in 0 until cellsList.size)) {
         if (commands[indexOfCom] == '>') {
             ind += 1
             indexOfCom += 1
@@ -463,8 +437,7 @@ fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
             indexOfCom += 1
         }
         lim -= 1
-        if (ind !in 0 until cellsList.size && indexOfCom == size) throw IllegalStateException()
-        if (countOfbrackets > 0 && ((lim == 0) || (indexOfCom == size - 1))) throw IllegalArgumentException()
+        if (ind !in 0 until cellsList.size) throw IllegalStateException()
     }
     return cellsList
 }
