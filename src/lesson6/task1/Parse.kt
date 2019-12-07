@@ -401,10 +401,9 @@ fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
                         countOfbracketsOne += 1
                     } else if (commands[indexOfCom] == ']' && countOfbracketsOne != 0) {
                         countOfbracketsOne -= 1
-                        indexOfCom += 1
                     }
                 }
-                indexOfCom -= 1
+                indexOfCom += 1
             } else {
                 indexOfCom += 1
             }
@@ -417,6 +416,7 @@ fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
                         countOfbracketsTwo -= 1
                     } else if (commands[indexOfCom] == '[' && countOfbracketsTwo != 0) {
                         countOfbracketsTwo += 1
+                        //indexOfCom -= 1
                     }
                 }
                 indexOfCom += 1

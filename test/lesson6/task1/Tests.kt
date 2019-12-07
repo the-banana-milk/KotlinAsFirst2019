@@ -140,6 +140,10 @@ class Tests {
     @Tag("Impossible")
     fun computeDeviceCells() {
         assertEquals(
+            listOf(0),
+            computeDeviceCells(1, "[[[[+++++++++]+++++++++++++]+-]]", 501)
+        )
+        assertEquals(
             listOf(0, 6, 5, 4, 3, 2, 1, 0, -1, -1, -2),
             computeDeviceCells(11, "<<<<< + >>>>>>>>>> --[<-] >+[>+] >++[--< <[<] >+[>+] >++]", 256)
         )

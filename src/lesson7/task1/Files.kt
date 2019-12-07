@@ -99,26 +99,34 @@ fun countSubstrings(inputName: String, substrings: List<String>): Map<String, In
  * Регистр заменённых букв следует сохранять.
  *
  * Исключения (жюри, брошюра, парашют) в рамках данного задания обрабатывать не нужно
- *    val correctFile = File(outputName).bufferedWriter()
-for (line in File(inputName).readLines()) {
-if (line.isEmpty()) {
-correctFile.newLine()
-correctFile.newLine()
-} else {
-var newline = StringBuilder()
-for (word in line.split(" ")) {
-val newWord = StringBuilder()
-for (i in 0 until word.length) {
-
-}
-}
-}
-}
-}
+ *
  */
 fun sibilants(inputName: String, outputName: String) {
-    TODO()
+    val correctFile = File(outputName).bufferedWriter()
+    for (line in File(inputName).readLines()) {
+        if (line.isEmpty()) {
+            correctFile.newLine()
+            correctFile.newLine()
+        } else {
+            val newline = StringBuilder()
+            for (word in line.split(" ")) {
+                if (word.contains(Regex("""[жЖшШчЧщЩ]+"""))) {
+                    val newWord = StringBuilder()
+                    for (i in 0 until word.length) {
+                        if (!word[i].toString().matches(Regex("""[ыЫяЯюЮ]"""))) newWord.append(word[i])
+                        else {
+
+                        }
+                    }
+                } else {
+                    newline.append(word)
+                    newline.append(" ")
+                }
+            }
+        }
+    }
 }
+
 
 
 
