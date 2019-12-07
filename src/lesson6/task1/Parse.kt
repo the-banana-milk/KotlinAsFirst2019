@@ -307,29 +307,23 @@ fun fromRoman(roman: String): Int {
         "I" to 1
     )
     var len = roman.length
-    var len1 = 0
+    var futureInd = 0
     var n = 0
     if (!roman.matches(Regex("""[IVXLCDM]+"""))) return -1
     for ((str, value) in list) {
-        if (len != 1) {
-            while ((str == roman[len1].toString() || len != 1 && str == roman.substring(len1, len1 + 2))) {
-                val size = str.length
-                n += value
-                len -= size
-                len1 += size
-                if (len == 0) return n
-                else if (len == 1 && str == roman[len1].toString()) return n + value
-                else if (len == 1 && str != roman[len1].toString()) break
-            }
-        } else if (len == 1 && str == roman[len1].toString()) {
+        while ((str == roman[futureInd].toString() || len != 1 && str == roman.substring(futureInd, futureInd + 2) && (len != 1))) {
+            val size = str.length
+            n += value
+            len -= size
+            futureInd += size
+            if (len == 0) return n
+        }
+        if (len == 1 && str == roman[futureInd].toString()) {
             return n + value
         }
     }
     return -1
 }
-
-
-
 
 
 /**
@@ -371,21 +365,20 @@ fun fromRoman(roman: String): Int {
  */
 fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
     val cellsList: MutableList<Int> = MutableList(cells) { 0 }
-    val indexOfOpenBracket = mutableListOf<Int>()
+    var BracketsCheck = 0
     var ind = cells / 2
     var indexOfCom = 0
     var lim = limit
     if (!commands.matches(Regex("""[+\-<>\[\] ]*"""))) throw IllegalArgumentException()
     val size = commands.length
-    var countOfbrackets = 0
     for (i in 0 until commands.length) {
-        if (commands[i] == '[') indexOfOpenBracket.add(i)
+        if (commands[i] == '[') BracketsCheck += 1
         if (commands[i] == ']') {
-            if (indexOfOpenBracket.isEmpty()) throw IllegalArgumentException()
-            indexOfOpenBracket.remove(indexOfOpenBracket.last())
+            if (BracketsCheck == 0) throw IllegalArgumentException()
+            BracketsCheck -= 1
         }
     }
-    if (indexOfOpenBracket.isNotEmpty()) throw IllegalArgumentException()
+    if (BracketsCheck != 0) throw IllegalArgumentException()
     while ((indexOfCom in 0 until size) && (lim != 0) && (ind in 0 until cellsList.size)) {
         if (commands[indexOfCom] == '>') {
             ind += 1
@@ -401,16 +394,15 @@ fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
             indexOfCom += 1
         } else if (commands[indexOfCom] == '[') {
             if (cellsList[ind] == 0) {
-                countOfbrackets += 1
-                while (countOfbrackets != 0) {
+                var countOfbracketsOne = 1
+                while (countOfbracketsOne != 0) {
                     indexOfCom += 1
                     if (commands[indexOfCom] == '[') {
-                        countOfbrackets += 1
-                    } else if (commands[indexOfCom] == ']' && countOfbrackets != 0) {
-                        countOfbrackets -= 1
+                        countOfbracketsOne += 1
+                    } else if (commands[indexOfCom] == ']' && countOfbracketsOne != 0) {
+                        countOfbracketsOne -= 1
                         indexOfCom += 1
                     }
-                    if (countOfbrackets > 0 && ((lim == 0) || (indexOfCom == size - 1))) throw IllegalArgumentException()
                 }
                 indexOfCom -= 1
             } else {
@@ -418,16 +410,15 @@ fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
             }
         } else if (commands[indexOfCom] == ']') {
             if (cellsList[ind] != 0) {
-                countOfbrackets -= 1
-                while (countOfbrackets != 0) {
+                var countOfbracketsTwo = -1
+                while (countOfbracketsTwo != 0) {
                     indexOfCom -= 1
                     if (commands[indexOfCom] == ']') {
-                        countOfbrackets -= 1
-                    } else if (commands[indexOfCom] == '[' && countOfbrackets != 0) {
-                        countOfbrackets += 1
+                        countOfbracketsTwo -= 1
+                    } else if (commands[indexOfCom] == '[' && countOfbracketsTwo != 0) {
+                        countOfbracketsTwo += 1
                         indexOfCom -= 1
                     }
-                    if (countOfbrackets > 0 && ((lim == 0) || (indexOfCom == size - 1))) throw IllegalArgumentException()
                 }
                 indexOfCom += 1
             } else {
