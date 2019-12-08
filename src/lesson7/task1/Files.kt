@@ -126,7 +126,7 @@ fun sibilants(inputName: String, outputName: String) {
                                     word[i].toString() == "ю" -> newWord.append("у")
                                     word[i].toString() == "Ю" -> newWord.append("У")
                                 }
-                            } else if (!word[i - 1].toString().matches(Regex("""[жЖшШчЧщЩ]+"""))) {
+                            } else {
                                 newWord.append(word[i].toString())
                             }
                         }
