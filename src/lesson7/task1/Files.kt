@@ -148,8 +148,6 @@ fun sibilants(inputName: String, outputName: String) {
 }
 
 
-
-
 /**
  * Средняя
  *
@@ -168,7 +166,33 @@ fun sibilants(inputName: String, outputName: String) {
  *
  */
 fun centerFile(inputName: String, outputName: String) {
-    TODO()
+    val newF = File(outputName).bufferedWriter()
+    var maxHalfOfLine = 0
+    for (line in File(inputName).readLines()) {
+        val difflen = line.length / 2
+        if (difflen > maxHalfOfLine) maxHalfOfLine = difflen
+    }
+    for (line in File(inputName).readLines()) {
+        var lenline = line.length / 2
+        if (line.isEmpty()) {
+            while (lenline != maxHalfOfLine) {
+                newF.write(" ")
+                lenline += 1
+            }
+            newF.newLine()
+        } else {
+            if (line[0].toString() == " ") lenline += 2
+            if (lenline <= maxHalfOfLine) {
+                while (lenline != maxHalfOfLine) {
+                    newF.write(" ")
+                    lenline += 1
+                }
+                newF.write(line)
+                newF.newLine()
+            }
+        }
+    }
+    newF.close()
 }
 
 /**
