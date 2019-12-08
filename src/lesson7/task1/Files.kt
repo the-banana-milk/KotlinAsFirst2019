@@ -109,22 +109,42 @@ fun sibilants(inputName: String, outputName: String) {
             correctFile.newLine()
         } else {
             val newline = StringBuilder()
-            for (word in line.split(" ")) {
+            val words = line.split(" ")
+            var linelen = words.size
+            for (word in words) {
                 if (word.contains(Regex("""[жЖшШчЧщЩ]+"""))) {
                     val newWord = StringBuilder()
                     for (i in 0 until word.length) {
                         if (!word[i].toString().matches(Regex("""[ыЫяЯюЮ]"""))) newWord.append(word[i])
                         else {
-
+                            if (i != 0 && word[i - 1].toString().matches(Regex("""[жЖшШчЧщЩ]+"""))) {
+                                when {
+                                    word[i].toString() == "ы" -> newWord.append("и")
+                                    word[i].toString() == "Ы" -> newWord.append("И")
+                                    word[i].toString() == "я" -> newWord.append("а")
+                                    word[i].toString() == "Я" -> newWord.append("А")
+                                    word[i].toString() == "ю" -> newWord.append("у")
+                                    word[i].toString() == "Ю" -> newWord.append("У")
+                                }
+                            } else if (!word[i - 1].toString().matches(Regex("""[жЖшШчЧщЩ]+"""))) {
+                                newWord.append(word[i].toString())
+                            }
                         }
                     }
+                    linelen -= 1
+                    if (linelen != 0) newWord.append(" ")
+                    newline.append(newWord.toString())
                 } else {
+                    linelen -= 1
                     newline.append(word)
-                    newline.append(" ")
+                    if (linelen != 0) newline.append(" ")
                 }
             }
+            correctFile.write(newline.toString())
+            correctFile.newLine()
         }
     }
+    correctFile.close()
 }
 
 

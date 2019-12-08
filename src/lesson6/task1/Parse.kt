@@ -380,51 +380,58 @@ fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
     }
     if (BracketsCheck != 0) throw IllegalArgumentException()
     while ((indexOfCom in 0 until size) && (lim != 0) && (ind in 0 until cellsList.size)) {
-        if (commands[indexOfCom] == '>') {
-            ind += 1
-            indexOfCom += 1
-        } else if (commands[indexOfCom] == '<') {
-            ind -= 1
-            indexOfCom += 1
-        } else if (commands[indexOfCom] == '+') {
-            cellsList[ind] += 1
-            indexOfCom += 1
-        } else if (commands[indexOfCom] == '-') {
-            cellsList[ind] -= 1
-            indexOfCom += 1
-        } else if (commands[indexOfCom] == '[') {
-            if (cellsList[ind] == 0) {
-                var countOfbracketsOne = 1
-                while (countOfbracketsOne != 0) {
+        when {
+            (commands[indexOfCom] == '>') -> {
+                ind += 1
+                indexOfCom += 1
+            }
+            (commands[indexOfCom] == '<') -> {
+                ind -= 1
+                indexOfCom += 1
+            }
+            (commands[indexOfCom] == '+') -> {
+                cellsList[ind] += 1
+                indexOfCom += 1
+            }
+            (commands[indexOfCom] == '-') -> {
+                cellsList[ind] -= 1
+                indexOfCom += 1
+            }
+            (commands[indexOfCom] == '[') -> {
+                if (cellsList[ind] == 0) {
+                    var countOfbracketsOne = 1
+                    while (countOfbracketsOne != 0) {
+                        indexOfCom += 1
+                        if (commands[indexOfCom] == '[') {
+                            countOfbracketsOne += 1
+                        } else if (commands[indexOfCom] == ']' && countOfbracketsOne != 0) {
+                            countOfbracketsOne -= 1
+                        }
+                    }
                     indexOfCom += 1
-                    if (commands[indexOfCom] == '[') {
-                        countOfbracketsOne += 1
-                    } else if (commands[indexOfCom] == ']' && countOfbracketsOne != 0) {
-                        countOfbracketsOne -= 1
-                    }
+                } else {
+                    indexOfCom += 1
                 }
-                indexOfCom += 1
-            } else {
+            }
+            (commands[indexOfCom] == ']') -> {
+                if (cellsList[ind] != 0) {
+                    var countOfbracketsTwo = -1
+                    while (countOfbracketsTwo != 0) {
+                        indexOfCom -= 1
+                        if (commands[indexOfCom] == ']') {
+                            countOfbracketsTwo -= 1
+                        } else if (commands[indexOfCom] == '[' && countOfbracketsTwo != 0) {
+                            countOfbracketsTwo += 1
+                        }
+                    }
+                    indexOfCom += 1
+                } else {
+                    indexOfCom += 1
+                }
+            }
+            (commands[indexOfCom] == ' ') -> {
                 indexOfCom += 1
             }
-        } else if (commands[indexOfCom] == ']') {
-            if (cellsList[ind] != 0) {
-                var countOfbracketsTwo = -1
-                while (countOfbracketsTwo != 0) {
-                    indexOfCom -= 1
-                    if (commands[indexOfCom] == ']') {
-                        countOfbracketsTwo -= 1
-                    } else if (commands[indexOfCom] == '[' && countOfbracketsTwo != 0) {
-                        countOfbracketsTwo += 1
-                        //indexOfCom -= 1
-                    }
-                }
-                indexOfCom += 1
-            } else {
-                indexOfCom += 1
-            }
-        } else if (commands[indexOfCom] == ' ') {
-            indexOfCom += 1
         }
         lim -= 1
         if (ind !in 0 until cellsList.size) throw IllegalStateException()
