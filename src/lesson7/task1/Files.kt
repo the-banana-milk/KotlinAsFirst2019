@@ -181,7 +181,14 @@ fun centerFile(inputName: String, outputName: String) {
             }
             newF.newLine()
         } else {
-            if (line[0].toString() == " ") lenline += 2
+            if (line[0].toString() == " ") {
+                var i = 0
+                while (line[i].toString() == " ") {
+                    i += 1
+                    lenline += 1
+                }
+                lenline -= i / 2
+            }
             if (lenline <= maxHalfOfLine) {
                 while (lenline != maxHalfOfLine) {
                     newF.write(" ")
