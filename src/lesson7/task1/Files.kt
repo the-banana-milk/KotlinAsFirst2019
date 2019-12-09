@@ -163,8 +163,8 @@ fun sibilants(inputName: String, outputName: String) {
  * 2) В случае невозможности выравнивания строго по центру, строка должна быть сдвинута в ЛЕВУЮ сторону
  * 3) Пустые строки не являются особым случаем, их тоже следует выравнивать
  * 4) Число строк в выходном файле должно быть равно числу строк во входном (в т. ч. пустых)
- *
  */
+
 fun centerFile(inputName: String, outputName: String) {
     val newF = File(outputName).bufferedWriter()
     var maxHalfOfLine = 0
@@ -173,7 +173,7 @@ fun centerFile(inputName: String, outputName: String) {
         if (difflen > maxHalfOfLine) maxHalfOfLine = difflen
     }
     for (line in File(inputName).readLines()) {
-        var lenline = line.length / 2
+        var lenline = 0
         if (line.isEmpty()) {
             while (lenline != maxHalfOfLine) {
                 newF.write(" ")
@@ -181,20 +181,21 @@ fun centerFile(inputName: String, outputName: String) {
             }
             newF.newLine()
         } else {
+            var newline = ""
             if (line[0].toString() == " ") {
                 var i = 0
                 while (line[i].toString() == " ") {
                     i += 1
-                    lenline += 1
                 }
-                lenline -= i / 2
-            }
+                newline = line.substring(i, line.length)
+            } else newline = line
+            lenline = newline.length / 2
             if (lenline <= maxHalfOfLine) {
                 while (lenline != maxHalfOfLine) {
                     newF.write(" ")
                     lenline += 1
                 }
-                newF.write(line)
+                newF.write(newline)
                 newF.newLine()
             }
         }
