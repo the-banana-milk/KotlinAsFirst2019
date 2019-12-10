@@ -377,24 +377,24 @@ fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
     }
     if (bracketsCheck != 0) throw IllegalArgumentException()
     while ((indexOfCom in 0 until size) && (lim != 0) && (ind in 0 until cellsList.size)) {
-        when {
-            (commands[indexOfCom] == '>') -> {
+        when (commands[indexOfCom]) {
+            '>' -> {
                 ind += 1
                 indexOfCom += 1
             }
-            (commands[indexOfCom] == '<') -> {
+            '<' -> {
                 ind -= 1
                 indexOfCom += 1
             }
-            (commands[indexOfCom] == '+') -> {
+            '+' -> {
                 cellsList[ind] += 1
                 indexOfCom += 1
             }
-            (commands[indexOfCom] == '-') -> {
+            '-' -> {
                 cellsList[ind] -= 1
                 indexOfCom += 1
             }
-            (commands[indexOfCom] == '[') -> {
+            '[' -> {
                 if (cellsList[ind] == 0) {
                     var countOfbracketsOne = 1
                     while (countOfbracketsOne != 0) {
@@ -407,7 +407,7 @@ fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
                 }
                 indexOfCom += 1
             }
-            (commands[indexOfCom] == ']') -> {
+            ']' -> {
                 if (cellsList[ind] != 0) {
                     var countOfbracketsTwo = -1
                     while (countOfbracketsTwo != 0) {
@@ -420,7 +420,7 @@ fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
                 }
                 indexOfCom += 1
             }
-            (commands[indexOfCom] == ' ') -> {
+            ' ' -> {
                 indexOfCom += 1
             }
         }
