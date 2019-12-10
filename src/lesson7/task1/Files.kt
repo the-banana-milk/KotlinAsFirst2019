@@ -221,7 +221,7 @@ fun centerFile(inputName: String, outputName: String) {
             val newlen = first.length
             if (first[newlen - 1].toString() == " ") {
                 var j = -1
-                while (first[newlen - j].toString() == " ") j -= 1
+                while (first[newlen + j].toString() == " ") j -= 1
                 first = first.substring(0, newlen + j + 1)
             }
             val halfLen = first.length / 2
