@@ -57,27 +57,18 @@ fun countSubstrings(inputName: String, substrings: List<String>): Map<String, In
     val savedInf = mutableMapOf<String, Int>()
     for (subStr in substrings) {
         var count = 0
+        val newSubStr = subStr.toLowerCase()
         for (line in File(inputName).readLines()) {
-            val newSubStr = subStr.toLowerCase()
             val newLine = line.toLowerCase()
             if (newSubStr in newLine) {
-                val strSize = newSubStr.length
-                val wordLen = newLine.length
-                if (strSize < wordLen) {
-                    if (strSize == 1) {
-                        for (char in newLine) {
-                            if (char.toString() == newSubStr) count += 1
-                        }
-                    } else {
-                        var openInd = 0
-                        var endInd = strSize
-                        while (endInd <= wordLen) {
-                            if (newLine.substring(openInd, endInd) == newSubStr) count += 1
-                            openInd += 1
-                            endInd += 1
-                        }
-                    }
-                } else if (newSubStr == newLine) count += 1
+                var previous = -1
+                var i = newLine.indexOf(newSubStr)
+                var lenNewSudStr = newSubStr.length
+                while (previous != i && i != -1) {
+                    previous = i
+                    i = newLine.indexOf(newSubStr, i + 1)
+                    count += 1
+                }
             }
         }
         savedInf.put(subStr, count)
