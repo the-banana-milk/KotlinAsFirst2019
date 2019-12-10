@@ -311,15 +311,12 @@ fun fromRoman(roman: String): Int {
     var n = 0
     if (!roman.matches(Regex("""[IVXLCDM]+"""))) return -1
     for ((str, value) in list) {
-        while ((str == roman[futureInd].toString() || len != 1 && str == roman.substring(futureInd, futureInd + 2) && (len != 1))) {
+        while ((str == roman[futureInd].toString() || len != 1 && str == roman.substring(futureInd, futureInd + 2))) {
             val size = str.length
             n += value
             len -= size
             futureInd += size
             if (len == 0) return n
-        }
-        if (len == 1 && str == roman[futureInd].toString()) {
-            return n + value
         }
     }
     return -1
