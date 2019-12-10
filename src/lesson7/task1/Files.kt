@@ -163,46 +163,80 @@ fun sibilants(inputName: String, outputName: String) {
  * 2) В случае невозможности выравнивания строго по центру, строка должна быть сдвинута в ЛЕВУЮ сторону
  * 3) Пустые строки не являются особым случаем, их тоже следует выравнивать
  * 4) Число строк в выходном файле должно быть равно числу строк во входном (в т. ч. пустых)
+ *     val newF = File(outputName).bufferedWriter()
+var maxHalfOfLine = 0
+for (line in File(inputName).readLines()) {
+val difflen = line.length / 2
+if (difflen > maxHalfOfLine) maxHalfOfLine = difflen
+}
+for (line in File(inputName).readLines()) {
+var lenline = 0
+if (line.isEmpty()) {
+while (lenline != maxHalfOfLine) {
+newF.write(" ")
+lenline += 1
+}
+newF.newLine()
+} else {
+var newline = ""
+if (line[0].toString() == " ") {
+var i = 0
+while (line[i].toString() == " ") i += 1
+newline = line.substring(i, line.length)
+} else newline = line
+val newlen = newline.length
+if (newline[newlen - 1].toString() == " ") {
+var j = -1
+while (newline[newlen - j].toString() == " ") j -= 1
+newline = newline.substring(0, newlen + j + 1)
+}
+lenline = newline.length / 2
+if (lenline <= maxHalfOfLine) {
+while (lenline != maxHalfOfLine) {
+newF.write(" ")
+lenline += 1
+}
+newF.write(newline)
+newF.newLine()
+}
+}
+}
+newF.close()
  */
 
 fun centerFile(inputName: String, outputName: String) {
     val newF = File(outputName).bufferedWriter()
     var maxHalfOfLine = 0
+    val mapForLines = mutableListOf<String>()
     for (line in File(inputName).readLines()) {
-        val difflen = line.length / 2
-        if (difflen > maxHalfOfLine) maxHalfOfLine = difflen
-    }
-    for (line in File(inputName).readLines()) {
-        var lenline = 0
         if (line.isEmpty()) {
-            while (lenline != maxHalfOfLine) {
-                newF.write(" ")
-                lenline += 1
-            }
-            newF.newLine()
+            mapForLines.add(String())
         } else {
-            var newline = ""
+            var first = ""
             if (line[0].toString() == " ") {
                 var i = 0
                 while (line[i].toString() == " ") i += 1
-                newline = line.substring(i, line.length)
-            } else newline = line
-            var newlen = newline.length
-            if (newline[newlen - 1].toString() == " ") {
+                first = line.substring(i, line.length)
+            } else first = line
+            val newlen = first.length
+            if (first[newlen - 1].toString() == " ") {
                 var j = -1
-                while (newline[newlen - j].toString() == " ") j -= 1
-                newline = newline.substring(0, newlen + j + 2)
+                while (first[newlen - j].toString() == " ") j -= 1
+                first = first.substring(0, newlen + j + 1)
             }
-            lenline = newline.length / 2
-            if (lenline <= maxHalfOfLine) {
-                while (lenline != maxHalfOfLine) {
-                    newF.write(" ")
-                    lenline += 1
-                }
-                newF.write(newline)
-                newF.newLine()
-            }
+            val halfLen = first.length / 2
+            if (halfLen >= maxHalfOfLine) maxHalfOfLine = halfLen
+            mapForLines.add(first)
         }
+    }
+    for (line in mapForLines) {
+        var halfLineLen = line.length / 2
+        while (halfLineLen != maxHalfOfLine) {
+            newF.write(" ")
+            halfLineLen += 1
+        }
+        newF.write(line)
+        newF.newLine()
     }
     newF.close()
 }
