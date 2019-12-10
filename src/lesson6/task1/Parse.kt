@@ -362,20 +362,20 @@ fun fromRoman(roman: String): Int {
  */
 fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
     val cellsList: MutableList<Int> = MutableList(cells) { 0 }
-    var BracketsCheck = 0
+    var bracketsCheck = 0
     var ind = cells / 2
     var indexOfCom = 0
     var lim = limit
     if (!commands.matches(Regex("""[+\-<>\[\] ]*"""))) throw IllegalArgumentException()
     val size = commands.length
     for (i in 0 until commands.length) {
-        if (commands[i] == '[') BracketsCheck += 1
+        if (commands[i] == '[') bracketsCheck += 1
         if (commands[i] == ']') {
-            if (BracketsCheck == 0) throw IllegalArgumentException()
-            BracketsCheck -= 1
+            if (bracketsCheck == 0) throw IllegalArgumentException()
+            bracketsCheck -= 1
         }
     }
-    if (BracketsCheck != 0) throw IllegalArgumentException()
+    if (bracketsCheck != 0) throw IllegalArgumentException()
     while ((indexOfCom in 0 until size) && (lim != 0) && (ind in 0 until cellsList.size)) {
         when {
             (commands[indexOfCom] == '>') -> {
@@ -399,32 +399,26 @@ fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
                     var countOfbracketsOne = 1
                     while (countOfbracketsOne != 0) {
                         indexOfCom += 1
-                        if (commands[indexOfCom] == '[') {
-                            countOfbracketsOne += 1
-                        } else if (commands[indexOfCom] == ']' && countOfbracketsOne != 0) {
-                            countOfbracketsOne -= 1
+                        when (commands[indexOfCom]) {
+                            '[' -> countOfbracketsOne += 1
+                            ']' -> countOfbracketsOne -= 1
                         }
                     }
-                    indexOfCom += 1
-                } else {
-                    indexOfCom += 1
                 }
+                indexOfCom += 1
             }
             (commands[indexOfCom] == ']') -> {
                 if (cellsList[ind] != 0) {
                     var countOfbracketsTwo = -1
                     while (countOfbracketsTwo != 0) {
                         indexOfCom -= 1
-                        if (commands[indexOfCom] == ']') {
-                            countOfbracketsTwo -= 1
-                        } else if (commands[indexOfCom] == '[' && countOfbracketsTwo != 0) {
-                            countOfbracketsTwo += 1
+                        when (commands[indexOfCom]) {
+                            ']' -> countOfbracketsTwo -= 1
+                            '[' -> countOfbracketsTwo += 1
                         }
                     }
-                    indexOfCom += 1
-                } else {
-                    indexOfCom += 1
                 }
+                indexOfCom += 1
             }
             (commands[indexOfCom] == ' ') -> {
                 indexOfCom += 1
