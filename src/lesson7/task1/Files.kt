@@ -58,28 +58,26 @@ fun countSubstrings(inputName: String, substrings: List<String>): Map<String, In
     for (subStr in substrings) {
         var count = 0
         for (line in File(inputName).readLines()) {
-            for (words in line.split(" ")) {
-                val newSubStr = subStr.toLowerCase()
-                val newWord = words.toLowerCase()
-                if (newSubStr in newWord) {
-                    val strSize = newSubStr.length
-                    val wordLen = newWord.length
-                    if (strSize < wordLen) {
-                        if (strSize == 1) {
-                            for (char in newWord) {
-                                if (char.toString() == newSubStr) count += 1
-                            }
-                        } else {
-                            var openInd = 0
-                            var endInd = strSize
-                            while (endInd <= wordLen) {
-                                if (newWord.substring(openInd, endInd) == newSubStr) count += 1
-                                openInd += 1
-                                endInd += 1
-                            }
+            val newSubStr = subStr.toLowerCase()
+            val newLine = line.toLowerCase()
+            if (newSubStr in newLine) {
+                val strSize = newSubStr.length
+                val wordLen = newLine.length
+                if (strSize < wordLen) {
+                    if (strSize == 1) {
+                        for (char in newLine) {
+                            if (char.toString() == newSubStr) count += 1
                         }
-                    } else if (newSubStr == newWord) count += 1
-                }
+                    } else {
+                        var openInd = 0
+                        var endInd = strSize
+                        while (endInd <= wordLen) {
+                            if (newLine.substring(openInd, endInd) == newSubStr) count += 1
+                            openInd += 1
+                            endInd += 1
+                        }
+                    }
+                } else if (newSubStr == newLine) count += 1
             }
         }
         savedInf.put(subStr, count)

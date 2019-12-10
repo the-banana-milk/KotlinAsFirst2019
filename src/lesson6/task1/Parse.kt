@@ -380,19 +380,15 @@ fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
         when (commands[indexOfCom]) {
             '>' -> {
                 ind += 1
-                indexOfCom += 1
             }
             '<' -> {
                 ind -= 1
-                indexOfCom += 1
             }
             '+' -> {
                 cellsList[ind] += 1
-                indexOfCom += 1
             }
             '-' -> {
                 cellsList[ind] -= 1
-                indexOfCom += 1
             }
             '[' -> {
                 if (cellsList[ind] == 0) {
@@ -405,7 +401,6 @@ fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
                         }
                     }
                 }
-                indexOfCom += 1
             }
             ']' -> {
                 if (cellsList[ind] != 0) {
@@ -418,12 +413,9 @@ fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
                         }
                     }
                 }
-                indexOfCom += 1
-            }
-            ' ' -> {
-                indexOfCom += 1
             }
         }
+        indexOfCom += 1
         lim -= 1
         if (ind !in 0 until cellsList.size) throw IllegalStateException()
     }
