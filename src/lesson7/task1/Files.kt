@@ -60,15 +60,12 @@ fun countSubstrings(inputName: String, substrings: List<String>): Map<String, In
         val newSubStr = subStr.toLowerCase()
         for (line in File(inputName).readLines()) {
             val newLine = line.toLowerCase()
-            if (newSubStr in newLine) {
-                var previous = -1
-                var i = newLine.indexOf(newSubStr)
-                var lenNewSudStr = newSubStr.length
-                while (previous != i && i != -1) {
-                    previous = i
-                    i = newLine.indexOf(newSubStr, i + 1)
-                    count += 1
-                }
+            var previous = -1
+            var i = newLine.indexOf(newSubStr)
+            while (previous != i && i != -1) {
+                previous = i
+                i = newLine.indexOf(newSubStr, i + 1)
+                count += 1
             }
         }
         savedInf.put(subStr, count)
@@ -91,49 +88,40 @@ fun countSubstrings(inputName: String, substrings: List<String>): Map<String, In
  *
  */
 fun sibilants(inputName: String, outputName: String) {
-    val correctFile = File(outputName).bufferedWriter()
-    for (line in File(inputName).readLines()) {
-        if (line.isEmpty()) {
-            correctFile.newLine()
-            correctFile.newLine()
-        } else {
-            val newline = StringBuilder()
-            val words = line.split(" ")
-            var linelen = words.size
-            for (word in words) {
-                if (word.contains(Regex("""[жЖшШчЧщЩ]+"""))) {
-                    val newWord = StringBuilder()
-                    for (i in 0 until word.length) {
-                        if (!word[i].toString().matches(Regex("""[ыЫяЯюЮ]"""))) newWord.append(word[i])
+    File(outputName).bufferedWriter().use {
+        for (line in File(inputName).readLines()) {
+            if (line.isEmpty()) {
+                it.newLine()
+            } else {
+                if (line.contains(Regex("""[жЖшШчЧщЩ]+"""))) {
+                    val linelen = line.length
+                    val newLine = StringBuilder()
+                    for (i in 0 until linelen) {
+                        if (!line[i].toString().matches(Regex("""[ыЫяЯюЮ]"""))) newLine.append(line[i])
                         else {
-                            if (i != 0 && word[i - 1].toString().matches(Regex("""[жЖшШчЧщЩ]+"""))) {
-                                when {
-                                    word[i].toString() == "ы" -> newWord.append("и")
-                                    word[i].toString() == "Ы" -> newWord.append("И")
-                                    word[i].toString() == "я" -> newWord.append("а")
-                                    word[i].toString() == "Я" -> newWord.append("А")
-                                    word[i].toString() == "ю" -> newWord.append("у")
-                                    word[i].toString() == "Ю" -> newWord.append("У")
+                            if (i != 0 && line[i - 1].toString().matches(Regex("""[жЖшШчЧщЩ]+"""))) {
+                                when (line[i]) {
+                                    'ы' -> newLine.append('и')
+                                    'Ы' -> newLine.append('И')
+                                    'я' -> newLine.append('а')
+                                    'Я' -> newLine.append('А')
+                                    'ю' -> newLine.append('у')
+                                    'Ю' -> newLine.append('У')
                                 }
                             } else {
-                                newWord.append(word[i].toString())
+                                newLine.append(line[i])
                             }
                         }
                     }
-                    linelen -= 1
-                    if (linelen != 0) newWord.append(" ")
-                    newline.append(newWord.toString())
+                    it.write(newLine.toString())
+                    it.newLine()
                 } else {
-                    linelen -= 1
-                    newline.append(word)
-                    if (linelen != 0) newline.append(" ")
+                    it.write(line)
+                    it.newLine()
                 }
             }
-            correctFile.write(newline.toString())
-            correctFile.newLine()
         }
     }
-    correctFile.close()
 }
 
 
@@ -156,40 +144,27 @@ fun sibilants(inputName: String, outputName: String) {
  */
 
 fun centerFile(inputName: String, outputName: String) {
-    val newF = File(outputName).bufferedWriter()
-    var maxHalfOfLine = 0
-    val mapForLines = mutableListOf<String>()
-    for (line in File(inputName).readLines()) {
-        if (line.isEmpty()) {
-            mapForLines.add(String())
-        } else {
-            var first = ""
-            if (line[0].toString() == " ") {
-                var i = 0
-                while (line[i].toString() == " ") i += 1
-                first = line.substring(i, line.length)
-            } else first = line
-            val newlen = first.length
-            if (first[newlen - 1].toString() == " ") {
-                var j = -1
-                while (first[newlen + j].toString() == " ") j -= 1
-                first = first.substring(0, newlen + j + 1)
+    File(outputName).bufferedWriter().use {
+        var maxHalfOfLine = 0
+        val mapForLines = mutableListOf<String>()
+        for (line in File(inputName).readLines()) {
+            if (line.isEmpty()) {
+                mapForLines.add(String())
+            } else {
+                val newLine = line.trim()
+                val halfLen = newLine.length / 2
+                if (halfLen >= maxHalfOfLine) maxHalfOfLine = halfLen
+                mapForLines.add(newLine)
             }
-            val halfLen = first.length / 2
-            if (halfLen >= maxHalfOfLine) maxHalfOfLine = halfLen
-            mapForLines.add(first)
         }
-    }
-    for (line in mapForLines) {
-        var halfLineLen = line.length / 2
-        while (halfLineLen != maxHalfOfLine) {
-            newF.write(" ")
-            halfLineLen += 1
+        for (line in mapForLines) {
+            val halfLineLen = line.length / 2
+            it.write(" ".repeat(maxHalfOfLine - halfLineLen))
+            it.write(line)
+            it.newLine()
         }
-        newF.write(line)
-        newF.newLine()
+        it.close()
     }
-    newF.close()
 }
 
 /**
