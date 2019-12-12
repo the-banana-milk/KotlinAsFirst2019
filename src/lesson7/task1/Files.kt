@@ -141,14 +141,10 @@ fun centerFile(inputName: String, outputName: String) {
         var maxOfLine = 0
         val listForLines = mutableListOf<String>()
         for (line in File(inputName).readLines()) {
-            if (line.isEmpty()) {
-                listForLines.add(String())
-            } else {
-                val newLine = line.trim()
-                val Len = newLine.length
-                if (Len >= maxOfLine) maxOfLine = Len
-                listForLines.add(newLine)
-            }
+            val newLine = line.trim()
+            val Len = newLine.length
+            if (Len >= maxOfLine) maxOfLine = Len
+            listForLines.add(newLine)
         }
         for (line in listForLines) {
             var lineLen = line.length
@@ -189,7 +185,42 @@ fun centerFile(inputName: String, outputName: String) {
  * 8) Если входной файл удовлетворяет требованиям 1-7, то он должен быть в точности идентичен выходному файлу
  */
 fun alignFileByWidth(inputName: String, outputName: String) {
-    TODO()
+    var maxLen = 0
+    val rememberLines = mutableListOf<String>()
+    for (line in File(inputName).readLines()) {
+        val len = line.trim().length
+        rememberLines.add(line.trim())
+        if (len > maxLen) maxLen = len
+    }
+    File(outputName).bufferedWriter().use {
+        for (line in rememberLines) {
+            val linelen = line.length
+            if (linelen != maxLen && line.isNotEmpty()) {
+                val words = line.split(" ") //слова
+                val howManyWords = words.size //количество слов
+                if (howManyWords != 1) {
+                    val countOfSpaceInFirstLine = howManyWords - 1 //первоначальные пробелы
+                    val notFoundedSpace = maxLen - linelen  //количество пробелов, которых не хватает
+                    val addSpace = notFoundedSpace / countOfSpaceInFirstLine //сужаем круг пробелов
+                    val missedSpace = notFoundedSpace % countOfSpaceInFirstLine //потерянные пробелы
+                    val newSpaces =
+                        MutableList(countOfSpaceInFirstLine) { addSpace + 1 } //целые пробелы без "пропавших"
+                    for (i in 0 until missedSpace) newSpaces[i] += 1 //количество пробелов в строчке, включая "пропавших"
+                    val newLine = StringBuilder()
+                    for (indOfWord in 0 until howManyWords) {
+                        newLine.append(words[indOfWord])
+                        if (indOfWord != countOfSpaceInFirstLine) newLine.append(" ".repeat(newSpaces[indOfWord]))
+                    }
+                    it.write(newLine.toString())
+                } else {
+                    it.write(line)
+                }
+            } else {
+                it.write(line)
+            }
+            it.newLine()
+        }
+    }
 }
 
 /**
@@ -214,7 +245,7 @@ fun top20Words(inputName: String): Map<String, Int> {
     val mapOfInfAboutAll = mutableMapOf<String, Int>()
     for (line in File(inputName).readLines()) {
         line.split(Regex("""[^a-zA-Zа-яА-ЯёЁ]""")).forEach {
-            val word = it.toLowerCase().filter { it in 'a'..'z'|| it in 'а'..'я' || it == 'ё'}
+            val word = it.toLowerCase().filter { it in 'a'..'z' || it in 'а'..'я' || it == 'ё' }
             if (word in mapOfInfAboutAll) mapOfInfAboutAll[word] = mapOfInfAboutAll[word]!!.plus(1)
             else mapOfInfAboutAll.put(word, 1)
 
@@ -224,7 +255,6 @@ fun top20Words(inputName: String): Map<String, Int> {
     val sort = mapOfInfAboutAll.toList().sortedBy { it.second }.reversed().take(20).toMap()
     return sort
 }
-
 
 
 /**
@@ -269,7 +299,8 @@ fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: 
         for (line in File(inputName).readLines()) {
             for (i in line) {
                 if (i.toLowerCase() in newDictionary.keys) {
-                    val newChar = if (i.isUpperCase()) newDictionary[i.toLowerCase()]!!.capitalize() else newDictionary[i]
+                    val newChar =
+                        if (i.isUpperCase()) newDictionary[i.toLowerCase()]!!.capitalize() else newDictionary[i]
                     it.write(newChar)
                 } else it.write(i.toString())
             }
