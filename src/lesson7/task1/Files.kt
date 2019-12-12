@@ -90,36 +90,29 @@ fun countSubstrings(inputName: String, substrings: List<String>): Map<String, In
 fun sibilants(inputName: String, outputName: String) {
     File(outputName).bufferedWriter().use {
         for (line in File(inputName).readLines()) {
-            if (line.isEmpty()) {
-                it.newLine()
-            } else {
-                if (line.contains(Regex("""[жЖшШчЧщЩ]+"""))) {
-                    val linelen = line.length
-                    val newLine = StringBuilder()
-                    for (i in 0 until linelen) {
-                        if (!line[i].toString().matches(Regex("""[ыЫяЯюЮ]"""))) newLine.append(line[i])
-                        else {
-                            if (i != 0 && line[i - 1].toString().matches(Regex("""[жЖшШчЧщЩ]+"""))) {
-                                when (line[i]) {
-                                    'ы' -> newLine.append('и')
-                                    'Ы' -> newLine.append('И')
-                                    'я' -> newLine.append('а')
-                                    'Я' -> newLine.append('А')
-                                    'ю' -> newLine.append('у')
-                                    'Ю' -> newLine.append('У')
-                                }
-                            } else {
-                                newLine.append(line[i])
-                            }
+            if (line.contains(Regex("""[жЖшШчЧщЩ]"""))) {
+                val linelen = line.length
+                val newLine = StringBuilder()
+                for (i in 0 until linelen) {
+                    if (i != 0 && line[i - 1].toString().matches(Regex("""[жЖшШчЧщЩ]"""))) {
+                        when (line[i]) {
+                            'ы' -> newLine.append('и')
+                            'Ы' -> newLine.append('И')
+                            'я' -> newLine.append('а')
+                            'Я' -> newLine.append('А')
+                            'ю' -> newLine.append('у')
+                            'Ю' -> newLine.append('У')
+                            else -> newLine.append(line[i])
                         }
+                    } else {
+                        newLine.append(line[i])
                     }
-                    it.write(newLine.toString())
-                    it.newLine()
-                } else {
-                    it.write(line)
-                    it.newLine()
                 }
+                it.write(newLine.toString())
+            } else {
+                it.write(line)
             }
+            it.newLine()
         }
     }
 }
@@ -145,21 +138,22 @@ fun sibilants(inputName: String, outputName: String) {
 
 fun centerFile(inputName: String, outputName: String) {
     File(outputName).bufferedWriter().use {
-        var maxHalfOfLine = 0
-        val mapForLines = mutableListOf<String>()
+        var maxOfLine = 0
+        val listForLines = mutableListOf<String>()
         for (line in File(inputName).readLines()) {
             if (line.isEmpty()) {
-                mapForLines.add(String())
+                listForLines.add(String())
             } else {
                 val newLine = line.trim()
-                val halfLen = newLine.length / 2
-                if (halfLen >= maxHalfOfLine) maxHalfOfLine = halfLen
-                mapForLines.add(newLine)
+                val Len = newLine.length
+                if (Len >= maxOfLine) maxOfLine = Len
+                listForLines.add(newLine)
             }
         }
-        for (line in mapForLines) {
-            val halfLineLen = line.length / 2
-            it.write(" ".repeat(maxHalfOfLine - halfLineLen))
+        for (line in listForLines) {
+            var lineLen = line.length
+            if ((maxOfLine - lineLen) % 2 != 0) lineLen += 1
+            it.write(" ".repeat(maxOfLine / 2 - lineLen / 2))
             it.write(line)
             it.newLine()
         }
@@ -216,7 +210,23 @@ fun alignFileByWidth(inputName: String, outputName: String) {
  * Ключи в ассоциативном массиве должны быть в нижнем регистре.
  *
  */
-fun top20Words(inputName: String): Map<String, Int> = TODO()
+fun top20Words(inputName: String): Map<String, Int> {
+    val mapOfInfAboutAll = mutableMapOf<String, Int>()
+    val mapOfTop = mutableMapOf<String, Int>()
+    for (line in File(inputName).readLines()) {
+        line.split(Regex("""[^a-zA-Zа-яА-ЯёЁ]""")).forEach {
+            val word = it.toLowerCase().filter { it in 'a'..'z'|| it in 'а'..'я' || it == 'ё'}
+            if (word in mapOfInfAboutAll) mapOfInfAboutAll[word] = mapOfInfAboutAll[word]!!.plus(1)
+            else mapOfInfAboutAll.put(word, 1)
+
+        }
+    }
+    mapOfInfAboutAll.remove("")
+    val sort = mapOfInfAboutAll.toList().sortedBy { it.second }.reversed().take(20).toMap()
+    return sort
+}
+
+
 
 /**
  * Средняя
