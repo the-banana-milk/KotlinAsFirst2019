@@ -90,28 +90,24 @@ fun countSubstrings(inputName: String, substrings: List<String>): Map<String, In
 fun sibilants(inputName: String, outputName: String) {
     File(outputName).bufferedWriter().use {
         for (line in File(inputName).readLines()) {
-            if (line.contains(Regex("""[жЖшШчЧщЩ]"""))) {
-                val linelen = line.length
-                val newLine = StringBuilder()
-                for (i in 0 until linelen) {
-                    if (i != 0 && line[i - 1].toString().matches(Regex("""[жЖшШчЧщЩ]"""))) {
-                        when (line[i]) {
-                            'ы' -> newLine.append('и')
-                            'Ы' -> newLine.append('И')
-                            'я' -> newLine.append('а')
-                            'Я' -> newLine.append('А')
-                            'ю' -> newLine.append('у')
-                            'Ю' -> newLine.append('У')
-                            else -> newLine.append(line[i])
-                        }
-                    } else {
-                        newLine.append(line[i])
+            val linelen = line.length
+            val newLine = StringBuilder()
+            for (i in 0 until linelen) {
+                if (i != 0 && line[i - 1].toString().matches(Regex("""[жЖшШчЧщЩ]"""))) {
+                    when (line[i]) {
+                        'ы' -> newLine.append('и')
+                        'Ы' -> newLine.append('И')
+                        'я' -> newLine.append('а')
+                        'Я' -> newLine.append('А')
+                        'ю' -> newLine.append('у')
+                        'Ю' -> newLine.append('У')
+                        else -> newLine.append(line[i])
                     }
+                } else {
+                    newLine.append(line[i])
                 }
-                it.write(newLine.toString())
-            } else {
-                it.write(line)
             }
+            it.write(newLine.toString())
             it.newLine()
         }
     }
@@ -142,8 +138,8 @@ fun centerFile(inputName: String, outputName: String) {
         val listForLines = mutableListOf<String>()
         for (line in File(inputName).readLines()) {
             val newLine = line.trim()
-            val Len = newLine.length
-            if (Len >= maxOfLine) maxOfLine = Len
+            val len = newLine.length
+            if (len >= maxOfLine) maxOfLine = len
             listForLines.add(newLine)
         }
         for (line in listForLines) {
@@ -188,7 +184,7 @@ fun alignFileByWidth(inputName: String, outputName: String) {
     var maxLen = 0
     val rememberLines = mutableListOf<String>()
     for (line in File(inputName).readLines()) {
-        var smthNew = line.trim()
+        val smthNew = line.trim()
         val len = smthNew.length
         val correctLine = StringBuilder()
         for (i in 0 until len) {
@@ -308,7 +304,7 @@ fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: 
                 if (i.toLowerCase() in newDictionary.keys) {
                     val newChar =
                         if (i.isUpperCase()) newDictionary[i.toLowerCase()]!!.capitalize() else newDictionary[i]
-                    it.write(newChar)
+                    it.write(newChar!!)
                 } else it.write(i.toString())
             }
             it.newLine()
@@ -341,7 +337,12 @@ fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: 
  * Обратите внимание: данная функция не имеет возвращаемого значения
  */
 fun chooseLongestChaoticWord(inputName: String, outputName: String) {
-    TODO()
+    File(outputName).bufferedWriter().use {
+        val savedAllInfAboutWords = mutableListOf<String>()
+        for (word in File(inputName).readLines()) {
+
+        }
+    }
 }
 
 /**
