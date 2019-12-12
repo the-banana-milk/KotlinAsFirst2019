@@ -144,7 +144,6 @@ fun centerFile(inputName: String, outputName: String) {
         }
         for (line in listForLines) {
             var lineLen = line.length
-            //if ((maxOfLine - lineLen) % 2 != 0) lineLen += 1
             it.write(" ".repeat((maxOfLine - lineLen) / 2))
             it.write(line)
             it.newLine()
@@ -187,12 +186,12 @@ fun alignFileByWidth(inputName: String, outputName: String) {
         val smthNew = line.trim()
         val len = smthNew.length
         val correctLine = StringBuilder()
-        for (i in 0 until len) {
+        for (i in 1 until len) {
             if (smthNew[i] == ' ' && smthNew[i - 1] == ' ') continue
             else correctLine.append(smthNew[i])
         }
         rememberLines.add(correctLine.toString())
-        val lenOfCorLin = correctLine.toString().length
+        val lenOfCorLin = correctLine.length
         if (lenOfCorLin > maxLen) maxLen = lenOfCorLin
     }
     File(outputName).bufferedWriter().use {
@@ -247,8 +246,8 @@ fun alignFileByWidth(inputName: String, outputName: String) {
 fun top20Words(inputName: String): Map<String, Int> {
     val mapOfInfAboutAll = mutableMapOf<String, Int>()
     for (line in File(inputName).readLines()) {
-        line.split(Regex("""[^a-zA-Zа-яА-ЯёЁ]+""")).forEach {
-            val word = it.toLowerCase()
+        for (words in line.split(Regex("""[^a-zA-Zа-яА-ЯёЁ]+"""))) {
+            val word = words.toLowerCase()
             val puted = mapOfInfAboutAll.getOrDefault(word, 0).plus(1)
             mapOfInfAboutAll.put(word, puted)
         }
@@ -299,11 +298,11 @@ fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: 
     for ((key, value) in dictionary) newDictionary[key.toLowerCase()] = value.toLowerCase()
     File(outputName).bufferedWriter().use {
         for (i in File(inputName).readText()) {
-            if (i.toLowerCase() in newDictionary.keys) {
-                val char = newDictionary[i.toLowerCase()]
+            val char = newDictionary[i.toLowerCase()]
+            if (char != null) {
                 val newChar =
-                    if (i.isUpperCase()) char!!.capitalize() else char
-                it.write(newChar!!)
+                    if (i.isUpperCase()) char.capitalize() else char
+                it.write(newChar)
             } else it.write(i.toString())
             it.newLine()
         }
