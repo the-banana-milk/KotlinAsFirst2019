@@ -144,8 +144,8 @@ fun centerFile(inputName: String, outputName: String) {
         }
         for (line in listForLines) {
             var lineLen = line.length
-            if ((maxOfLine - lineLen) % 2 != 0) lineLen += 1
-            it.write(" ".repeat(maxOfLine / 2 - lineLen / 2))
+            //if ((maxOfLine - lineLen) % 2 != 0) lineLen += 1
+            it.write(" ".repeat((maxOfLine - lineLen) / 2))
             it.write(line)
             it.newLine()
         }
@@ -247,11 +247,10 @@ fun alignFileByWidth(inputName: String, outputName: String) {
 fun top20Words(inputName: String): Map<String, Int> {
     val mapOfInfAboutAll = mutableMapOf<String, Int>()
     for (line in File(inputName).readLines()) {
-        line.split(Regex("""[^a-zA-Zа-яА-ЯёЁ]""")).forEach {
-            val word = it.toLowerCase().filter { it in 'a'..'z' || it in 'а'..'я' || it == 'ё' }
-            if (word in mapOfInfAboutAll) mapOfInfAboutAll[word] = mapOfInfAboutAll[word]!!.plus(1)
-            else mapOfInfAboutAll.put(word, 1)
-
+        line.split(Regex("""[^a-zA-Zа-яА-ЯёЁ]+""")).forEach {
+            val word = it.toLowerCase()
+            val puted = mapOfInfAboutAll.getOrDefault(word, 0).plus(1)
+            mapOfInfAboutAll.put(word, puted)
         }
     }
     mapOfInfAboutAll.remove("")
@@ -299,14 +298,13 @@ fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: 
     val newDictionary = mutableMapOf<Char, String>()
     for ((key, value) in dictionary) newDictionary[key.toLowerCase()] = value.toLowerCase()
     File(outputName).bufferedWriter().use {
-        for (line in File(inputName).readLines()) {
-            for (i in line) {
-                if (i.toLowerCase() in newDictionary.keys) {
-                    val newChar =
-                        if (i.isUpperCase()) newDictionary[i.toLowerCase()]!!.capitalize() else newDictionary[i]
-                    it.write(newChar!!)
-                } else it.write(i.toString())
-            }
+        for (i in File(inputName).readText()) {
+            if (i.toLowerCase() in newDictionary.keys) {
+                val char = newDictionary[i.toLowerCase()]
+                val newChar =
+                    if (i.isUpperCase()) char!!.capitalize() else char
+                it.write(newChar!!)
+            } else it.write(i.toString())
             it.newLine()
         }
     }
