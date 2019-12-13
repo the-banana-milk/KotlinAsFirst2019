@@ -349,9 +349,11 @@ fun chooseLongestChaoticWord(inputName: String, outputName: String) {
             if (max < lenOfDifWord) max = lenOfDifWord
         }
         val savedInfLen = savedAllInfAboutWords.size
-        for (i in 0 until savedInfLen - 1) {
-            if (savedAllInfAboutWords[i].length < max) savedAllInfAboutWords.remove(savedAllInfAboutWords[i])
+        val shouldBeDeleted = mutableListOf<String>()
+        for (i in 0 until savedInfLen) {
+            if (savedAllInfAboutWords[i].length < max) shouldBeDeleted.add(savedAllInfAboutWords[i])
         }
+        for (removed in shouldBeDeleted) savedAllInfAboutWords.remove(removed)
         it.write(savedAllInfAboutWords.joinToString(", "))
     }
 }
