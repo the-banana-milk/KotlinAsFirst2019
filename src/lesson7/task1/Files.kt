@@ -336,25 +336,15 @@ fun chooseLongestChaoticWord(inputName: String, outputName: String) {
     File(outputName).bufferedWriter().use {
         val savedAllInfAboutWords = mutableListOf<String>()
         for (word in File(inputName).readLines()) {
-            val list = mutableListOf<Char>()
             val wordLen = word.length
-            for (i in 0 until wordLen) {
-                if (word[i].toLowerCase() in list) break
-                else list.add(word[i].toLowerCase())
-                if (i == wordLen - 1) savedAllInfAboutWords.add(word)
+            val setOfLet = word.toLowerCase().toSet()
+            val lenOfSet = setOfLet.size
+            if (lenOfSet == wordLen) {
+                if (wordLen >= max) max = wordLen
+                savedAllInfAboutWords.add(word)
             }
         }
-        for (wordsWithDifLet in savedAllInfAboutWords) {
-            val lenOfDifWord = wordsWithDifLet.length
-            if (max < lenOfDifWord) max = lenOfDifWord
-        }
-        val savedInfLen = savedAllInfAboutWords.size
-        val shouldBeDeleted = mutableListOf<String>()
-        for (i in 0 until savedInfLen) {
-            if (savedAllInfAboutWords[i].length < max) shouldBeDeleted.add(savedAllInfAboutWords[i])
-        }
-        for (removed in shouldBeDeleted) savedAllInfAboutWords.remove(removed)
-        it.write(savedAllInfAboutWords.joinToString(", "))
+        it.write(savedAllInfAboutWords.filter { it.length == max }.joinToString(", "))
     }
 }
 
