@@ -88,12 +88,13 @@ fun countSubstrings(inputName: String, substrings: List<String>): Map<String, In
  *
  */
 fun sibilants(inputName: String, outputName: String) {
+    val checking = setOf<Char>('ж', 'Ж', 'ш', 'Ш', 'ч', 'Ч', 'щ', 'Щ')
     File(outputName).bufferedWriter().use {
         for (line in File(inputName).readLines()) {
             val linelen = line.length
             val newLine = StringBuilder()
             for (i in 0 until linelen) {
-                if (i != 0 && line[i - 1].toString().matches(Regex("""[жЖшШчЧщЩ]"""))) {
+                if (i != 0 && line[i - 1] in checking) {
                     when (line[i]) {
                         'ы' -> newLine.append('и')
                         'Ы' -> newLine.append('И')
@@ -143,7 +144,7 @@ fun centerFile(inputName: String, outputName: String) {
             listForLines.add(newLine)
         }
         for (line in listForLines) {
-            var lineLen = line.length
+            val lineLen = line.length
             it.write(" ".repeat((maxOfLine - lineLen) / 2))
             it.write(line)
             it.newLine()
@@ -186,7 +187,7 @@ fun alignFileByWidth(inputName: String, outputName: String) {
         val smthNew = line.trim()
         val len = smthNew.length
         val correctLine = StringBuilder()
-        for (i in 1 until len) {
+        for (i in 0 until len) {
             if (smthNew[i] == ' ' && smthNew[i - 1] == ' ') continue
             else correctLine.append(smthNew[i])
         }
@@ -205,13 +206,11 @@ fun alignFileByWidth(inputName: String, outputName: String) {
                     val notFoundedSpace = maxLen - linelen  //количество пробелов, которых не хватает
                     val addSpace = notFoundedSpace / countOfSpaceInFirstLine //сужаем круг пробелов
                     val missedSpace = notFoundedSpace % countOfSpaceInFirstLine //потерянные пробелы
-                    val newSpaces =
-                        MutableList(countOfSpaceInFirstLine) { addSpace + 1 } //целые пробелы без "пропавших"
-                    for (i in 0 until missedSpace) newSpaces[i] += 1 //количество пробелов в строчке, включая "пропавших"
                     val newLine = StringBuilder()
                     for (indOfWord in 0 until howManyWords) {
                         newLine.append(words[indOfWord])
-                        if (indOfWord != countOfSpaceInFirstLine) newLine.append(" ".repeat(newSpaces[indOfWord]))
+                        if (indOfWord < missedSpace) newLine.append(" ".repeat(addSpace + 2))
+                        else if (indOfWord != howManyWords - 1) newLine.append(" ".repeat(addSpace + 1))
                     }
                     it.write(newLine.toString())
                 } else {
@@ -304,7 +303,6 @@ fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: 
                     if (i.isUpperCase()) char.capitalize() else char
                 it.write(newChar)
             } else it.write(i.toString())
-            it.newLine()
         }
     }
 }
@@ -337,7 +335,11 @@ fun chooseLongestChaoticWord(inputName: String, outputName: String) {
     File(outputName).bufferedWriter().use {
         val savedAllInfAboutWords = mutableListOf<String>()
         for (word in File(inputName).readLines()) {
-
+            val list = mutableListOf<Char>()
+            for (i in word) {
+                if (i in list) break
+                else list.add(i)
+            }
         }
     }
 }
