@@ -426,77 +426,68 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
                 var i = 0
                 val newLine = StringBuilder()
                 while (i < lenLine) {
-                    if (i != lenLine - 1 && line[i] == '*' && line[i + 1] == '*' && theoreticalStack.isEmpty()) {
-                        i += 2
-                        theoreticalStack.add(3)
-                        newLine.append("<b>")
-                        continue
-                    }
-                    if (i != lenLine - 1 && line[i] == '*' && line[i + 1] == '*' && theoreticalStack[top] != 3) {
-                        top += 1
-                        i += 2
-                        theoreticalStack.add(3)
-                        newLine.append("<b>")
-                        continue
-                    }
-                    if (i != lenLine - 1 && line[i] == '*' && line[i + 1] != '*' && theoreticalStack.isEmpty()) {
-                        i += 1
-                        theoreticalStack.add(2)
-                        newLine.append("<i>")
-                        continue
-                    }
-                    if (i != lenLine - 1 && line[i] == '*' && line[i + 1] != '*' && theoreticalStack[top] != 2) {
-                        i += 1
-                        theoreticalStack.add(2)
-                        newLine.append("<i>")
-                        top += 1
-                        continue
-                    }
-                    if (i != lenLine - 1 && line[i] == '~' && line[i + 1] == '~' && theoreticalStack.isEmpty()) {
-                        i += 2
-                        theoreticalStack.add(1)
-                        newLine.append("<s>")
-                        continue
-                    }
-                    if (i != lenLine - 1 && line[i] == '~' && line[i + 1] == '~' && theoreticalStack[top] != 1) {
-                        i += 2
-                        theoreticalStack.add(1)
-                        newLine.append("<s>")
-                        top += 1
-                        continue
-                    }
-                    if (i != lenLine - 1 && line[i] == '*' && line[i + 1] == '*' && theoreticalStack[top] == 3) {
-                        i += 2
-                        theoreticalStack.removeAt(top)
-                        if (top != 0) top -= 1
-                        newLine.append("</b>")
-                        continue
-                    }
-                    if (i != lenLine - 1 && line[i] == '*' && line[i + 1] == '*' && theoreticalStack[top] == 2) {
-                        i += 1
-                        theoreticalStack.removeAt(top)
-                        if (top != 0) top -= 1
-                        newLine.append("</i>")
-                        continue
-                    }
-                    if (i != lenLine - 1 && line[i] == '*' && line[i + 1] != '*' && theoreticalStack[top] == 2) {
-                        i += 1
-                        theoreticalStack.removeAt(top)
-                        if (top != 0) top -= 1
-                        newLine.append("</i>")
-                        continue
-                    }
-                    if (i != lenLine - 1 && line[i] == '~' && line[i + 1] == '~' && theoreticalStack[top] == 1) {
-                        i += 2
-                        theoreticalStack.removeAt(top)
-                        if (top != 0) top -= 1
-                        newLine.append("</s>")
-                        continue
-                    }
-                    if (line[i] != '*' && line[i] != '~') {
-                        newLine.append(line[i])
-                        i += 1
-                        continue
+                    when {
+                        (i != lenLine - 1 && line[i] == '*' && line[i + 1] == '*' && theoreticalStack.isEmpty()) -> {
+                            i += 2
+                            theoreticalStack.add(3)
+                            newLine.append("<b>")
+                        }
+                        (i != lenLine - 1 && line[i] == '*' && line[i + 1] == '*' && theoreticalStack[top] != 3) -> {
+                            top += 1
+                            i += 2
+                            theoreticalStack.add(3)
+                            newLine.append("<b>")
+                        }
+                        (i != lenLine - 1 && line[i] == '*' && line[i + 1] != '*' && theoreticalStack.isEmpty()) -> {
+                            i += 1
+                            theoreticalStack.add(2)
+                            newLine.append("<i>")
+                        }
+                        (i != lenLine - 1 && line[i] == '*' && line[i + 1] != '*' && theoreticalStack[top] != 2) -> {
+                            i += 1
+                            theoreticalStack.add(2)
+                            newLine.append("<i>")
+                            top += 1
+                        }
+                        (i != lenLine - 1 && line[i] == '~' && line[i + 1] == '~' && theoreticalStack.isEmpty()) -> {
+                            i += 2
+                            theoreticalStack.add(1)
+                            newLine.append("<s>")
+                        }
+                        (i != lenLine - 1 && line[i] == '~' && line[i + 1] == '~' && theoreticalStack[top] != 1) -> {
+                            i += 2
+                            theoreticalStack.add(1)
+                            newLine.append("<s>")
+                            top += 1
+                        }
+                        (i != lenLine - 1 && line[i] == '*' && line[i + 1] == '*' && theoreticalStack[top] == 3) -> {
+                            i += 2
+                            theoreticalStack.removeAt(top)
+                            if (top != 0) top -= 1
+                            newLine.append("</b>")
+                        }
+                        (i != lenLine - 1 && line[i] == '*' && line[i + 1] == '*' && theoreticalStack[top] == 2) -> {
+                            i += 1
+                            theoreticalStack.removeAt(top)
+                            if (top != 0) top -= 1
+                            newLine.append("</i>")
+                        }
+                        (i != lenLine - 1 && line[i] == '*' && line[i + 1] != '*' && theoreticalStack[top] == 2) -> {
+                            i += 1
+                            theoreticalStack.removeAt(top)
+                            if (top != 0) top -= 1
+                            newLine.append("</i>")
+                        }
+                        (i != lenLine - 1 && line[i] == '~' && line[i + 1] == '~' && theoreticalStack[top] == 1) -> {
+                            i += 2
+                            theoreticalStack.removeAt(top)
+                            if (top != 0) top -= 1
+                            newLine.append("</s>")
+                        }
+                        (line[i] != '*' && line[i] != '~') -> {
+                            newLine.append(line[i])
+                            i += 1
+                        }
                     }
                 }
                 it.write(newLine.toString())
