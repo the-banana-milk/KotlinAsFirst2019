@@ -502,6 +502,10 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
                 it.write(newLine.toString())
             }
         }
+        if (paragraphControl != 0) {
+            it.write("</p>")
+            paragraphControl -= 1
+        }
         it.write("</body>")
         it.write("</html>")
         println(paragraphControl)
