@@ -395,11 +395,12 @@ Suspendisse <s>et elit in enim tempus iaculis</s>.
  */
 fun markdownToHtmlSimple(inputName: String, outputName: String) {
     val theoreticalStack = mutableListOf<Int>()
+    val file = File(inputName).bufferedReader()
     File(outputName).bufferedWriter().use {
         it.write("<html>")
         it.write("<body>")
         var paragraphControl = 0
-        for (line in File(inputName).bufferedReader().readLines()) {
+        for (line in file.readLines()) {
             if (line.isEmpty() && paragraphControl != 0) {
                 it.write("</p>")
                 paragraphControl -= 1
@@ -423,12 +424,12 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
                             theoreticalStack.add(2)
                             newLine.append("<i>")
                         }
-                        (line[i] == '~' && (theoreticalStack.isEmpty() || theoreticalStack.last() != 1)) -> {
+                        (line[i] == '~' && line[i + 1] == '~' && (theoreticalStack.isEmpty() || theoreticalStack.last() != 1)) -> {
                             i += 1
                             theoreticalStack.add(1)
                             newLine.append("<s>")
                         }
-                        (line[i] == '*' && theoreticalStack.last() == 3) -> {
+                        (line[i] == '*' && line[i + 1] == '*' && theoreticalStack.last() == 3) -> {
                             i += 1
                             theoreticalStack.remove(theoreticalStack.last())
                             newLine.append("</b>")
