@@ -415,21 +415,21 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
                 val newLine = StringBuilder()
                 while (i < lenLine) {
                     when {
-                        (line[i] == '*' && line[i + 1] == '*' && (theoreticalStack.isEmpty() || theoreticalStack.last() != 3)) -> {
+                        (i != lenLine - 1 && line[i] == '*' && line[i + 1] == '*' && (theoreticalStack.isEmpty() || theoreticalStack.last() != 3)) -> {
                             i += 1
                             theoreticalStack.add(3)
                             newLine.append("<b>")
                         }
-                        (line[i] == '*' && line[i + 1] != '*' && (theoreticalStack.isEmpty() || theoreticalStack.last() != 2)) -> {
+                        (i != lenLine - 1 && line[i] == '*' && line[i + 1] != '*' && (theoreticalStack.isEmpty() || theoreticalStack.last() != 2)) -> {
                             theoreticalStack.add(2)
                             newLine.append("<i>")
                         }
-                        (line[i] == '~' && line[i + 1] == '~' && (theoreticalStack.isEmpty() || theoreticalStack.last() != 1)) -> {
+                        (line[i] == '~' && (theoreticalStack.isEmpty() || theoreticalStack.last() != 1)) -> {
                             i += 1
                             theoreticalStack.add(1)
                             newLine.append("<s>")
                         }
-                        (line[i] == '*' && line[i + 1] == '*' && theoreticalStack.last() == 3) -> {
+                        (i != lenLine - 1 && line[i] == '*' && line[i + 1] == '*' && theoreticalStack.last() == 3) -> {
                             i += 1
                             theoreticalStack.remove(theoreticalStack.last())
                             newLine.append("</b>")
