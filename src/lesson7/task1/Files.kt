@@ -420,7 +420,7 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
                             theoreticalStack.add(3)
                             newLine.append("<b>")
                         }
-                        (i != lenLine - 1 && line[i] == '*' && line[i + 1] != '*' && (theoreticalStack.isEmpty() || theoreticalStack.last() != 2)) -> {
+                        ((i != lenLine - 1 && line[i] == '*' && line[i + 1] != '*' || i == lenLine - 1 && line[i] == '*') && (theoreticalStack.isEmpty() || theoreticalStack.last() != 2)) -> {
                             theoreticalStack.add(2)
                             newLine.append("<i>")
                         }
