@@ -390,28 +390,17 @@ Suspendisse <s>et elit in enim tempus iaculis</s>.
 </p>
 </body>
 </html>
- *for (word in line.split(" ")) {
-val wordLen = word.length
-val halfLen = wordLen / 2
-if (word.contains(Regex("""[\*~]"""))) {
-var i = 0
-while (i != wordLen) {
-if (i != wordLen - 1 && word[i] == '*' && word[i + 1] == '*' && i in 0..halfLen) {
-i += 1
-theoreticalStack.add(2)
-}
-}
-} else it.write(word)
-}
+ *
  * (Отступы и переносы строк в примере добавлены для наглядности, при решении задачи их реализовывать не обязательно)
  */
 fun markdownToHtmlSimple(inputName: String, outputName: String) {
     val theoreticalStack = mutableListOf<Int>()
+    val file = File(inputName).bufferedReader()
     File(outputName).bufferedWriter().use {
         it.write("<html>")
         it.write("<body>")
         var paragraphControl = 0
-        for (line in File(inputName).readLines()) {
+        for (line in file.readLines()) {
             if (line.isEmpty() && paragraphControl != 0) {
                 it.write("</p>")
                 paragraphControl -= 1
@@ -441,15 +430,10 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
                             theoreticalStack.add(1)
                             newLine.append("<s>")
                         }
-                        (line[i] == '*'&& theoreticalStack.last() == 3) -> {
+                        (line[i] == '*' && theoreticalStack.last() == 3) -> {
                             i += 2
                             theoreticalStack.remove(theoreticalStack.last())
                             newLine.append("</b>")
-                        }
-                        (line[i] == '*' && theoreticalStack.last() == 2) -> {
-                            i += 1
-                            theoreticalStack.remove(theoreticalStack.last())
-                            newLine.append("</i>")
                         }
                         (line[i] == '*' && theoreticalStack.last() == 2) -> {
                             i += 1
@@ -476,7 +460,6 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
         }
         it.write("</body>")
         it.write("</html>")
-        println(paragraphControl)
     }
 }
 
