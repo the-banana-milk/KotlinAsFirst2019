@@ -415,12 +415,12 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
                 val newLine = StringBuilder()
                 while (i < lenLine) {
                     when {
-                        (i != lenLine - 1 && line[i] == '*' && line[i + 1] == '*' && (theoreticalStack.isEmpty() || theoreticalStack.last() != 3)) -> {
+                        (line[i] == '*' && line[i + 1] == '*' && (theoreticalStack.isEmpty() || theoreticalStack.last() != 3)) -> {
                             i += 2
                             theoreticalStack.add(3)
                             newLine.append("<b>")
                         }
-                        (i != lenLine - 1 && line[i] == '*' && line[i + 1] != '*' && (theoreticalStack.isEmpty() || theoreticalStack.last() != 2)) -> {
+                        (line[i] == '*' && line[i + 1] != '*' && (theoreticalStack.isEmpty() || theoreticalStack.last() != 2)) -> {
                             i += 1
                             theoreticalStack.add(2)
                             newLine.append("<i>")
