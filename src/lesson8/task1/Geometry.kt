@@ -3,10 +3,7 @@
 package lesson8.task1
 
 import lesson1.task1.sqr
-import kotlin.math.PI
-import kotlin.math.cos
-import kotlin.math.sin
-import kotlin.math.sqrt
+import kotlin.math.*
 
 /**
  * Точка на плоскости
@@ -79,14 +76,21 @@ data class Circle(val center: Point, val radius: Double) {
      * расстояние между их центрами минус сумма их радиусов.
      * Расстояние между пересекающимися окружностями считать равным 0.0.
      */
-    fun distance(other: Circle): Double = TODO()
+    fun distance(other: Circle): Double {
+        val lineBetweenX = abs(center.x - other.center.x)
+        val lineBetweenY = abs(center.y - other.center.y)
+        val lineBetweenCenter = sqrt(sqr(lineBetweenX) + sqr(lineBetweenY))
+        val sum = radius + other.radius
+        if (lineBetweenCenter <= sum) return 0.0
+        return lineBetweenCenter - sum
+    }
 
     /**
      * Тривиальная
      *
      * Вернуть true, если и только если окружность содержит данную точку НА себе или ВНУТРИ себя
      */
-    fun contains(p: Point): Boolean = TODO()
+    fun contains(p: Point): Boolean = sqr(p.x - center.x) + sqr(p.y - center.y) <= sqr(radius)
 }
 
 /**
@@ -106,7 +110,24 @@ data class Segment(val begin: Point, val end: Point) {
  * Дано множество точек. Вернуть отрезок, соединяющий две наиболее удалённые из них.
  * Если в множестве менее двух точек, бросить IllegalArgumentException
  */
-fun diameter(vararg points: Point): Segment = TODO()
+fun diameter(vararg points: Point): Segment {
+    var remOne:Point = Point(0.0, 0.0)
+    var remTwo:Point = Point(0.0, 0.0)
+    var maxLen = 0.0
+    val len = points.size
+    if (len < 2) throw IllegalArgumentException()
+    for (i in 0..len - 2) {
+        val lenBetweenOX = abs(points[i].x - points[i + 1].x)
+        val lenBetweenOY = abs(points[i].y - points[i + 1].y)
+        val currentLen = sqrt(sqr(lenBetweenOX) + sqr(lenBetweenOY))
+        if (currentLen >= maxLen) {
+            maxLen = currentLen
+            remOne = points[i]
+            remTwo = points[i + 1]
+        }
+    }
+    return Segment(remOne, remTwo)
+}
 
 /**
  * Простая
@@ -114,7 +135,14 @@ fun diameter(vararg points: Point): Segment = TODO()
  * Построить окружность по её диаметру, заданному двумя точками
  * Центр её должен находиться посередине между точками, а радиус составлять половину расстояния между ними
  */
-fun circleByDiameter(diameter: Segment): Circle = TODO()
+fun circleByDiameter(diameter: Segment): Circle {
+    val lenBetweenOX = abs(diameter.begin.x - diameter.end.x)
+    val lenBetweenOY = abs(diameter.begin.y - diameter.end.y)
+    val rad = sqrt(sqr(lenBetweenOX) + sqr(lenBetweenOY)) / 2
+    val centerX = lenBetweenOX / 2
+    val centerY = lenBetweenOY / 2
+    return Circle(Point(centerX, centerY), rad)
+}
 
 /**
  * Прямая, заданная точкой point и углом наклона angle (в радианах) по отношению к оси X.
