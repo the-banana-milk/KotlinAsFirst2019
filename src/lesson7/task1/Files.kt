@@ -436,36 +436,35 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
                             theoreticalStack.add(2)
                             newLine.append("<i>")
                         }
-                        (i != lenLine - 1 && line[i] == '~' && (theoreticalStack.isEmpty() || theoreticalStack.last() != 1)) -> {
+                        (line[i] == '~' && (theoreticalStack.isEmpty() || theoreticalStack.last() != 1)) -> {
                             i += 2
                             theoreticalStack.add(1)
                             newLine.append("<s>")
                         }
-                        (i != lenLine - 1 && line[i] == '*' && line[i + 1] == '*' && theoreticalStack.last() == 3) -> {
+                        (line[i] == '*'&& theoreticalStack.last() == 3) -> {
                             i += 2
                             theoreticalStack.remove(theoreticalStack.last())
                             newLine.append("</b>")
                         }
-                        (i != lenLine - 1 && line[i] == '*' && line[i + 1] == '*' && theoreticalStack.last() == 2) -> {
+                        (line[i] == '*' && theoreticalStack.last() == 2) -> {
                             i += 1
                             theoreticalStack.remove(theoreticalStack.last())
                             newLine.append("</i>")
                         }
-                        (i != lenLine - 1 && line[i] == '*' && line[i + 1] != '*' && theoreticalStack.last() == 2) -> {
+                        (line[i] == '*' && theoreticalStack.last() == 2) -> {
                             i += 1
                             theoreticalStack.remove(theoreticalStack.last())
                             newLine.append("</i>")
                         }
-                        (i != lenLine - 1 && line[i] == '~' && theoreticalStack.last() == 1) -> {
+                        (line[i] == '~' && theoreticalStack.last() == 1) -> {
                             i += 2
                             theoreticalStack.remove(theoreticalStack.last())
                             newLine.append("</s>")
                         }
-                        (line[i] != '*' && line[i] != '~') -> {
+                        else -> {
                             newLine.append(line[i])
                             i += 1
                         }
-                        else -> i += 1
                     }
                 }
                 it.write(newLine.toString())
