@@ -407,15 +407,21 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
             if (line.isEmpty() && !paragraphControl && closeTagWork != 1 && countEmpty == 0) {
                 it.write("</p>")
                 paragraphControl = true
-                countEmpty = 1
+                countEmpty += 1
+                //continue
             }
-            closeTagWork += 1
+            if (line.isEmpty() && closeTagWork == 1) {
+                closeTagWork += 1
+                countEmpty += 1
+                continue
+            }
             if (line.isNotEmpty()) {
                 if (paragraphControl) {
                     it.write("<p>")
                     paragraphControl = false
                 }
                 countEmpty = 0
+                closeTagWork += 1
                 val lenLine = line.length
                 var i = 0
                 val newLine = StringBuilder()
@@ -458,7 +464,7 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
                 it.write(newLine.toString())
             }
         }
-        if (paragraphControl == false) it.write("</p>")
+        if (!paragraphControl) it.write("</p>")
         it.write("</body>")
         it.write("</html>")
     }
