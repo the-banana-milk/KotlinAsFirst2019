@@ -401,18 +401,21 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
         it.write("<body>")
         it.write("<p>")
         var closeTagWork = 1
+        var countEmpty = 0
         var paragraphControl: Boolean = false
         for (line in file.readLines()) {
-            if (line.isEmpty() && paragraphControl == false && closeTagWork != 1) {
+            if (line.isEmpty() && !paragraphControl && closeTagWork != 1 && countEmpty == 0) {
                 it.write("</p>")
                 paragraphControl = true
+                countEmpty = 1
             }
             closeTagWork += 1
             if (line.isNotEmpty()) {
-                if (paragraphControl == true) {
+                if (paragraphControl) {
                     it.write("<p>")
                     paragraphControl = false
                 }
+                countEmpty = 0
                 val lenLine = line.length
                 var i = 0
                 val newLine = StringBuilder()
