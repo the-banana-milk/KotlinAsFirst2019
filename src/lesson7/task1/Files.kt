@@ -400,12 +400,14 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
         it.write("<html>")
         it.write("<body>")
         it.write("<p>")
+        var closeTageWork = 1
         var paragraphControl: Boolean = false
         for (line in file.readLines()) {
-            if (line.isEmpty() && paragraphControl == false) {
+            if (line.isEmpty() && paragraphControl == false && closeTageWork != 1) {
                 it.write("</p>")
                 paragraphControl = true
             }
+            closeTageWork += 1
             if (line.isNotEmpty()) {
                 if (paragraphControl == true) {
                     it.write("<p>")
