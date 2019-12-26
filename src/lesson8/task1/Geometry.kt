@@ -77,9 +77,7 @@ data class Circle(val center: Point, val radius: Double) {
      * Расстояние между пересекающимися окружностями считать равным 0.0.
      */
     fun distance(other: Circle): Double {
-        val lineBetweenX = abs(center.x - other.center.x)
-        val lineBetweenY = abs(center.y - other.center.y)
-        val lineBetweenCenter = sqrt(sqr(lineBetweenX) + sqr(lineBetweenY))
+        val lineBetweenCenter = center.distance(other.center)
         val sum = radius + other.radius
         if (lineBetweenCenter <= sum) return 0.0
         return lineBetweenCenter - sum
@@ -116,14 +114,14 @@ fun diameter(vararg points: Point): Segment {
     var maxLen = 0.0
     val len = points.size
     if (len < 2) throw IllegalArgumentException()
-    for (i in 0..len - 2) {
-        val lenBetweenOX = abs(points[i].x - points[i + 1].x)
-        val lenBetweenOY = abs(points[i].y - points[i + 1].y)
-        val currentLen = sqrt(sqr(lenBetweenOX) + sqr(lenBetweenOY))
-        if (currentLen >= maxLen) {
-            maxLen = currentLen
-            remOne = points[i]
-            remTwo = points[i + 1]
+    for (i in 0 until len) {
+        for (j in i until len - 1) {
+            val currentLen = points[i].distance(points[j + 1])
+            if (currentLen >= maxLen) {
+                maxLen = currentLen
+                remOne = points[i]
+                remTwo = points[j + 1]
+            }
         }
     }
     return Segment(remOne, remTwo)
@@ -136,8 +134,8 @@ fun diameter(vararg points: Point): Segment {
  * Центр её должен находиться посередине между точками, а радиус составлять половину расстояния между ними
  */
 fun circleByDiameter(diameter: Segment): Circle {
-    val lenBetweenOX = maxOf(diameter.begin.x, diameter.end.x) - min(diameter.begin.x, diameter.end.x)
-    val lenBetweenOY = maxOf(diameter.begin.y, diameter.end.y) - min(diameter.begin.y, diameter.end.y)
+    val lenBetweenOX = diameter.begin.x - diameter.end.x
+    val lenBetweenOY = diameter.begin.y - diameter.end.y
     val rad = sqrt(sqr(lenBetweenOX) + sqr(lenBetweenOY)) / 2
     val centerX = (diameter.begin.x + diameter.end.x) / 2
     val centerY = (diameter.begin.y + diameter.end.y) / 2

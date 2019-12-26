@@ -399,16 +399,17 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
     File(outputName).bufferedWriter().use {
         it.write("<html>")
         it.write("<body>")
-        var paragraphControl = 0
+        it.write("<p>")
+        var paragraphControl: Boolean = false
         for (line in file.readLines()) {
-            if (line.isEmpty() && paragraphControl != 0) {
+            if (line.isEmpty() && paragraphControl == false) {
                 it.write("</p>")
-                paragraphControl -= 1
+                paragraphControl = true
             }
             if (line.isNotEmpty()) {
-                if (paragraphControl == 0) {
+                if (paragraphControl == true) {
                     it.write("<p>")
-                    paragraphControl += 1
+                    paragraphControl = false
                 }
                 val lenLine = line.length
                 var i = 0
@@ -452,10 +453,7 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
                 it.write(newLine.toString())
             }
         }
-        if (paragraphControl != 0) {
-            it.write("</p>")
-            paragraphControl -= 1
-        }
+        it.write("</p>")
         it.write("</body>")
         it.write("</html>")
     }

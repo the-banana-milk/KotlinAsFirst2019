@@ -1,6 +1,6 @@
 package lesson7.task1
 
-import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import java.io.File
@@ -56,6 +56,7 @@ Basic, Ruby, Swift.
         )
         File("temp.txt").delete()
     }
+
 
     @Test
     @Tag("Normal")
