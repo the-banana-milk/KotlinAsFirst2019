@@ -161,7 +161,15 @@ class Line private constructor(val b: Double, val angle: Double) {
      * Найти точку пересечения с другой линией.
      * Для этого необходимо составить и решить систему из двух уравнений (каждое для своей прямой)
      */
-    fun crossPoint(other: Line): Point = TODO()
+    fun crossPoint(other: Line): Point {
+        val b1 = cos(angle)
+        val a1 = -sin(angle)
+        val b2 = cos(other.angle)
+        val a2 = -sin(other.angle)
+        val x = -(((-b) * b2 - (-other.b) * b1) / (a1 * b2 - a2 * b1))
+        val y = -(((-other.b) * a1 - (-b) * a2) / (a1 * b2 - a2 * b1))
+        return Point(x, y)
+    }
 
     override fun equals(other: Any?) = other is Line && angle == other.angle && b == other.b
 
@@ -179,21 +187,42 @@ class Line private constructor(val b: Double, val angle: Double) {
  *
  * Построить прямую по отрезку
  */
-fun lineBySegment(s: Segment): Line = TODO()
+fun lineBySegment(s: Segment): Line {
+    val segmOX = abs(s.begin.x - s.end.x)
+    val segmOY = abs(s.begin.y - s.end.y)
+    val ang = atan(segmOY / segmOX)
+    return if (s.begin.y < s.end.y) Line(Point(s.begin.x, s.begin.y), ang)
+    else Line(Point(s.end.x, s.end.y), ang)
+}
 
 /**
  * Средняя
  *
  * Построить прямую по двум точкам
  */
-fun lineByPoints(a: Point, b: Point): Line = TODO()
+fun lineByPoints(a: Point, b: Point): Line {
+    val segmOX = abs(a.x - b.x)
+    val segmOY = abs(a.y - b.y)
+    val ang = atan(segmOY / segmOX)
+    return if (a.y < b.y) Line(Point(a.x, a.y), ang)
+    else Line(Point(b.x, b.y), ang)
+}
 
 /**
  * Сложная
  *
  * Построить серединный перпендикуляр по отрезку или по двум точкам
  */
-fun bisectorByPoints(a: Point, b: Point): Line = TODO()
+fun bisectorByPoints(a: Point, b: Point): Line {
+    val findPointY = (a.y + b.y) / 2
+    val findPointX = (a.x + b.x) / 2
+    val segmOX = abs(a.x - b.x)
+    val segmOY = abs(a.y - b.y)
+    var ang = atan(segmOY / segmOX)
+    if (ang < PI / 2) ang += PI / 2
+    else ang -= PI / 2
+    return (Line(Point(findPointX, findPointY), ang))
+}
 
 /**
  * Средняя

@@ -408,7 +408,6 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
                 it.write("</p>")
                 paragraphControl = true
                 countEmpty += 1
-                //continue
             }
             if (line.isEmpty() && closeTagWork == 1) {
                 closeTagWork += 1
