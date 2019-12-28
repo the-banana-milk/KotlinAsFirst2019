@@ -203,8 +203,8 @@ fun lineBySegment(s: Segment): Line {
 fun lineByPoints(a: Point, b: Point): Line {
     val segmOX = a.x - b.x
     val segmOY = a.y - b.y
-    var ang = abs(atan(segmOY / segmOX))
-    if (ang > PI / 2) ang = PI - ang
+    var ang = atan(segmOY / segmOX)
+    if (ang < 0 || ang > PI / 2) ang += PI
     return if (a.y < b.y) Line(Point(a.x, a.y), ang)
     else Line(Point(b.x, b.y), ang)
 }
