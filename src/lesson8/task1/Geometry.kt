@@ -192,7 +192,11 @@ fun lineBySegment(s: Segment): Line {
     val segmOY = abs(s.begin.y - s.end.y)
     val ang = atan(segmOY / segmOX)
     var b = 0.0
-    if (s.end.x - s.begin.x != 0.0) b = (s.end.x * s.begin.y - s.end.y * s.begin.x) / (s.end.x - s.begin.x)
+    if (segmOX != 0.0) b = (s.end.x * s.begin.y - s.end.y * s.begin.x) / (s.end.x - s.begin.x)
+    else if (segmOX == 0.0 && ang == PI / 2) {
+        if (s.end.x > 0.0) b = -s.end.x
+        else b = s.end.x
+    }
     return Line(Point(0.0, b), ang)
 }
 
@@ -202,12 +206,12 @@ fun lineBySegment(s: Segment): Line {
  * Построить прямую по двум точкам
  */
 fun lineByPoints(a: Point, b: Point): Line {
-    val segmOX = a.x - b.x
-    val segmOY = a.y - b.y
-    var ang = atan(segmOY / segmOX)
-    if (ang < 0 || ang > PI / 2) ang += PI
-    return if (a.y < b.y) Line(Point(a.x, a.y), ang)
-    else Line(Point(b.x, b.y), ang)
+    val segmOX = abs(a.x - b.x)
+    val segmOY = abs(a.y - b.y)
+    val ang = atan(segmOY / segmOX)
+    var p = 0.0
+    if (b.x - a.x != 0.0) p = (b.x * a.y - b.y * a.x) / (b.x - a.x)
+    return Line(Point(0.0, p), ang)
 }
 
 /**
