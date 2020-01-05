@@ -192,7 +192,7 @@ fun lineBySegment(s: Segment): Line {
     val segmOY = abs(s.begin.y - s.end.y)
     val ang = atan(segmOY / segmOX)
     var b = 0.0
-    if ((s.begin.x != 0.0 || s.end.x != 0.0) && s.begin.x != s.end.x) b = (s.end.x * s.begin.y - s.end.y * s.begin.x) / (s.end.x - s.begin.x)
+    if (s.end.x - s.begin.x != 0.0) b = (s.end.x * s.begin.y - s.end.y * s.begin.x) / (s.end.x - s.begin.x)
     return Line(Point(0.0, b), ang)
 }
 
