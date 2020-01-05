@@ -190,9 +190,10 @@ class Line private constructor(val b: Double, val angle: Double) {
 fun lineBySegment(s: Segment): Line {
     val segmOX = abs(s.begin.x - s.end.x)
     val segmOY = abs(s.begin.y - s.end.y)
-    val ang = atan(segmOY / segmOX)
-    return if (s.begin.y < s.end.y) Line(Point(s.begin.x, s.begin.y), ang)
-    else Line(Point(s.end.x, s.end.y), ang)
+    val ang = atan(segmOY / segmOX) % PI
+    var b = 0.0
+    if (s.begin.x != 0.0 || s.end.x != 0.0) b = (s.end.x * s.begin.y - s.end.y * s.begin.x) / (s.end.x - s.begin.x)
+    return Line(Point(0.0, b), ang)
 }
 
 /**
