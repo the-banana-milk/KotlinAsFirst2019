@@ -194,7 +194,7 @@ fun lineBySegment(s: Segment): Line {
     var pointX = 0.0
     var b = 0.0
     if (segmOX != 0.0) b = (s.end.x * s.begin.y - s.end.y * s.begin.x) / (s.end.x - s.begin.x)
-    else if (segmOX == 0.0 && ang == PI / 2) pointX = -s.end.x
+    if (segmOX == 0.0 && ang == PI / 2) pointX = (-1) * s.end.x
     return Line(Point(pointX, b), ang)
 }
 
