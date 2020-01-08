@@ -198,6 +198,10 @@ fun lineBySegment(s: Segment): Line {
         pointX = s.end.x
         b = 0.0
     }
+    if (ang == 0.0 || ang == PI) {
+        pointX = 0.0
+        b = s.end.y
+    }
     return Line(Point(pointX, b), ang)
 }
 
