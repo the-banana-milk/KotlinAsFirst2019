@@ -212,9 +212,11 @@ fun lineBySegment(s: Segment): Line {
  * Построить прямую по двум точкам
  */
 fun lineByPoints(a: Point, b: Point): Line {
-    val segmOX = abs(a.x - b.x)
-    val segmOY = abs(a.y - b.y)
-    val ang = atan(segmOY / segmOX)
+    val segmOX = a.x - b.x
+    val segmOY = a.y - b.y
+    var ang = atan(segmOY / segmOX)
+    if (ang < 0) ang += PI
+    else if (segmOX < 0.0 && segmOY < 0.0) ang = PI - ang
     var py = 0.0
     var px = 0.0
     if (segmOX != 0.0) py = (b.x * a.y - b.y * a.x) / segmOX
