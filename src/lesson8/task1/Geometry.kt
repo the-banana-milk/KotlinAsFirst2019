@@ -188,11 +188,10 @@ class Line private constructor(val b: Double, val angle: Double) {
  * Построить прямую по отрезку
  */
 fun lineBySegment(s: Segment): Line {
-    val segmOX = maxOf(s.begin.x, s.end.x) - minOf(s.begin.x, s.end.x)
-    val segmOY = maxOf(s.begin.y, s.end.y) - minOf(s.begin.y, s.end.y)
+    val segmOX = abs(s.end.x - s.begin.x)
+    val segmOY = s.end.y - s.begin.y
     var ang = atan(segmOY / segmOX)
     if (ang < 0) ang += PI
-    else if (ang > 0.0 && (segmOX < 0.0 || segmOY < 0.0)) ang = PI - ang
     var pointX = 0.0
     var b = 0.0
     if (segmOX != 0.0) b = (s.end.x * s.begin.y - s.end.y * s.begin.x) / segmOX
