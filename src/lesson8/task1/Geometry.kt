@@ -190,7 +190,8 @@ class Line private constructor(val b: Double, val angle: Double) {
 fun lineBySegment(s: Segment): Line {
     val segmOX = abs(s.end.x - s.begin.x)
     val segmOY = abs(s.end.y - s.begin.y)
-    var ang = atan(segmOY / segmOX)
+    var ang = 0.0
+    if (segmOY != 0.0) ang = atan(segmOY / segmOX)
     if (s.begin.x > s.end.x && s.begin.y < s.end.y) {
         ang = PI - ang
     } else if (s.end.x > s.begin.x && s.end.y < s.begin.y) {
@@ -203,7 +204,7 @@ fun lineBySegment(s: Segment): Line {
         pointX = s.end.x
         b = 0.0
     }
-    if (ang == 0.0 || ang == PI) {
+    if (ang == 0.0) {
         pointX = 0.0
         b = s.end.y
     }
