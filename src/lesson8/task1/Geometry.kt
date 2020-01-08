@@ -198,7 +198,7 @@ fun lineBySegment(s: Segment): Line {
     }
     var pointX = 0.0
     var b = 0.0
-    if (segmOX != 0.0) b = (s.end.x * s.begin.y - s.end.y * s.begin.x) / segmOX
+    if (segmOX != 0.0) b = (s.end.x * s.begin.y - s.end.y * s.begin.x) / (s.end.x - s.begin.x)
     if (ang == PI / 2) {
         pointX = s.end.x
         b = 0.0
