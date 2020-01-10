@@ -150,7 +150,7 @@ fun circleByDiameter(diameter: Segment): Circle {
  */
 class Line private constructor(val b: Double, val angle: Double) {
     init {
-        require(angle >= 0 && angle < PI) { "Incorrect line angle: $angle" }
+        require(angle in 0.0..PI) { "Incorrect line angle: $angle" }
     }
 
     constructor(point: Point, angle: Double) : this(point.y * cos(angle) - point.x * sin(angle), angle)
@@ -200,11 +200,12 @@ fun lineBySegment(s: Segment): Line {
     var pointX = 0.0
     var b = 0.0
     if (segmOX != 0.0) b = (s.end.x * s.begin.y - s.end.y * s.begin.x) / (s.end.x - s.begin.x)
+    if (ang == 0.0 && s.end.x < s.begin.x) ang = PI
     if (ang == PI / 2) {
         pointX = s.end.x
         b = 0.0
     }
-    if (ang == 0.0) {
+    if (ang == 0.0 || ang == PI) {
         pointX = 0.0
         b = s.end.y
     }
@@ -227,7 +228,7 @@ fun lineByPoints(a: Point, b: Point): Line {
     }
     var py = 0.0
     var px = 0.0
-    if (segmOX != 0.0) py = (b.x * a.y - b.y * a.x) / segmOX
+    if (segmOX != 0.0) py = (b.x * a.y - b.y * a.x) / (a.x - b.x)
     if (ang == PI / 2) {
         px = a.x
         py = 0.0
