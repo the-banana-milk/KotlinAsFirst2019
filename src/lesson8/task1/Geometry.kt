@@ -228,7 +228,8 @@ fun lineByPoints(a: Point, b: Point): Line {
     }
     var py = 0.0
     var px = 0.0
-    if (segmOX != 0.0) py = (b.x * a.y - b.y * a.x) / (a.x - b.x)
+    if (segmOX != 0.0) py = (b.x * a.y - b.y * a.x) / (b.x - a.x)
+    if (ang == 0.0 && b.x < a.x) ang = PI
     if (ang == PI / 2) {
         px = a.x
         py = 0.0
